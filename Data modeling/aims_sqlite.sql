@@ -9,7 +9,8 @@ CREATE TABLE "aims"."DeliveryInfo"(
   "province" TEXT NOT NULL,
   "address" TEXT NOT NULL,
   "instructions" TEXT,
-  "deliveryTime" DATETIME
+  "deliveryTime" DATETIME,
+  "isRushOrder" BOOLEAN NOT NULL
 );
 CREATE TABLE "aims"."Product"(
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,50 +23,44 @@ CREATE TABLE "aims"."Product"(
 );
 CREATE TABLE "aims"."Order"(
   "id" INTEGER PRIMARY KEY,
+  "cartId" INTEGER NOT NULL,
   "shippingFees" REAL NOT NULL,
   "deliveryInfoId" INTEGER NOT NULL,
-  "transactionInfoId" INTEGER,
+  CONSTRAINT "fk_order_cart"
+    FOREIGN KEY("cartId")
+    REFERENCES "Cart"("id"),
   CONSTRAINT "fk_order_deliveryinfo"
     FOREIGN KEY("deliveryInfoId")
-    REFERENCES "DeliveryInfo"("id"),
-  CONSTRAINT "fk_order_transactioninfo"
-    FOREIGN KEY("transactionInfoId")
-    REFERENCES "TransactionInfo"("id")
+    REFERENCES "DeliveryInfo"("id")
 );
+CREATE INDEX "aims"."Order.fk_order_cart_idx" ON "Order" ("cartId");
 CREATE INDEX "aims"."Order.fk_order_deliveryinfo_idx" ON "Order" ("deliveryInfoId");
-CREATE INDEX "aims"."Order.fk_order_transactioninfo_idx" ON "Order" ("transactionInfoId");
-
-CREATE TABLE "aims"."OrderProduct"(
-  "orderId" INTEGER NOT NULL,
-  "productId" INTEGER NOT NULL,
-  "quantity" INTEGER NOT NULL,
-  PRIMARY KEY("orderId", "productId"),
-  CONSTRAINT "fk_orderproduct_order"
-    FOREIGN KEY("orderId")
-    REFERENCES "Order"("id"),
-  CONSTRAINT "fk_orderproduct_product"
-    FOREIGN KEY("productId")
-    REFERENCES "Product"("id")
-);
-CREATE INDEX "aims"."OrderProduct.fk_orderproduct_order_idx" ON "OrderProduct" ("orderId");
-CREATE INDEX "aims"."OrderProduct.fk_orderproduct_product_idx" ON "OrderProduct" ("productId");
 
 CREATE TABLE "aims"."TransactionInfo"(
   "id" INTEGER PRIMARY KEY,
+  "amount" REAL NOT NULL,
+  "bankCode" TEXT NOT NULL,
+  "bankTranNo" TEXT,
+  "cardType" TEXT,
+  "payDate" DATE,
   "content" TEXT NOT NULL,
-  "date" DATE NOT NULL,
-  "amount" REAL NOT NULL
+  "transactionNo" TEXT NOT NULL
 );
 CREATE TABLE "aims"."Invoice"(
   "id" INTEGER PRIMARY KEY,
   "currency" TEXT NOT NULL,
   "amount" REAL NOT NULL,
-  "order_id" INTEGER NOT NULL,
+  "orderId" INTEGER NOT NULL,
+  "transactionInfoId" INTEGER,
   CONSTRAINT "fk_invoice_order"
-    FOREIGN KEY("order_id")
-    REFERENCES "Order"("id")
+    FOREIGN KEY("orderId")
+    REFERENCES "Order"("id"),
+  CONSTRAINT "fk_invoice_transactioninfo"
+    FOREIGN KEY("transactionInfoId")
+    REFERENCES "TransactionInfo"("id")
 );
-CREATE INDEX "aims"."Invoice.fk_invoice_order_idx" ON "Invoice" ("order_id");
+CREATE INDEX "aims"."Invoice.fk_invoice_order_idx" ON "Invoice" ("orderId");
+CREATE INDEX "aims"."Invoice.fk_invoice_transactioninfo_idx" ON "Invoice" ("transactionInfoId");
 
 CREATE TABLE "aims"."Cart"(
   "id" INTEGER PRIMARY KEY,
@@ -87,4 +82,3 @@ CREATE INDEX "aims"."CartProduct.fk_cartproduct_cart_idx" ON "CartProduct" ("car
 CREATE INDEX "aims"."CartProduct.fk_cartproduct_product_idx" ON "CartProduct" ("productId");
 
 COMMIT;
-
