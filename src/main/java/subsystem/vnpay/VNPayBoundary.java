@@ -12,8 +12,8 @@ import java.util.Map;
 public class VNPayBoundary {
 
 	public String generateURL(int amount, String content) throws IOException {
-		PayRequestVNPay payRequestVNPay = new PayRequestVNPay(amount, content);
-		return payRequestVNPay.generateURL();
+		Map<String, String> vnp_Params = ConfigVNPay.getVNPPayParams(amount, content, "pay");
+		return ConfigVNPay.getVNPayUrl(vnp_Params);
 	}
 
 	public RefundTransaction refund(PaymentTransaction paymentTransaction) throws IOException {

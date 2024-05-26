@@ -88,7 +88,6 @@ views/screen/home/HomeScreenHandler.class
 common/exception/NotEnoughTransactionInfoException.class
 subsystem/vnpay/RefundResponseVNPay.class
 subsystem/vnpay/RefundRequestVNPay$1.class
-views/screen/payment/PaymentScreenHandler.class
 utils/Utils.class
 views/screen/home/MediaHandler.class
 common/exception/SuspiciousTransactionException.class

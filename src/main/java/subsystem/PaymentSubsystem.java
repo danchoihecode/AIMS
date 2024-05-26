@@ -20,7 +20,7 @@ public class PaymentSubsystem implements IPaymentSubsystem {
 	/**
 	 * Represent the controller of the subsystem
 	 */
-	private IPaymentSubsystem controller;
+	private final IPaymentSubsystem controller;
 
 	/**
 	 * Initializes a newly created {@code InterbankSubsystem} object so that it

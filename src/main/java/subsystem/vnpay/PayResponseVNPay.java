@@ -2,14 +2,7 @@ package subsystem.vnpay;
 
 import java.util.Map;
 
-import common.exception.AnonymousTransactionException;
-import common.exception.ProcessingException;
-import common.exception.RejectedTransactionException;
-import common.exception.SendToBankException;
-import common.exception.TransactionFailedException;
-import common.exception.TransactionNotDoneException;
-import common.exception.TransactionReverseException;
-import common.exception.UnrecognizedException;
+import common.exception.*;
 import entity.payment.PaymentTransaction;
 import utils.Utils;
 
@@ -20,7 +13,7 @@ public class PayResponseVNPay {
         this.response = response;
     }
 
-    public PaymentTransaction getPaymentTransaction() {
+    public PaymentTransaction getPaymentTransaction() throws PaymentException {
         if (response == null) {
             return null;
         }

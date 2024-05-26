@@ -24,7 +24,7 @@ public class PaymentController extends BaseController {
 	/**
 	 * Represent the Interbank subsystem
 	 */
-	private IPaymentSubsystem vnPay;
+	private final IPaymentSubsystem vnPay;
 
 	public PaymentController(){
 		this.vnPay = new PaymentSubsystem(new VNPaySubsystemController());

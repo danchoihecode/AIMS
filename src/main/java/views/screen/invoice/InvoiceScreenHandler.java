@@ -9,18 +9,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import common.exception.PaymentException;
 import common.exception.ProcessInvoiceException;
 import controller.PaymentController;
 import entity.invoice.Invoice;
-import entity.order.Order;
 import entity.order.OrderMedia;
 import entity.payment.PaymentTransaction;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
@@ -31,7 +28,6 @@ import subsystem.vnpay.ConfigVNPay;
 import utils.Configs;
 import utils.Utils;
 import views.screen.BaseScreenHandler;
-import views.screen.payment.PaymentScreenHandler;
 import views.screen.payment.ResultScreenHandler;
 
 public class InvoiceScreenHandler extends BaseScreenHandler {
@@ -138,7 +134,6 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 		webViewStage.setTitle("Payment Process");
 		webViewStage.initModality(Modality.APPLICATION_MODAL);
 
-		// Create a WebView and get its WebEngine
 		WebView webView = new WebView();
 		WebEngine webEngine = webView.getEngine();
 		this.setBController(new PaymentController());
@@ -146,9 +141,7 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 		webEngine.load(paymentURL);
 
 		webEngine.locationProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue.contains(ConfigVNPay.vnp_ReturnUrl)) {
-				Map<String, String> queryParams = extractAndPrintQueryParameters(newValue);
-				String transactionStatus = Utils.extractQueryParameter(newValue, "vnp_TransactionStatus");
+			if (ConfigVNPay.isVNPayReturnURL(newValue)) {
 				webViewStage.close();
 				try {
 					URI uri = new URI(newValue);
@@ -163,18 +156,18 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 					}
 
 
-				} catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+				} catch (URISyntaxException | IOException | SQLException | PaymentException e) {
+					PaymentTransaction paymentTransaction = new PaymentTransaction(invoice.getOrder().getId(), "01", "TRAN001", "Thanh toan don hang: " + invoice.getOrder().getId(), invoice.getOrder().calculateTotalPrice(), String.valueOf(new Date()), "0001");
+                    try {
+                        showResult(paymentTransaction);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
-			}
-
+            }
 		});
 		webViewStage.setOnCloseRequest(eventClose -> {
-			if (!webEngine.getLocation().contains(ConfigVNPay.vnp_ReturnUrl)) {
+			if (!ConfigVNPay.isVNPayReturnURL(webEngine.getLocation())) {
 				PaymentTransaction paymentTransaction = new PaymentTransaction(invoice.getOrder().getId(), "01", "TRAN001", "Thanh toan don hang: " + invoice.getOrder().getId(), invoice.getOrder().calculateTotalPrice(), String.valueOf(new Date()), "0001");
 				try {
 					showResult(paymentTransaction);
@@ -191,13 +184,6 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 		webViewStage.setTitle("WebView");
 		webViewStage.setScene(webViewScene);
 		webViewStage.show();
-//		BaseScreenHandler paymentScreen = new PaymentScreenHandler(this.stage, Configs.PAYMENT_SCREEN_PATH, invoice.getOrder());
-//		paymentScreen.setBController(new PaymentController());
-//		paymentScreen.setPreviousScreen(this);
-//		paymentScreen.setHomeScreenHandler(homeScreenHandler);
-//		paymentScreen.setScreenTitle("Payment Screen");
-//		paymentScreen.show();
-//		LOGGER.info("Confirmed invoice");
 	}
 	void showResult(PaymentTransaction paymentTransaction) throws IOException {
 		PaymentController controller = (PaymentController) getBController();
@@ -209,23 +195,4 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 		resultScreen.show();
 
 	}
-	private Map<String, String> extractAndPrintQueryParameters(String url) {
-		try {
-			URI uri = new URI(url);
-			String query = uri.getQuery();
-			Map<String, String> queryParams = new HashMap<>();
-			String[] pairs = query.split("&");
-			for (String pair : pairs) {
-				int idx = pair.indexOf("=");
-				String key = idx > 0 ? pair.substring(0, idx) : pair;
-				String value = idx > 0 && pair.length() > idx + 1 ? pair.substring(idx + 1) : null;
-				queryParams.put(key, value);
-			}
-			return queryParams;
-		} catch (URISyntaxException e) {
-			System.out.println("Error: " + e.getMessage());
-		}
-		return new HashMap<>();
-	}
-
 }
