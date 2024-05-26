@@ -9,21 +9,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="pageTitle" layoutX="99.0" layoutY="-12.0" prefHeight="96.0" prefWidth="128.0" text="CART" textAlignment="CENTER" textFill="#5091e6">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f3f4" height="88.0" layoutX="-6.0" layoutY="87.0" stroke="WHITE" strokeType="INSIDE" width="1374.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="428.0" layoutX="999.0" layoutY="193.0" stroke="BLACK" strokeType="INSIDE" width="344.0" />
+      <Label fx:id="pageTitle" layoutX="99.0" prefHeight="70.0" prefWidth="106.0" text="AIMS" textAlignment="CENTER" textFill="#5091e6">
          <font>
             <Font name="Segoe UI Semibold" size="42.0" />
          </font>
       </Label>
-      <ImageView fx:id="aimsImage" fitHeight="73.0" fitWidth="73.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+      <ImageView fx:id="aimsImage" fitHeight="55.0" fitWidth="54.0" layoutX="24.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
          <image>
             <Image url="@../images/cart.png" />
          </image>
       </ImageView>
-      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="70.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="678.0" prefWidth="987.0">
+      <ScrollPane hbarPolicy="NEVER" layoutX="206.0" layoutY="241.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="471.0" prefWidth="685.0">
          <content>
             <VBox fx:id="vboxCart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="567.0" />
          </content>
@@ -80,7 +83,7 @@
                      </children>
                   </HBox>
                   <Separator layoutX="50.0" layoutY="5.0" prefHeight="18.0" prefWidth="239.0" />
-                  <Button fx:id="btnCancelOrder1" alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" layoutY="114.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="PLACE ORDER" textFill="WHITE">
+                  <Button fx:id="btnPlaceOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" layoutY="125.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="PLACE ORDER" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
@@ -89,10 +92,25 @@
             </AnchorPane>
          </children>
       </VBox>
-      <Button fx:id="btnCancelOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="1127.0" layoutY="539.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="CANCLE" textFill="WHITE">
+      <Label layoutX="51.0" layoutY="87.0" prefHeight="35.0" prefWidth="54.0" text="Cart">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="51.0" layoutY="131.0" prefHeight="26.0" prefWidth="130.0" text="AIMS     &gt;   Cart">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnCancelOrder1" alignment="CENTER" contentDisplay="CENTER" layoutX="1127.0" layoutY="539.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" style="-fx-background-color: #ffffff; -fx-cursor: hand;" text="CANCEL" textFill="black">
          <font>
             <Font name="Segoe UI Bold" size="24.0" />
          </font>
       </Button>
+      <Label layoutX="1087.0" layoutY="205.0" prefHeight="35.0" prefWidth="178.0" text="Order summary">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
