@@ -14,7 +14,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f2f3f4" height="88.0" layoutX="-6.0" layoutY="87.0" stroke="WHITE" strokeType="INSIDE" width="1374.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d5d7d9" height="91.0" layoutX="-6.0" layoutY="84.0" stroke="WHITE" strokeType="INSIDE" width="1372.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="428.0" layoutX="999.0" layoutY="193.0" stroke="BLACK" strokeType="INSIDE" width="344.0" />
       <Label fx:id="pageTitle" layoutX="99.0" prefHeight="70.0" prefWidth="106.0" text="AIMS" textAlignment="CENTER" textFill="#5091e6">
          <font>
@@ -83,9 +83,9 @@
                      </children>
                   </HBox>
                   <Separator layoutX="50.0" layoutY="5.0" prefHeight="18.0" prefWidth="239.0" />
-                  <Button fx:id="btnPlaceOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="119.0" layoutY="125.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="PLACE ORDER" textFill="WHITE">
+                  <Button fx:id="btnPlaceOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="97.0" layoutY="125.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="PLACE ORDER" textFill="WHITE">
                      <font>
-                        <Font name="Segoe UI Bold" size="24.0" />
+                        <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                   </Button>
                </children>
@@ -102,9 +102,9 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="btnCancelOrder1" alignment="CENTER" contentDisplay="CENTER" layoutX="1127.0" layoutY="539.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="106.0" style="-fx-background-color: #ffffff; -fx-cursor: hand;" text="CANCEL" textFill="black">
+      <Button fx:id="btnCancelOrder1" alignment="CENTER" contentDisplay="CENTER" layoutX="1105.0" layoutY="548.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-cursor: hand;" text="CANCEL" textFill="black">
          <font>
-            <Font name="Segoe UI Bold" size="24.0" />
+            <Font name="Segoe UI Bold" size="18.0" />
          </font>
       </Button>
       <Label layoutX="1087.0" layoutY="205.0" prefHeight="35.0" prefWidth="178.0" text="Order summary">
