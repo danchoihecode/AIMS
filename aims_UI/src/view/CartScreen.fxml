@@ -15,7 +15,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d5d7d9" height="91.0" layoutX="-6.0" layoutY="84.0" stroke="WHITE" strokeType="INSIDE" width="1372.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="428.0" layoutX="999.0" layoutY="193.0" stroke="BLACK" strokeType="INSIDE" width="344.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="439.0" layoutX="933.0" layoutY="223.0" stroke="BLACK" strokeType="INSIDE" width="326.0" />
       <Label fx:id="pageTitle" layoutX="99.0" prefHeight="70.0" prefWidth="106.0" text="AIMS" textAlignment="CENTER" textFill="#5091e6">
          <font>
             <Font name="Segoe UI Semibold" size="42.0" />
@@ -31,16 +31,16 @@
             <VBox fx:id="vboxCart" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="567.0" />
          </content>
       </ScrollPane>
-      <VBox layoutX="1008.0" layoutY="251.0" prefHeight="288.0" prefWidth="344.0">
+      <VBox layoutX="943.0" layoutY="269.0" prefHeight="288.0" prefWidth="344.0">
          <children>
             <HBox prefHeight="56.0" prefWidth="316.0">
                <children>
-                  <Label fx:id="subtotal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="161.0" text="Subtotal:" textAlignment="CENTER">
+                  <Label fx:id="subtotal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="137.0" text="Subtotal:" textAlignment="CENTER">
                      <font>
                         <Font name="Arial Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labelSubtotal" prefHeight="55.0" prefWidth="162.0" text="1000000 VND" textFill="#5091e6">
+                  <Label fx:id="labelSubtotal" prefHeight="55.0" prefWidth="166.0" text="1000000 VND" textFill="#5091e6">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -54,12 +54,12 @@
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="58.0" prefWidth="106.0" text="(10%):">
+                  <Label prefHeight="58.0" prefWidth="85.0" text="(10%):">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="labelVAT" prefHeight="58.0" prefWidth="167.0" text="1000 VND" textFill="#5091e6">
+                  <Label fx:id="labelVAT" prefHeight="58.0" prefWidth="176.0" text="1000 VND" textFill="#5091e6">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -75,7 +75,7 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Label fx:id="labelAmount" prefHeight="45.0" prefWidth="206.0" text="1100000 VND" textFill="#5091e6">
+                        <Label fx:id="labelAmount" prefHeight="46.0" prefWidth="236.0" text="1100000 VND" textFill="#5091e6">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -83,7 +83,7 @@
                      </children>
                   </HBox>
                   <Separator layoutX="50.0" layoutY="5.0" prefHeight="18.0" prefWidth="239.0" />
-                  <Button fx:id="btnPlaceOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="97.0" layoutY="125.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="PLACE ORDER" textFill="WHITE">
+                  <Button fx:id="btnPlaceOrder" alignment="CENTER" contentDisplay="CENTER" layoutX="94.0" layoutY="125.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="144.0" style="-fx-background-color: #000000; -fx-cursor: hand;" text="PLACE ORDER" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="18.0" />
                      </font>
@@ -102,12 +102,12 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="btnCancelOrder1" alignment="CENTER" contentDisplay="CENTER" layoutX="1105.0" layoutY="548.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #ffffff; -fx-cursor: hand;" text="CANCEL" textFill="black">
+      <Button fx:id="btnCancelOrder1" alignment="CENTER" contentDisplay="CENTER" layoutX="1030.0" layoutY="575.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #ffffff; -fx-cursor: hand;" text="CANCEL" textFill="black">
          <font>
             <Font name="Segoe UI Bold" size="18.0" />
          </font>
       </Button>
-      <Label layoutX="1087.0" layoutY="205.0" prefHeight="35.0" prefWidth="178.0" text="Order summary">
+      <Label layoutX="1016.0" layoutY="233.0" prefHeight="35.0" prefWidth="178.0" text="Order summary">
          <font>
             <Font size="24.0" />
          </font>
