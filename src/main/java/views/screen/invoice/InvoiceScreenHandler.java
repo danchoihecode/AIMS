@@ -28,7 +28,9 @@ import subsystem.vnpay.ConfigVNPay;
 import utils.Configs;
 import utils.Utils;
 import views.screen.BaseScreenHandler;
+import views.screen.payment.FailOrderScreen;
 import views.screen.payment.ResultScreenHandler;
+import views.screen.payment.SuccessOrderScreen;
 
 public class InvoiceScreenHandler extends BaseScreenHandler {
 
@@ -186,9 +188,19 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 		webViewStage.show();
 	}
 	void showResult(PaymentTransaction paymentTransaction) throws IOException {
+		System.out.println(invoice);
+		System.out.println(invoice.getOrder());
+		System.out.println(invoice.getOrder().getDeliveryInfo());
+		System.out.println(paymentTransaction);
 		PaymentController controller = (PaymentController) getBController();
-		BaseScreenHandler resultScreen = new ResultScreenHandler(this.stage, Configs.RESULT_SCREEN_PATH, paymentTransaction);
-		controller.emptyCart();
+		BaseScreenHandler resultScreen;
+		if (paymentTransaction.getErrorCode().equals("00")) {
+			resultScreen = new SuccessOrderScreen(this.stage, Configs.SUCCESS_ORDER_SCREEN_PATH, invoice, paymentTransaction);
+			controller.emptyCart();
+
+		} else {
+			resultScreen = new FailOrderScreen(this.stage, Configs.FAIL_ORDER_SCREEN_PATH, invoice, paymentTransaction);
+		}
 		resultScreen.setPreviousScreen(this);
 		resultScreen.setHomeScreenHandler(homeScreenHandler);
 		resultScreen.setScreenTitle("Result Screen");

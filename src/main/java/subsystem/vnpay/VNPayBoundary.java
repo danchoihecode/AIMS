@@ -12,7 +12,7 @@ import java.util.Map;
 public class VNPayBoundary {
 
 	public String generateURL(int amount, String content) throws IOException {
-		Map<String, String> vnp_Params = ConfigVNPay.getVNPPayParams(amount, content, "pay");
+		Map<String, String> vnp_Params = ConfigVNPay.getVNPPayParams(amount, ConfigVNPay.getRandomNumber(8), "pay");
 		return ConfigVNPay.getVNPayUrl(vnp_Params);
 	}
 

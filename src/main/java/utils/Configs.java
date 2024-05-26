@@ -48,6 +48,8 @@ public class Configs {
 	public static final String INVOICE_MEDIA_SCREEN_PATH = "/views/fxml/media_invoice.fxml";
 	public static final String PAYMENT_SCREEN_PATH = "/views/fxml/payment.fxml";
 	public static final String RESULT_SCREEN_PATH = "/views/fxml/result.fxml";
+	public static final String SUCCESS_ORDER_SCREEN_PATH = "/views/fxml/success_order.fxml";
+	public static final String FAIL_ORDER_SCREEN_PATH = "/views/fxml/fail_order.fxml";
 	public static final String SPLASH_SCREEN_PATH = "/views/fxml/splash.fxml";
 	public static final String CART_SCREEN_PATH = "/views/fxml/cart.fxml";
 	public static final String VIEW_ORDER_SCREEN_PATH = "/views/fxml/view_order.fxml";

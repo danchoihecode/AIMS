@@ -17,6 +17,7 @@
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/entity/cart/CartMedia.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/views/screen/payment/ResultScreenHandler.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/common/exception/ProcessInvoiceException.java
+/Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/views/screen/payment/SuccessOrderScreen.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/common/exception/RefundException.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/entity/payment/PaymentTransaction.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/entity/order/OrderDTO.java
@@ -24,6 +25,7 @@
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/views/screen/ordermanagement/RefundResultScreenHandler.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/common/exception/NotFoundTransactionException.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/common/exception/InvalidCardException.java
+/Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/views/screen/payment/FailOrderScreen.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/views/screen/shipping/ShippingScreenHandler.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/views/screen/SplashScreenHandler.java
 /Users/haidohong/Programming/javafx/AIMS-Student-master/src/main/java/App.java

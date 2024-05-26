@@ -1,6 +1,7 @@
 package entity.payment;
 
 import entity.db.AIMSDB;
+import subsystem.vnpay.ConfigVNPay;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,11 +41,7 @@ public class PaymentTransaction {
         this.transactionContent = transactionContent;
         this.amount = amount;
         this.createdAt = createdAt;
-        if ("00".equals(getErrorCode())) {
-            message = "Successful transaction";
-        } else {
-            message = "Transaction failed";
-        }
+        message = ConfigVNPay.getTransactionStatus(getErrorCode());
     }
 
     public String getTransactionNum() {

@@ -20,6 +20,7 @@ views/screen/payment/ResultScreenHandler.class
 entity/media/CD.class
 views/screen/cart/CartScreenHandler.class
 views/seller_screen/seller_event_screen/create/CreateCommonInfo.class
+views/screen/payment/FailOrderScreen.class
 entity/order/Order$OrderState.class
 common/exception/PlaceOrderException.class
 views/screen/SplashScreenHandler.class
@@ -62,6 +63,7 @@ common/exception/MediaUpdateException.class
 utils/MyMap.class
 subsystem/IPaymentSubsystem.class
 subsystem/vnpay/VNPaySubsystemController.class
+views/screen/payment/SuccessOrderScreen.class
 views/screen/ordermanagement/OrderDetailScreenHandler$1.class
 utils/API.class
 common/exception/RejectedTransactionException.class

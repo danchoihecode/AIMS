@@ -18,7 +18,22 @@ import java.util.*;
  * @author CTT VNPAY
  */
 public class ConfigVNPay {
+    private static final Map<String, String> transactionStatus = new HashMap<>();
 
+    // Static initialization block to populate the map
+    static {
+        transactionStatus.put("00", "Giao dịch thành công");
+        transactionStatus.put("01", "Giao dịch chưa hoàn tất");
+        transactionStatus.put("02", "Giao dịch bị lỗi");
+        transactionStatus.put("04", "Giao dịch đảo (Khách hàng đã bị trừ tiền tại Ngân hàng nhưng GD chưa thành công ở VNPAY)");
+        transactionStatus.put("05", "VNPAY đang xử lý giao dịch này (GD hoàn tiền)");
+        transactionStatus.put("06", "VNPAY đã gửi yêu cầu hoàn tiền sang Ngân hàng (GD hoàn tiền)");
+        transactionStatus.put("07", "Giao dịch bị nghi ngờ gian lận");
+        transactionStatus.put("09", "GD Hoàn trả bị từ chối");
+    }
+    public static String getTransactionStatus(String key) {
+        return transactionStatus.get(key);
+    }
     public static final String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static final String vnp_ReturnUrl = "http://localhost:8080/payment";
     public static final String vnp_TmnCode = "3EBUDP0P";
