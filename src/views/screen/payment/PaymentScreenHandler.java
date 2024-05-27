@@ -45,9 +45,18 @@ public class PaymentScreenHandler extends BaseScreenHandler {
     private Label pageTitle;
     @FXML
     private VBox vBox;
+    @FXML
+	private ImageView aimsImage;
 
     public PaymentScreenHandler(Stage stage, String screenPath, Order order) throws IOException {
         super(stage, screenPath);
+        File file = new File("assets/images/Logo.png");
+		Image im = new Image(file.toURI().toString());
+		aimsImage.setImage(im);
+
+		aimsImage.setOnMouseClicked(e -> {
+			homeScreenHandler.show();
+		});
         this.setBController(new PaymentController());
         this.order = order;
         WebView paymentView = new WebView();

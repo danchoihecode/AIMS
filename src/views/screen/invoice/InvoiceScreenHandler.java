@@ -74,10 +74,21 @@ public class InvoiceScreenHandler extends BaseScreenHandler {
 	@FXML
 	private VBox vboxItems;
 
+	@FXML
+	private ImageView aimsImage;
+
 	private Invoice invoice;
 
 	public InvoiceScreenHandler(Stage stage, String screenPath, Invoice invoice) throws IOException {
 		super(stage, screenPath);
+		File file = new File("assets/images/Logo.png");
+		Image im = new Image(file.toURI().toString());
+		aimsImage.setImage(im);
+
+		aimsImage.setOnMouseClicked(e -> {
+			homeScreenHandler.show();
+		});
+
 		this.invoice = invoice;
 		setInvoiceInfo();
 		gobackBtn.setOnMouseClicked(e -> {
