@@ -9,12 +9,14 @@ export default function Cart() {
                 <h2 className="font-semibold text-xl">Your cart</h2>
                 <Separator orientation="horizontal" />
                 <div>
-                    <CartItem item={{
-                        title: "Product 1",
-                        price: 10000,
-                        quantity: 1,
-                        imageUrl: "/sample.jpg",
-                    }} />
+                    <CartItem
+                        item={{
+                            title: "Product 1",
+                            price: 10000,
+                            quantity: 1,
+                            imageUrl: "/sample.jpg",
+                        }}
+                    />
                 </div>
             </div>
             <CartTotal subtotal={10000} tax={1000} />
