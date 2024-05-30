@@ -4,14 +4,11 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
+import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 
 interface CartItemProps {
-    item: {
-        title: string;
-        price: number;
-        quantity: number;
-        imageUrl: string;
-    };
+    item: CartItemDTO;
+    setItemList?: any;
 }
 const isValidQty = (qty: string) => {
     if (/^[0-9]*$/.test(qty) === false) {
@@ -19,7 +16,7 @@ const isValidQty = (qty: string) => {
     }
     return parseInt(qty) > 0;
 }
-export default function CartItem({item}: CartItemProps) {
+export default function CartItem({item, setItemList}: CartItemProps) {
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -28,8 +25,8 @@ export default function CartItem({item}: CartItemProps) {
     return (
         <div className="flex space-x-8 items-center p-8">
             <Toaster />
-            <div className="w-24 h-24 bg-slate-100 shrink-0 flex justify-center items-center">
-                <Image src={item.imageUrl} height={80} width={40} alt="poster" />
+            <div className="w-24 h-24 bg-slate-100 shrink-0 flex justify-center items-center relative">
+                <Image src={item.imageUrl} alt="poster" layout="fill" objectFit="contain"/>
             </div>
             <div className="grow">
                 <p>{item.title}</p>
@@ -39,14 +36,15 @@ export default function CartItem({item}: CartItemProps) {
             <Input className="w-16" value={qty} onChange={(e) => {
                 const value = e.target.value;
                 if (!isValidQty(value)) {
-                    console.log("Invalid quantity");
                     toast.error("Invalid quantity");    
                     return;
                 }
                 setQty(parseInt(value, 10));
             }}/>
             <Button variant="secondary" size="icon" className="shrink-0" onClick={() => {
-                toast.success("Item removed from cart");
+                setItemList((prev: any) => {
+                    return prev.filter((i: any) => i.id !== item.id);
+                });
             }}>
                 <Image
                     width={16}

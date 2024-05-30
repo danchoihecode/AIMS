@@ -39,7 +39,7 @@ export default function CartTotal({ subtotal, tax }: CartTotalProps) {
                 </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-2">
-                <Link href="/cart/order" className="w-full">
+                <Link href="/cart/delivery" className="w-full">
                     <Button className="w-full">Checkout</Button>
                 </Link>
                 <Link href="/" className="w-full">

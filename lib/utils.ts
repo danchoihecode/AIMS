@@ -10,3 +10,10 @@ export const capitalizeFirstLetter = (path: string) => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 }
+export function isWithinNextWeek(date: Date): boolean {
+    const today = new Date();
+    const nextWeek = new Date();
+    nextWeek.setDate(today.getDate() + 7);
+
+    return date >= today && date <= nextWeek;
+}

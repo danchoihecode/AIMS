@@ -18,14 +18,14 @@ export default function MyBreadcrumb() {
     return (
         <div className="p-16 bg-slate-100 space-y-2">
             <h1 className="text-3xl font-semibold">
-                {capitalizeFirstLetter(paths[paths.length - 1])}
+                {paths.length ? capitalizeFirstLetter(paths[paths.length - 1]) : "Home"}
             </h1>
             <Breadcrumb>
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink href="/">Home</BreadcrumbLink>
                     </BreadcrumbItem>
-                    {paths.map((path) => {
+                    {paths && paths.map((path) => {
                         currentPath += `/${path}`;
                         return (
                             <Fragment key={path}>
