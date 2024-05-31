@@ -1,6 +1,7 @@
-package com.springboot.vnpaysubsystem;
+package com.springboot.subsystem.vnpaysubsystem;
 
-import static com.springboot.vnpaysubsystem.ConfigVNPay.vnp_Version;
+import static com.springboot.subsystem.vnpaysubsystem.ConfigVNPay.vnp_Version;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;

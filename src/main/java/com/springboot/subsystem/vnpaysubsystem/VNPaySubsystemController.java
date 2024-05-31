@@ -1,10 +1,11 @@
-package com.springboot.vnpaysubsystem;
+package com.springboot.subsystem.vnpaysubsystem;
 
 import java.io.IOException;
 import java.util.Map;
 
 import com.springboot.model.entity.PaymentTransaction;
 import com.springboot.model.entity.RefundTransaction;
+import com.springboot.subsystem.IPaymentSubsystem;
 
 public class VNPaySubsystemController implements IPaymentSubsystem {
 

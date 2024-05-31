@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.model.entity.PaymentTransaction;
 import com.springboot.model.response.PaymentURLResponse;
-import com.springboot.vnpaysubsystem.IPaymentSubsystem;
-import com.springboot.vnpaysubsystem.PaymentSubsystem;
-import com.springboot.vnpaysubsystem.VNPaySubsystemController;
+import com.springboot.subsystem.IPaymentSubsystem;
+import com.springboot.subsystem.PaymentSubsystem;
+import com.springboot.subsystem.vnpaysubsystem.VNPaySubsystemController;
 
 @RestController
 @RequestMapping

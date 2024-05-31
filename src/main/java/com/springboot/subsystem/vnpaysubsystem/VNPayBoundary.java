@@ -1,4 +1,4 @@
-package com.springboot.vnpaysubsystem;
+package com.springboot.subsystem.vnpaysubsystem;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
