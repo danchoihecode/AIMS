@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.model.CartProduct;
 import com.springboot.model.response.StockAvailabilityResponse;
-import com.springboot.model.response.Tax;
+import com.springboot.model.response.TaxResponse;
 import com.springboot.model.response.UpdateCartResponse;
 import com.springboot.service.CartService;
 import com.springboot.service.ProductService;
@@ -63,8 +63,8 @@ public class CartController {
 
 	@GetMapping(value = "/tax")
 
-	public ResponseEntity<Tax> getTax() {
-		return ResponseEntity.ok(new Tax(10));
+	public ResponseEntity<TaxResponse> getTax() {
+		return ResponseEntity.ok(new TaxResponse(10));
 	}
 
 }

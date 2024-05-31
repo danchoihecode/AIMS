@@ -5,6 +5,6 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class Tax {
+public class TaxResponse {
 	int taxRate;
 }
