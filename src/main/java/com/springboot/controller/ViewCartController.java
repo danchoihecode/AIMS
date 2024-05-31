@@ -21,7 +21,7 @@ import com.springboot.service.ProductService;
 
 @RestController
 @RequestMapping
-public class CartController {
+public class ViewCartController {
 	@Autowired
 	private CartService cartService;
 	@Autowired
