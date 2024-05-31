@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.model.CartProduct;
-import com.springboot.model.StockAvailabilityResponse;
-import com.springboot.model.Tax;
-import com.springboot.model.UpdateCartResponse;
+import com.springboot.model.response.StockAvailabilityResponse;
+import com.springboot.model.response.Tax;
+import com.springboot.model.response.UpdateCartResponse;
 import com.springboot.service.CartService;
 import com.springboot.service.ProductService;
 
