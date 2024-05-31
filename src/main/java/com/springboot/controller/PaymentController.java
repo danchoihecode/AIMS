@@ -4,12 +4,19 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.model.entity.Invoice;
+import com.springboot.model.entity.Order;
 import com.springboot.model.entity.PaymentTransaction;
 import com.springboot.model.response.PaymentURLResponse;
+import com.springboot.service.InvoiceService;
 import com.springboot.subsystem.IPaymentSubsystem;
 import com.springboot.subsystem.PaymentSubsystem;
 import com.springboot.subsystem.vnpaysubsystem.VNPaySubsystemController;
@@ -19,25 +26,31 @@ import com.springboot.subsystem.vnpaysubsystem.VNPaySubsystemController;
 public class PaymentController {
 
 	private IPaymentSubsystem payment;
+	private Invoice invoice;
+
+	@Autowired
+	InvoiceService invoiceService;
 
 	public PaymentController() {
 		this.payment = new PaymentSubsystem(new VNPaySubsystemController());
 	}
+	
+	public void payOrder(Order order) {
+		invoice = new Invoice(order);
+		System.out.println(invoice.getAmount());
+	}
 
-	public void makePayment(Map<String, String> res) throws IOException, SQLException {
+	@PostMapping("/payment/result")
+	public ResponseEntity<Void> makePayment(@RequestBody Map<String, String> res) throws IOException, SQLException {
 		PaymentTransaction transaction = payment.getPaymentTransaction(res);
-		PaymentTransaction.saveTransaction(transaction);
+		invoice.setPaymentTransaction(transaction);
+		invoiceService.save(invoice);
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/payment/VNPayURL")
-	public PaymentURLResponse generateURL(int amount, String content) throws IOException {
-		return new PaymentURLResponse(payment.generateURL(amount, content));
+	public PaymentURLResponse generateURL() throws IOException {
+		return new PaymentURLResponse(payment.generateURL(invoice.getAmount(), "Payment"));
 	}
-//	public int createOrder(Order order) throws SQLException {
-//		return Order.createOrder(order);
-//	}
-//
-//	public void emptyCart(){
-//		Cart.getCart().emptyCart();
-//	}
+
 }

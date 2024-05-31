@@ -13,7 +13,7 @@ public interface IPaymentSubsystem {
 	public abstract PaymentTransaction getPaymentTransaction(Map<String,String> res)
 			throws PaymentException, UnrecognizedException, IOException;
 
-	public abstract String generateURL(int amount, String content) throws IOException;
+	public abstract String generateURL(double d, String content) throws IOException;
 	public abstract RefundTransaction refund(PaymentTransaction paymentTransaction) throws IOException;
 
 }

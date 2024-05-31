@@ -50,4 +50,9 @@ public class CartService {
 		return cartProducts;
 	}
 
+	public Cart findById(Long id) throws Exception {
+		Cart cart = cartRepository.findById(id).orElseThrow(() -> new Exception("Cart not found"));
+		return cart;
+	}
+
 }

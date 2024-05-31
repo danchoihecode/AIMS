@@ -29,10 +29,9 @@ public class PayResponseVNPay {
         String transactionId = response.get("vnp_TransactionNo");
         String transactionContent = response.get("vnp_OrderInfo");
         int amount = Integer.parseInt(response.get("vnp_Amount")) / 100;
-        int orderId = Integer.parseInt(response.get("orderId"));
         String createdAt = response.get("vnp_PayDate");
         String vnpTxnRef = response.get("vnp_TxnRef");
-        PaymentTransaction trans = new PaymentTransaction(orderId,errorCode, transactionId, transactionContent, amount, Utils.convertPaymentTimeFormat(createdAt), vnpTxnRef);
+        PaymentTransaction trans = new PaymentTransaction(errorCode, transactionId, transactionContent, amount, Utils.convertPaymentTimeFormat(createdAt), vnpTxnRef);
 
         switch (trans.getErrorCode()) {
             case "00":

@@ -13,7 +13,7 @@ public class VNPaySubsystemController implements IPaymentSubsystem {
 	private static VNPayBoundary vnPayBoundary = new VNPayBoundary();
 
 	@Override
-	public String generateURL(int amount, String content) throws IOException {
+	public String generateURL(double amount, String content) throws IOException {
 		return vnPayBoundary.generateURL(amount, content);
 	}
 

@@ -11,7 +11,7 @@ import com.springboot.model.entity.RefundTransaction;
 
 public class VNPayBoundary {
 
-	public String generateURL(int amount, String content) throws IOException {
+	public String generateURL(double amount, String content) throws IOException {
 		PayRequestVNPay payRequestVNPay = new PayRequestVNPay(amount, content);
 		return payRequestVNPay.generateURL();
 	}

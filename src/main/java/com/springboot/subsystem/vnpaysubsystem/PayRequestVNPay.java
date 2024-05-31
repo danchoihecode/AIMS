@@ -16,17 +16,17 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class PayRequestVNPay {
-    private int amount;
+    private double amount;
     private String content;
 
-    public PayRequestVNPay(int amount, String content){
-        this.amount = amount;
+    public PayRequestVNPay(double amount2, String content){
+        this.amount = amount2;
         this.content = content;
     }
 
     public String generateURL() throws UnsupportedEncodingException {
         String orderType = "other";
-        long amountVNPay = amount * 100L;
+        double amountVNPay = amount * 100L; 
 
         String vnp_TxnRef = ConfigVNPay.getRandomNumber(8);
         String vnp_IpAddr = ConfigVNPay.getIpAddress();

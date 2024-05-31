@@ -23,7 +23,7 @@ public class PaymentSubsystem implements IPaymentSubsystem {
 	}
 
 	@Override
-	public String generateURL(int amount, String content) throws IOException {
+	public String generateURL(double amount, String content) throws IOException {
 		return controller.generateURL(amount, content);
 	}
 
