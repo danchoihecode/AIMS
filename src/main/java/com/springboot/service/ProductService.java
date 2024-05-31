@@ -3,7 +3,7 @@ package com.springboot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springboot.model.Product;
+import com.springboot.model.entity.Product;
 import com.springboot.repository.ProductRepository;
 
 @Service

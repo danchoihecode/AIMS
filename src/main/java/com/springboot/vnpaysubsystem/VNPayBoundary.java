@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
-import com.springboot.model.PaymentTransaction;
-import com.springboot.model.RefundTransaction;
+import com.springboot.model.entity.PaymentTransaction;
+import com.springboot.model.entity.RefundTransaction;
 
 public class VNPayBoundary {
 

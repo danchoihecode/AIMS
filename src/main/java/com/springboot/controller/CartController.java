@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.model.CartProduct;
+import com.springboot.model.entity.CartProduct;
 import com.springboot.model.response.StockAvailabilityResponse;
 import com.springboot.model.response.TaxResponse;
 import com.springboot.model.response.UpdateCartResponse;

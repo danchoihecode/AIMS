@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springboot.model.Cart;
-import com.springboot.model.CartProduct;
 import com.springboot.model.CartProductKey;
-import com.springboot.model.Product;
+import com.springboot.model.entity.Cart;
+import com.springboot.model.entity.CartProduct;
+import com.springboot.model.entity.Product;
 import com.springboot.repository.CartProductRepository;
 import com.springboot.repository.CartRepository;
 import com.springboot.repository.ProductRepository;

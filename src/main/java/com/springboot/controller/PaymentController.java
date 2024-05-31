@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.model.PaymentTransaction;
+import com.springboot.model.entity.PaymentTransaction;
 import com.springboot.model.response.PaymentURLResponse;
 import com.springboot.vnpaysubsystem.IPaymentSubsystem;
 import com.springboot.vnpaysubsystem.PaymentSubsystem;

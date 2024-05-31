@@ -9,7 +9,7 @@ import com.springboot.exception.NotFoundTransactionException;
 import com.springboot.exception.ProcessingRefundException;
 import com.springboot.exception.RejectRefundTransactionException;
 import com.springboot.exception.UnrecognizedException;
-import com.springboot.model.RefundTransaction;
+import com.springboot.model.entity.RefundTransaction;
 
 public class RefundResponseVNPay {
     Map<String, String> response;

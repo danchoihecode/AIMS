@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.springboot.exception.PaymentException;
 import com.springboot.exception.UnrecognizedException;
-import com.springboot.model.PaymentTransaction;
-import com.springboot.model.RefundTransaction;
+import com.springboot.model.entity.PaymentTransaction;
+import com.springboot.model.entity.RefundTransaction;
 
 public interface IPaymentSubsystem {
 

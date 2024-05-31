@@ -11,7 +11,7 @@ import com.springboot.exception.TransactionFailedException;
 import com.springboot.exception.TransactionNotDoneException;
 import com.springboot.exception.TransactionReverseException;
 import com.springboot.exception.UnrecognizedException;
-import com.springboot.model.PaymentTransaction;
+import com.springboot.model.entity.PaymentTransaction;
 
 public class PayResponseVNPay {
     private Map<String, String> response;

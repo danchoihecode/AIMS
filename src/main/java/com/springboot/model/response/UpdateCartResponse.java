@@ -2,7 +2,7 @@ package com.springboot.model.response;
 
 import java.util.List;
 
-import com.springboot.model.CartProduct;
+import com.springboot.model.entity.CartProduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

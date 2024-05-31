@@ -1,4 +1,6 @@
-package com.springboot.model;
+package com.springboot.model.entity;
+
+import com.springboot.model.CartProductKey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;

@@ -1,4 +1,4 @@
-package com.springboot.model;
+package com.springboot.model.entity;
 
 public class RefundTransaction {
     private String id;
