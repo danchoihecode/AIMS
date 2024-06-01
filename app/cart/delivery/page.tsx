@@ -3,13 +3,14 @@ import DeliveryItems from "@/components/checkout/delivery-items";
 import { Separator } from "@/components/ui/separator";
 
 export default function Checkout() {
-    const items = [
+    const allItems = [
         {
             id: "1",
             title: "Killer of the flower moon",
             price: 200000,
             quantity: 1,
             imageUrl: "/sample.jpg",
+            isRushDelivery: true,
         },
         {
             id: "2",
@@ -17,6 +18,7 @@ export default function Checkout() {
             price: 20000,
             quantity: 2,
             imageUrl: "/sample.jpg",
+            isRushDelivery: false,
         },
         {
             id: "3",
@@ -24,25 +26,21 @@ export default function Checkout() {
             price: 30000,
             quantity: 3,
             imageUrl: "/sample.jpg",
-        }
+            isRushDelivery: false,
+        },
+        {
+            id: "4",
+            title: "Barbie",
+            price: 30000,
+            quantity: 3,
+            imageUrl: "/sample.jpg",
+            isRushDelivery: true,
+        },
     ];
+    const normalShippingFee = 20000;
+    const rushShippingFee = 50000;
+    const taxRate = 0.1;
     return (
-        <div className="lg:flex lg:space-x-4">
-            <DeliveryForm />
-            <Separator orientation="vertical" />
-            <div className="w-full lg:w-96 space-y-8">
-                <h2 className="text-lg font-bold">Your Order</h2>
-                <Separator orientation="horizontal" />
-                <div className="space-y-4">
-                    <h3 className="font-semibold text-slate-500">Normal Shipping</h3>
-                    <DeliveryItems items={items} />
-                </div>
-                <Separator orientation="horizontal" />
-                <div className="space-y-4">
-                    <h3 className="font-semibold text-slate-500">Rush Shipping</h3>
-                    <DeliveryItems items={items} />
-                </div>
-            </div>
-        </div>
+            <DeliveryForm cartItems={allItems} shippingFee={{normalShippingFee, rushShippingFee}} taxRate={taxRate} />
     );
 }

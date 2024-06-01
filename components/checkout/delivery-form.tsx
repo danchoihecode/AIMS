@@ -31,23 +31,41 @@ import { cn, isWithinNextWeek } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
+import DeliveryInfo from "./delivery-info";
+import { CartItemDTO } from "@/api/DTO/CartItemDTO";
+
+interface DeliveryFormProps {
+    cartItems: CartItemDTO[];
+    shippingFee: {
+    normalShippingFee: number;
+    rushShippingFee: number;
+    };
+    taxRate: number;
+}
 
 const DeliveryFormSchema = z.object({
-    name: z.string(),
+    name: z.string().min(5),
     email: z.string().email(),
     province: z.enum(province.map((p) => p.id) as any, {
         message: "Invalid province",
-    
     }),
-    district: z.string(),
-    street: z.string(),
+    district: z.string().min(5),
+    street: z.string().min(5),
     phone: z.string().min(10).max(10),
-    date: z.date().refine(isWithinNextWeek, {
-        message: "Date must be in the future",
-    }).optional(),
+    date: z
+        .date()
+        .refine(isWithinNextWeek, {
+            message: "Date must be in the future",
+        })
+        .optional(),
     note: z.string().optional(),
 });
-export default function DeliveryForm() {
+export default function DeliveryForm({
+    cartItems,
+    shippingFee,
+    taxRate,
+}: DeliveryFormProps
+) {
     const [isRush, setIsRush] = useState(false);
     const form = useForm<z.infer<typeof DeliveryFormSchema>>({
         resolver: zodResolver(DeliveryFormSchema),
@@ -68,207 +86,243 @@ export default function DeliveryForm() {
     const onRushDeliveryChange = (checked: boolean) => {
         setIsRush(checked);
         toast.success("Rush delivery is changed to " + checked);
-        // setIsRush(false);
-        // toast.error("Rush delivery is not available");
+        if (checked) {
+            setNormalDeliveryItems(
+                cartItems.filter((item) => !item.isRushDelivery)
+            );
+            setRushDeliveryItems(
+                cartItems.filter((item) => item.isRushDelivery)
+            );
+            setRushShippingFee(shippingFee.rushShippingFee);
+        } else {
+            setNormalDeliveryItems(cartItems);
+            setRushDeliveryItems([]);
+            setRushShippingFee(0);
+        }
     };
+    
+    const [normalDeliveryItems, setNormalDeliveryItems] = useState<CartItemDTO[]>(cartItems);
+    const [rushDeliveryItems, setRushDeliveryItems] = useState<CartItemDTO[]>([]);
+    const [rushShippingFee, setRushShippingFee] = useState(0);
     return (
         <>
             <Toaster />
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-8 grow"
+                    className="lg:flex lg:space-x-8"
                 >
-                    <div className="grid grid-cols-2 gap-4">
-                        <h2 className="text-l font-semibold col-span-2 mb-8">
-                            Personal Information
-                        </h2>
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Name</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} placeholder="Name" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="phone"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Phone Number</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="Phone Number"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} placeholder="Email" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <h2 className="text-l font-semibold col-span-2 mb-8">
-                            Shipping Address
-                        </h2>
-                        <FormField
-                            control={form.control}
-                            name="province"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Province</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        value={field.value}
-                                    >
+                    <div className="space-y-8 grow">
+                        <div className="grid grid-cols-2 gap-4">
+                            <h2 className="text-l font-semibold col-span-2 mb-8">
+                                Personal Information
+                            </h2>
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Name</FormLabel>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Province" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {province.map((p) => (
-                                                <SelectItem
-                                                    key={p.id}
-                                                    value={p.id}
-                                                >
-                                                    {p.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="district"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>District</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="District"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="street"
-                            render={({ field }) => (
-                                <FormItem className="col-span-2">
-                                    <FormLabel>Street Address</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="Street Address"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Switch
-                            id="rush-delivery"
-                            checked={isRush}
-                            onCheckedChange={onRushDeliveryChange}
-                        />
-                        <Label htmlFor="rush-delivery">Rush Delivery</Label>
-                    </div>
-                    <div className={cn("space-y-4", !isRush && "hidden")}>
-                        <h2 className="text-l font-semibold col-span-2 mb-8">
-                            Rush Shipping Infomation
-                        </h2>
-                        <FormField
-                            control={form.control}
-                            name="date"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-col">
-                                    <FormLabel>Shipping Date</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    className={cn(
-                                                        "w-[240px] pl-3 text-left font-normal",
-                                                        !field.value &&
-                                                            "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value ? (
-                                                        format(
-                                                            field.value,
-                                                            "PPP"
-                                                        )
-                                                    ) : (
-                                                        <span>Pick a date</span>
-                                                    )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent
-                                            className="w-auto p-0"
-                                            align="start"
-                                        >
-                                            <Calendar
-                                                mode="single"
-                                                selected={field.value}
-                                                onSelect={field.onChange}
-                                                disabled={(date) => !isWithinNextWeek(date)}
-                                                initialFocus
+                                            <Input
+                                                {...field}
+                                                placeholder="Name"
                                             />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="note"
-                            render={({ field }) => (
-                                <FormItem className="col-span-2">
-                                    <FormLabel>Shipping Instruction</FormLabel>
-                                    <FormControl>
-                                        <Textarea
-                                            {...field}
-                                            placeholder="Shipping Instruction"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="phone"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder="Phone Number"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder="Email"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <h2 className="text-l font-semibold col-span-2 mb-8">
+                                Shipping Address
+                            </h2>
+                            <FormField
+                                control={form.control}
+                                name="province"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Province</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Province" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {province.map((p) => (
+                                                    <SelectItem
+                                                        key={p.id}
+                                                        value={p.id}
+                                                    >
+                                                        {p.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="district"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>District</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder="District"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="street"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-2">
+                                        <FormLabel>Street Address</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                placeholder="Street Address"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Switch
+                                id="rush-delivery"
+                                checked={isRush}
+                                onCheckedChange={onRushDeliveryChange}
+                            />
+                            <Label htmlFor="rush-delivery">Rush Delivery</Label>
+                        </div>
+                        <div className={cn("space-y-4", !isRush && "hidden")}>
+                            <h2 className="text-l font-semibold col-span-2 mb-8">
+                                Rush Shipping Infomation
+                            </h2>
+                            <FormField
+                                control={form.control}
+                                name="date"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Shipping Date</FormLabel>
+                                        <Popover>
+                                            <PopoverTrigger asChild>
+                                                <FormControl>
+                                                    <Button
+                                                        variant="outline"
+                                                        className={cn(
+                                                            "w-[240px] pl-3 text-left font-normal",
+                                                            !field.value &&
+                                                                "text-muted-foreground"
+                                                        )}
+                                                    >
+                                                        {field.value ? (
+                                                            format(
+                                                                field.value,
+                                                                "PPP"
+                                                            )
+                                                        ) : (
+                                                            <span>
+                                                                Pick a date
+                                                            </span>
+                                                        )}
+                                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    </Button>
+                                                </FormControl>
+                                            </PopoverTrigger>
+                                            <PopoverContent
+                                                className="w-auto p-0"
+                                                align="start"
+                                            >
+                                                <Calendar
+                                                    mode="single"
+                                                    selected={field.value}
+                                                    onSelect={field.onChange}
+                                                    disabled={(date) =>
+                                                        !isWithinNextWeek(date)
+                                                    }
+                                                    initialFocus
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="note"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-2">
+                                        <FormLabel>
+                                            Shipping Instruction
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                {...field}
+                                                placeholder="Shipping Instruction"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
                     </div>
-                    <Button type="submit">Submit</Button>
+                    {/* <Separator orientation="vertical" /> */}
+                    <DeliveryInfo
+                        normalDeliveryItems={normalDeliveryItems}
+                        rushDeliveryItems={rushDeliveryItems}
+                        normalShippingFee={shippingFee.normalShippingFee}
+                        rushShippingFee={rushShippingFee}
+                        taxRate={taxRate}
+                    />
                 </form>
             </Form>
         </>

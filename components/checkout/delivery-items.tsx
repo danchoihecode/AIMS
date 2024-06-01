@@ -3,8 +3,9 @@ import DeliveryItem from "./delivery-item";
 
 interface DeliveryItemsProps {
     items: CartItemDTO[];
+    shippingFee: number;
 }
-export default function DeliveryItems({ items }: DeliveryItemsProps) {
+export default function DeliveryItems({ items, shippingFee }: DeliveryItemsProps) {
     const formatter = new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency: "VND",
@@ -21,7 +22,7 @@ export default function DeliveryItems({ items }: DeliveryItemsProps) {
             ))}
             <div className="flex space-x-2 text-sm">
                 <p className="w-2/3 text-slate-500">Shipping fee</p>
-                <p className="w-1/3 text-slate-500 text-right">{formatter.format(30000)}</p>
+                <p className="w-1/3 text-slate-500 text-right">{formatter.format(shippingFee)}</p>
             </div>
         </>
     );
