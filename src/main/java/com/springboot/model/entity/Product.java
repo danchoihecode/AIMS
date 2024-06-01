@@ -40,4 +40,7 @@ public class Product {
 	@Column(name = "rush_order_eligible", nullable = false)
 	private Boolean rushOrderEligible;
 
+	public boolean isRushOrderEligible() {
+		return rushOrderEligible;
+	}
 }

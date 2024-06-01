@@ -23,20 +23,22 @@ public class Order {
 	@JoinColumn(name = "cart_id", referencedColumnName = "id")
 	private Cart cart;
 
-	private double shippingFees;
+	private Double normalShippingFees;
+	private Double rushShippingFees;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "delivery_info_id", referencedColumnName = "id")
 	private DeliveryInfo deliveryInfo;
 
 	public Order() {}
-	public Order(Cart cart, double shippingFees, DeliveryInfo deliveryInfo) {
+	public Order(Cart cart, double normalShippingFees, double rushShippingFees, DeliveryInfo deliveryInfo) {
 		this.cart = cart;
-		this.shippingFees = shippingFees;
+		this.normalShippingFees = normalShippingFees;
+		this.rushShippingFees = rushShippingFees;
 		this.deliveryInfo = deliveryInfo;
 	}
 
-	public double getTotalAmount() {
-		return cart.getSubTotal() * 1.1 + shippingFees;
+	public Double getTotalAmount() {
+		return cart.getSubTotal() * 1.1 + normalShippingFees + rushShippingFees;
 	}
 }

@@ -35,5 +35,4 @@ public class CartProduct {
 
 	@Column(name = "qty", nullable = false)
 	private Integer qty;
-
 }
