@@ -1,46 +1,67 @@
 # ISD.ICT.20232-08
 
-## Members
+# Members
 - Bui Hoang Ha 20205149
 - Do Hong Hai 20215199
 - Duong Hoang Hai 20215198 - Leader
 - Nguyen Huu Hai 20215200
 - Dang Phuc Hieu 20194759
 
-## Work
+# Work
 
-### First week (20-26/5/2024)
+## First week (20-26/5/2024)
 All use cases related to Place order
 
-### Work assignment
-- Bui Hoang Ha 20205149: Class design, DB modeling, checks conflicts
-- Do Hong Hai 20215199: VNPay Subsystem, makes handlers for Delivery Form, SuccessOrderScreen, and FailureOrderScreen
-- Duong Hoang Hai 20215198: Gives skeleton source code, DB modeling, makes handlers for CartScreen and InvoiceScreen
+## Work done in week 1
+- Bui Hoang Ha 20205149:
+  + Class design
+  + DB modeling
+  + checks conflicts
+- Do Hong Hai 20215199:
+  + VNPay Subsystem
+  + Makes handlers for Delivery Form, SuccessOrderScreen and FailureOrderScreen
+  + GUI design for FailureOrderScreen
+- Duong Hoang Hai 20215198:
+  + Gives skeleton source code for the project
+  + DB modeling
+  + Makes handlers for CartScreen and InvoiceScreen
 - Nguyen Huu Hai 20215200: GUI design for Cart Screen and Delivery Form
-- Dang Phuc Hieu 20194759: GUI design for InvoiceScreen, SuccessOrderScreen, and FailureOrderScreen
+- Dang Phuc Hieu 20194759: GUI design for InvoiceScreen and SuccessOrderScreen
 
-## Tech stack
-- JavaFX
+## Second week (27/5-2/6/2024)
+All use cases related to Place order
+
+## Work done in week 2
+### Convert from desktop app to web app
+#### Frontend
+- Do Hong Hai 20215199: Programming the user-side web interface
+- Nguyen Huu Hai 20215200: Programming the user-side web interface
+#### Backend
+- Bui Hoang Ha 20205149:
+ + Handles API calls from the frontend in PlaceOrderController
+- Duong Hoang Hai 20215198:
+  + Create skeleton source code for project (model, service, repository, exception, controller)
+  + Handles API calls from the frontend in CartController, PaymentController
+  + VNPay subsystem (backend)
+- Dang Phuc Hieu 20194759: Did not participate
+### Review code
+- Bui Hoang Ha 20205149:
+- Do Hong Hai 20215199: 
+- Duong Hoang Hai 20215198:
+- Nguyen Huu Hai 20215200:
+- Dang Phuc Hieu 20194759:
+# Tech stack
+- Frontend : HTML, CSS, Javascript, Next.js Framework.
+- Backend :  Spring Boot, Java, MySQL
 
 # Project Setup Instructions
-
-1. Unzip the zip file.
-
-2. Configure Eclipse to use the required VM arguments for JavaFX:
-    - Go to `Run Configurations`.
-    - Select your Java application.
-    - In the `VM arguments` section, checks the following :
-      ```
-      --module-path lib/win/javafx-sdk-15/lib --add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web
-      --add-reads javafx.graphics=ALL-UNNAMED
-      --add-opens javafx.controls/com.sun.javafx.charts=ALL-UNNAMED
-      --add-opens javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED
-      --add-opens javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED
-      --add-opens javafx.graphics/com.sun.javafx.css=ALL-UNNAMED
-      --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
-      ```
-
-3. Open the file `App.java`.
-
-4. Click `Run` to start the project.
-
+1. Download XAMPP https://www.apachefriends.org/download.html
+2. Download and upzip the zip file
+3. For the backend project :
+- Run Xampp, on the Apache line, go to the config file httpd.conf and change the port to 88
+- Go to PHPMyAdmin: http://localhost:88/phpmyadmin/
+- Create a new database named 'aims'
+- Copy the command in the aims.sql file and run to create the database
+- Run the AimsApplication class to start the backend application
+4. For the frontend project :
+   
