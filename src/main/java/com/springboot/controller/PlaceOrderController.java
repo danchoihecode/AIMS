@@ -14,7 +14,9 @@ import com.springboot.service.CartService;
 @RestController
 @RequestMapping
 public class PlaceOrderController {
-	private PaymentController paymentController = new PaymentController();
+	
+	@Autowired
+	private PaymentController paymentController;
 	private Order order;
 	@Autowired
 	private CartService cartService;

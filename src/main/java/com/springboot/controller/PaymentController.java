@@ -37,7 +37,7 @@ public class PaymentController {
 	
 	public void payOrder(Order order) {
 		invoice = new Invoice(order);
-		System.out.println(invoice.getAmount());
+		System.out.println(invoice.toString());
 	}
 
 	@PostMapping("/payment/result")
