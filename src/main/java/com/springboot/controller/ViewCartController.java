@@ -62,9 +62,7 @@ public class ViewCartController {
 	}
 
 	@GetMapping(value = "/tax")
-
 	public ResponseEntity<TaxResponse> getTax() {
 		return ResponseEntity.ok(new TaxResponse(10));
 	}
-
 }

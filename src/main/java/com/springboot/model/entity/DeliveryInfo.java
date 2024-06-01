@@ -17,16 +17,15 @@ public class DeliveryInfo {
 	private Long id;
 
 	private String name;
-
 	private String phone;
-
 	private String email;
 	private String address;
 	private String instructions;
 	private LocalDate deliveryTime;
 	private boolean isRushOrder;
 
-	 public DeliveryInfo() {}
+	public DeliveryInfo() {}
+
 	public DeliveryInfo(String name, String phone, String email, String address, boolean isRushOrder) {
 		super();
 		this.name = name;
