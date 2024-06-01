@@ -57,7 +57,7 @@ All use cases related to Place order
 # Project Setup Instructions
 1. Download XAMPP https://www.apachefriends.org/download.html
 2. Download and upzip the zip file
-3. For the backend project :
+3. For the backend project (AIMS) :
 - Run Xampp, on the Apache line, go to the config file httpd.conf and change the port to 88
 - Go to PHPMyAdmin: http://localhost:88/phpmyadmin/
 - Create a new database named 'aims'
