@@ -1,5 +1,7 @@
 package com.springboot.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Map;
@@ -18,6 +20,7 @@ import com.springboot.model.entity.Cart;
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.DeliveryInfo;
 import com.springboot.model.entity.Order;
+import com.springboot.model.response.CartProductResponse;
 import com.springboot.model.response.RushDeliveryCheckResponse;
 import com.springboot.service.CartService;
 import com.springboot.service.OrderService;
@@ -30,7 +33,8 @@ public class PlaceOrderController {
 	@Autowired
 	private PaymentController paymentController;
 	private Order order;
-	private Double shippingFee;
+	private Double normalShippingFees = 0.0;
+	private Double rushShippingFees = 0.0;
 	@Autowired
 	private CartService cartService;
 	@Autowired
@@ -44,7 +48,6 @@ public class PlaceOrderController {
 		
 		try {
 			Cart cart = cartService.findById((long) 1);
-
 			paymentController.payOrder(order);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,7 +61,8 @@ public class PlaceOrderController {
 		try {
 			Long cartId = Long.valueOf(request.get("cartId").toString());
 			List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
-			return ResponseEntity.ok(order);
+			CartProductResponse response = CartProductResponse.fromCartProducts(cartProducts);
+			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.notFound().build();
@@ -85,6 +89,7 @@ public class PlaceOrderController {
 			else if (isRushDelivery == false || province != 1) {
 				List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
 				double normalShippingFee = calculateNormalShippingFee(cartProducts, province);
+				this.normalShippingFees = normalShippingFee;
 				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, 0, false);
 				return ResponseEntity.ok(response);
 			}
@@ -92,6 +97,8 @@ public class PlaceOrderController {
 				List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartService.getAllProductsInCart(cartId));
 				double normalShippingFee = calculateNormalShippingFee(rushDeliveryProducts, province);
 				double rushShippingFee = calculateRushShippingFee(rushDeliveryProducts, province);
+				this.normalShippingFees = normalShippingFee;
+				this.rushShippingFees = rushShippingFee;
 				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, rushShippingFee, false);
 				return ResponseEntity.ok(response);
 			}
@@ -101,50 +108,36 @@ public class PlaceOrderController {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@PostMapping("/cart/delivery/submit")
-	public ResponseEntity<Void> submitDeliveryForm(@RequestBody Map<String, Object> request) {
-		return ResponseEntity.ok().build();
-	}
-
-	public boolean validatePhoneNumber(String phoneNumber) {
-		if (phoneNumber.length() != 10)
-			return false;
-		if (Character.compare(phoneNumber.charAt(0), '0') != 0)
-			return false; 
+	public ResponseEntity<String> submitDeliveryForm(@RequestBody Map<String, Object> request) {
 		try {
-			Integer.parseInt(phoneNumber);
-		} catch (NumberFormatException e) {
-			return false;
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			Long cartId = Long.valueOf(request.get("cartId").toString());
+			Map<String, Object> deliveryFormDTO = (Map<String, Object>) request.get("DeliveryFormDTO");
+			String name = deliveryFormDTO.get("name").toString();
+			String phone = deliveryFormDTO.get("phone").toString();
+			String email = deliveryFormDTO.get("email").toString();
+			String address = deliveryFormDTO.get("address").toString();
+			Long province = Long.valueOf(deliveryFormDTO.get("province").toString());
+			String instructions = deliveryFormDTO.get("note").toString();
+			LocalDate date = LocalDate.parse(deliveryFormDTO.get("date").toString(), formatter);
+			Boolean isRushDelivery = Boolean.valueOf(deliveryFormDTO.get("isRushDelivery").toString());
+			
+			DeliveryInfo deliveryInfo = new DeliveryInfo(name, phone, email, province, instructions, address, date, isRushDelivery);
+			
+			if (!deliveryInfo.isValid()) {
+				return ResponseEntity.status(404).body("Invalid delivery information");
+			}
+			
+			Cart cart = cartService.findById((long) 1);
+			this.order = new Order(cart, this.normalShippingFees, this.rushShippingFees, deliveryInfo);
+			
+			return ResponseEntity.ok("Order created successfully");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(404).body("Failed to create order");
 		}
-		return true;
-	}
-
-	public boolean validateName(String name) {
-		if (name == null)
-			return false;
-		if (name.trim().length() == 0)
-			return false;
-		if (name.matches("^[a-zA-Z ]*$") == false)
-			return false;
-		return true;
-	}
-
-	public boolean validateAddress(String address) {
-		if (address == null)
-			return false;
-		if (address.trim().length() == 0)
-			return false;
-		if (address.matches("^[a-zA-Z ]*$") == false)
-			return false;
-		return true;
-	}
-
-	public boolean validateAddressPlaceRushOrder(Long province, String address) {
-		if (!validateAddress(address))
-			return false;
-		if(province != 1)
-			return false;
-		return true;
 	}
 
 	public double calculateNormalShippingFee(List<CartProduct> cartProducts, Integer province) {

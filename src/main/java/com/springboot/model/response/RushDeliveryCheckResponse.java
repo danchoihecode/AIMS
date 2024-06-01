@@ -1,6 +1,5 @@
 package com.springboot.model.response;
 
-import com.springboot.model.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
