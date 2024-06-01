@@ -26,6 +26,7 @@ public class DeliveryInfo {
 	private LocalDate deliveryTime;
 	private boolean isRushOrder;
 
+	 public DeliveryInfo() {}
 	public DeliveryInfo(String name, String phone, String email, String address, boolean isRushOrder) {
 		super();
 		this.name = name;
