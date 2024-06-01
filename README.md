@@ -16,7 +16,7 @@ All use cases related to Place order
 - Bui Hoang Ha 20205149:
   + Class design
   + DB modeling
-  + checks conflicts
+  + Checks conflicts
 - Do Hong Hai 20215199:
   + VNPay Subsystem
   + Makes handlers for Delivery Form, SuccessOrderScreen and FailureOrderScreen
