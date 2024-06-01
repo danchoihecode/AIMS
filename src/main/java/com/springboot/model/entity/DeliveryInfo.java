@@ -34,4 +34,5 @@ public class DeliveryInfo {
 		this.address = address;
 		this.isRushOrder = isRushOrder;
 	}
+	
 }

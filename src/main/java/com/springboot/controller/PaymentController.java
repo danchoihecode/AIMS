@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.model.entity.Invoice;
 import com.springboot.model.entity.Order;
 import com.springboot.model.entity.PaymentTransaction;
+import com.springboot.model.response.InvoiceDetailResponse;
 import com.springboot.model.response.PaymentURLResponse;
+import com.springboot.service.CartService;
 import com.springboot.service.InvoiceService;
 import com.springboot.subsystem.IPaymentSubsystem;
 import com.springboot.subsystem.PaymentSubsystem;
@@ -30,6 +32,8 @@ public class PaymentController {
 
 	@Autowired
 	InvoiceService invoiceService;
+	@Autowired
+	private CartService cartService;
 
 	public PaymentController() {
 		this.payment = new PaymentSubsystem(new VNPaySubsystemController());
@@ -37,6 +41,12 @@ public class PaymentController {
 	
 	public void payOrder(Order order) {
 		invoice = new Invoice(order);
+	}
+	
+	@GetMapping("/payment/invoice")
+	public ResponseEntity<InvoiceDetailResponse> getInvoiceDetail()  {
+		
+		return ResponseEntity.ok(new InvoiceDetailResponse(invoice.getOrder(), cartService));
 	}
 
 	@PostMapping("/payment/result")
