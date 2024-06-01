@@ -26,7 +26,7 @@ public class PayRequestVNPay {
 
     public String generateURL() throws UnsupportedEncodingException {
         String orderType = "other";
-        double amountVNPay = amount * 100L; 
+        Long amountVNPay = (long) amount * 100L; 
 
         String vnp_TxnRef = ConfigVNPay.getRandomNumber(8);
         String vnp_IpAddr = ConfigVNPay.getIpAddress();
