@@ -37,8 +37,7 @@ All use cases related to Place order
 - Do Hong Hai 20215199: Programming the user-side web interface
 - Nguyen Huu Hai 20215200: Programming the user-side web interface
 #### Backend
-- Bui Hoang Ha 20205149:
- + Handles API calls from the frontend in PlaceOrderController
+- Bui Hoang Ha 20205149: Handles API calls from the frontend in PlaceOrderController
 - Duong Hoang Hai 20215198:
   + Create skeleton source code for project (model, service, repository, exception, controller)
   + Handles API calls from the frontend in CartController, PaymentController
