@@ -44,11 +44,11 @@ All use cases related to Place order
   + VNPay subsystem (backend)
 - Dang Phuc Hieu 20194759: Did not participate
 ### Review code
-- Bui Hoang Ha 20205149:
-- Do Hong Hai 20215199: 
-- Duong Hoang Hai 20215198:
-- Nguyen Huu Hai 20215200:
-- Dang Phuc Hieu 20194759:
+- Bui Hoang Ha 20205149: DIP: The Dependency Inversion Principle
+- Do Hong Hai 20215199: LSP: The Liskov Substitution Principle
+- Duong Hoang Hai 20215198: SRP: The Single Responsibility Principle
+- Nguyen Huu Hai 20215200: OCP: The Open Closed Principle
+- Dang Phuc Hieu 20194759: ISP: The Interface Segregation Principle
 # Tech stack
 - Frontend : HTML, CSS, Javascript, Next.js Framework.
 - Backend :  Spring Boot, Java, MySQL
