@@ -1,4 +1,10 @@
+import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import DeliveryForm from "@/components/delivery/delivery-form";
+
+interface CheckoutDTO {
+    allItems: CartItemDTO[];
+    taxRate: number;
+}
 
 export default function Checkout() {
     const allItems = [

@@ -1,6 +1,14 @@
+'use client'
+import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import CartItems from "@/components/cart/cart-items";
 import CartTotal from "@/components/cart/cart-total";
 import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
+
+interface CartDTO {
+    items: CartItemDTO[];
+    taxRate: number;
+}
 
 export default function Cart() {
     const items = [
@@ -26,14 +34,28 @@ export default function Cart() {
             imageUrl: "/sample.jpg",
         },
     ];
+    const taxRate = 0.1;
+    const formatter = new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+    });
+    const [cartItems, setCartItems] = useState(items);
+    const [total, setTotal] = useState(cartItems.reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+    }, 0));
+    useEffect(() => {
+        setTotal(cartItems.reduce((acc, item) => {
+            return acc + item.price * item.quantity;
+        }, 0));
+    }, [cartItems]);
     return (
         <div className="lg:space-x-16 lg:flex items-start">
             <div className="space-y-8 grow">
                 <h2 className="font-semibold text-xl">Your cart</h2>
                 <Separator orientation="horizontal" />
-                <CartItems items={items} />
+                <CartItems items={cartItems} setCartItems={setCartItems}/>
             </div>
-            <CartTotal subtotal={10000} tax={1000} />
+            <CartTotal subtotal={total} tax={total * taxRate} />
         </div>
     );
 }

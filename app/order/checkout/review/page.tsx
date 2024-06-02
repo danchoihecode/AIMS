@@ -1,3 +1,4 @@
+import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import CheckoutButtons from "@/components/checkout/buttons";
 import CheckoutDeliveryInfo from "@/components/checkout/checkout-delivery-info";
 import {
@@ -8,6 +9,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+
+interface CheckoutPageProps {
+    normalDeliveryItems: CartItemDTO[];
+    rushDeliveryItems: CartItemDTO[];
+    normalShippingFee: number;
+    rushShippingFee: number;
+    taxRate: number;
+}
 
 export default function CheckoutPage() {
     const deliveryInfo = {
