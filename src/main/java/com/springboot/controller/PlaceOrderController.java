@@ -73,8 +73,8 @@ public class PlaceOrderController {
 			}
 			Boolean isRushDelivery = Boolean.valueOf(request.get("isRushDelivery").toString());
 
-			Cart cart = cartService.findById((long) 1);
-			order = new Order(cart, 0, 0, new DeliveryInfo("Ha","0123", "a@gmail.com","HN", false));
+//			Cart cart = cartService.findById((long) 1);
+//			order = new Order(cart, 0, 0, new DeliveryInfo("Ha","0123", "a@gmail.com","HN", false));
 			if (province == null) {
 				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(0, 0, false);
 				return ResponseEntity.ok(response);
