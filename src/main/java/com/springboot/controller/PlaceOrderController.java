@@ -21,8 +21,6 @@ import com.springboot.model.entity.Order;
 import com.springboot.model.response.CartProductResponse;
 import com.springboot.model.response.RushDeliveryCheckResponse;
 import com.springboot.service.CartService;
-import com.springboot.service.OrderService;
-import com.springboot.service.ProductService;
 
 @RestController
 @RequestMapping
@@ -35,10 +33,6 @@ public class PlaceOrderController {
 	private Double rushShippingFees = 0.0;
 	@Autowired
 	private CartService cartService;
-	@Autowired
-	private OrderService orderService;
-	@Autowired
-	private ProductService productService;
 
 	//test for pay order
 	@GetMapping("/pay")
@@ -46,10 +40,7 @@ public class PlaceOrderController {
 		
 		try {
 			Cart cart = cartService.findById((long) 1);
-<<<<<<< HEAD
             order = new Order(cart,20000,30000,new DeliveryInfo("Ha","0123", "a@gmail.com","HN", false));
-=======
->>>>>>> cd4ecd1a683ab9551bfb88812cc33499970f6ef0
 			paymentController.payOrder(order);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,17 +54,12 @@ public class PlaceOrderController {
 		try {
 			Long cartId = Long.valueOf(request.get("cartId").toString());
 			List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
-<<<<<<< HEAD
-//			return ResponseEntity.ok(order);
-=======
 			CartProductResponse response = CartProductResponse.fromCartProducts(cartProducts);
 			return ResponseEntity.ok(response);
->>>>>>> cd4ecd1a683ab9551bfb88812cc33499970f6ef0
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
-		return null;
 	}
 
 	// test for check rush delivery
@@ -120,7 +106,6 @@ public class PlaceOrderController {
 	public ResponseEntity<String> submitDeliveryForm(@RequestBody Map<String, Object> request) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			Long cartId = Long.valueOf(request.get("cartId").toString());
 			Map<String, Object> deliveryFormDTO = (Map<String, Object>) request.get("DeliveryFormDTO");
 			String name = deliveryFormDTO.get("name").toString();
 			String phone = deliveryFormDTO.get("phone").toString();
