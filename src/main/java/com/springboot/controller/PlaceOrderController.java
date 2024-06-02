@@ -114,6 +114,7 @@ public class PlaceOrderController {
 	public ResponseEntity<String> submitDeliveryForm(@RequestBody Map<String, Object> request) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			Long cartId = Long.valueOf(request.get("cartId").toString());
 			Map<String, Object> deliveryFormDTO = (Map<String, Object>) request.get("DeliveryFormDTO");
 			String name = deliveryFormDTO.get("name").toString();
 			String phone = deliveryFormDTO.get("phone").toString();
