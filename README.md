@@ -63,4 +63,32 @@ All use cases related to Place order
 - Copy the command in the aims.sql file and run to create the database
 - Run the AimsApplication class to start the backend application
 4. For the frontend project :
-   
+
+### Prerequisites
+
+Ensure you have Node.js installed. You can download it from [nodejs.org](https://nodejs.org/).
+
+### Installation
+
+1. **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/your-username/your-nextjs-project.git
+    cd your-nextjs-project
+    ```
+
+2. **Install the dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+### Running the Development Server
+
+3. **Start the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
