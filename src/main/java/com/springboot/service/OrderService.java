@@ -13,18 +13,9 @@ public class OrderService {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	// Logic to check if the order is eligible for rush delivery
 	public RushDeliveryCheckResponse checkRushDelivery(Order order) {
 		return null;
 	}
-
-	// // Logic to handle delivery form submission
-	// public void submitDeliveryForm(DeliveryFormRequest deliveryFormRequest) {
-	// // Save the delivery information to the database (implementation depends on
-	// your persistence layer)
-	// // For example:
-	// // deliveryInfoRepository.save(new DeliveryInfo(...));
-	// }
 
 	public Order findById(Long id) throws Exception {
 		Order order = orderRepository.findById(id).orElseThrow(() -> new Exception("Order not found"));
