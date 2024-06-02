@@ -78,14 +78,14 @@ public class DeliveryInfo {
 	}
 
 	public boolean validateAddress(String address) {
-		if (address == null)
+    if (address == null)
 			return false;
-		if (address.trim().length() == 0)
+    if (address.trim().length() == 0)
 			return false;
-		if (address.matches("^[a-zA-Z ]*$") == false)
+    if (address.matches("^[a-zA-Z0-9 ]*$") == false)
 			return false;
-		return true;
-	}
+    return true;
+}
 
 	public boolean validateEmail(String email) {
 		if (email == null)
