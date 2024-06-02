@@ -26,7 +26,7 @@ import com.springboot.service.CartService;
 @RestController
 @RequestMapping
 public class PlaceOrderController {
-	
+
 	@Autowired
 	private PaymentController paymentController;
 	private Order order;
@@ -47,7 +47,6 @@ public class PlaceOrderController {
 		}
 	}
 
-	// test for check rush delivery
 	@PostMapping("/cart/delivery/checkRushOrder")
 	public ResponseEntity<RushDeliveryCheckResponse> checkRushOrder(@RequestBody Map<String, Object> request) {
 		try {
@@ -58,20 +57,16 @@ public class PlaceOrderController {
 			}
 			Boolean isRushDelivery = Boolean.valueOf(request.get("isRushDelivery").toString());
 
-			Cart cart = cartService.findById(cartId);
-			order = new Order(cart, 0, 0, new DeliveryInfo("Ha","0123", "a@gmail.com","HN", false));
 			if (province == null) {
 				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(0, 0, false);
 				return ResponseEntity.ok(response);
-			}
-			else if (isRushDelivery == false || province != 1) {
+			} else if (isRushDelivery == false || province != 1) {
 				List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
 				double normalShippingFee = calculateNormalShippingFee(cartProducts, province);
 				this.normalShippingFees = normalShippingFee;
 				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, 0, false);
 				return ResponseEntity.ok(response);
-			}
-			else {
+			} else {
 				List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
 				List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartProducts);
 				if (rushDeliveryProducts.isEmpty() || rushDeliveryProducts == null) {
@@ -79,14 +74,14 @@ public class PlaceOrderController {
 					this.normalShippingFees = normalShippingFee;
 					RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, 0, false);
 					return ResponseEntity.ok(response);
-				}
-				else {
+				} else {
 					List<CartProduct> normalDeliveryProducts = getNonRushDeliveryProducts(cartProducts);
 					double normalShippingFee = calculateNormalShippingFee(normalDeliveryProducts, province);
 					double rushShippingFee = calculateRushShippingFee(rushDeliveryProducts, province);
 					this.normalShippingFees = normalShippingFee;
 					this.rushShippingFees = rushShippingFee;
-					RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, rushShippingFee, true);
+					RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee,
+							rushShippingFee, true);
 					return ResponseEntity.ok(response);
 				}
 			}
@@ -95,7 +90,7 @@ public class PlaceOrderController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@PostMapping("/cart/delivery/submit")
 	public ResponseEntity<String> submitDeliveryForm(@RequestBody Map<String, Object> request) {
@@ -111,17 +106,18 @@ public class PlaceOrderController {
 			String instructions = deliveryFormDTO.get("note").toString();
 			LocalDate date = LocalDate.parse(deliveryFormDTO.get("date").toString(), formatter);
 			Boolean isRushDelivery = Boolean.valueOf(deliveryFormDTO.get("isRushDelivery").toString());
-			
-			DeliveryInfo deliveryInfo = new DeliveryInfo(name, phone, email, province, instructions, address, date, isRushDelivery);
-			
+
+			DeliveryInfo deliveryInfo = new DeliveryInfo(name, phone, email, province, instructions, address, date,
+					isRushDelivery);
+
 			if (!deliveryInfo.isValid()) {
 				return ResponseEntity.status(404).body("Invalid delivery information");
 			}
-			
+
 			Cart cart = cartService.findById(cartId);
 			this.order = new Order(cart, this.normalShippingFees, this.rushShippingFees, deliveryInfo);
 			paymentController.payOrder(order);
-			
+
 			return ResponseEntity.ok("Order created successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,16 +126,16 @@ public class PlaceOrderController {
 	}
 
 	public double calculateNormalShippingFee(List<CartProduct> cartProducts, Integer province) {
-    double totalPrice = calculateTotalPrice(cartProducts);
+		double totalPrice = calculateTotalPrice(cartProducts);
 		double maxWeight = findProductWithMaxWeight(cartProducts);
 		int baseRate;
-    int additionalFeePerHalfKg = 2500;  // Additional fee for every subsequent 0.5kg
+		int additionalFeePerHalfKg = 2500; // Additional fee for every subsequent 0.5kg
 		double shippingFee;
 		// if the province is Hanoi or Ho Chi Minh city
 		if (province == 1 || province == 79) {
 			baseRate = 22000; // Initial price for the first 3kg
 			if (maxWeight <= 3) {
-				shippingFee = baseRate;	
+				shippingFee = baseRate;
 			} else {
 				shippingFee = baseRate + Math.ceil((maxWeight - 3) / 0.5) * additionalFeePerHalfKg;
 			}
@@ -151,16 +147,17 @@ public class PlaceOrderController {
 				shippingFee = baseRate + Math.ceil((maxWeight - 0.5) / 0.5) * additionalFeePerHalfKg;
 			}
 		}
-		// Apply free shipping if total price exceeds 100,000 VND, up to a maximum of 25,000 VND
+		// Apply free shipping if total price exceeds 100,000 VND, up to a maximum of
+		// 25,000 VND
 		if (totalPrice > 100000) {
 			shippingFee = Math.max(shippingFee - 25000, 0);
 		}
 		return shippingFee;
-  }
-  
-  public double calculateRushShippingFee(List<CartProduct> cartProducts, Integer province) {
+	}
+
+	public double calculateRushShippingFee(List<CartProduct> cartProducts, Integer province) {
 		int baseRate;
-    int additionalFeePerHalfKg = 2500;  // Additional fee for every subsequent 0.5kg
+		int additionalFeePerHalfKg = 2500; // Additional fee for every subsequent 0.5kg
 		double maxWeight = findProductWithMaxWeight(cartProducts);
 		double shippingFee;
 		if (province == 1 || province == 79) {
@@ -180,30 +177,26 @@ public class PlaceOrderController {
 		}
 		shippingFee += cartProducts.size() * 10000;
 		return shippingFee;
-  }
+	}
 
 	public double findProductWithMaxWeight(List<CartProduct> cartProducts) {
 		return cartProducts.stream()
-			.mapToDouble(cartProduct -> cartProduct.getProduct().getWeight() * cartProduct.getQty())
-			.max()
-			.orElse(0.0);
+				.mapToDouble(cartProduct -> cartProduct.getProduct().getWeight() * cartProduct.getQty()).max()
+				.orElse(0.0);
 	}
 
 	public double calculateTotalPrice(List<CartProduct> cartProducts) {
 		return cartProducts.stream()
-			.mapToDouble(cartProduct -> cartProduct.getProduct().getPrice() * cartProduct.getQty())
-			.sum();
+				.mapToDouble(cartProduct -> cartProduct.getProduct().getPrice() * cartProduct.getQty()).sum();
 	}
 
 	public List<CartProduct> getRushDeliveryProducts(List<CartProduct> cartProducts) {
-		return cartProducts.stream()
-			.filter(cartProduct -> cartProduct.getProduct().isRushOrderEligible())
-			.collect(Collectors.toList());
+		return cartProducts.stream().filter(cartProduct -> cartProduct.getProduct().isRushOrderEligible())
+				.collect(Collectors.toList());
 	}
 
 	public List<CartProduct> getNonRushDeliveryProducts(List<CartProduct> cartProducts) {
-		return cartProducts.stream()
-			.filter(cartProduct -> !cartProduct.getProduct().isRushOrderEligible())
-			.collect(Collectors.toList());
+		return cartProducts.stream().filter(cartProduct -> !cartProduct.getProduct().isRushOrderEligible())
+				.collect(Collectors.toList());
 	}
 }
