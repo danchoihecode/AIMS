@@ -80,7 +80,7 @@ public class PlaceOrderController {
 			}
 			Boolean isRushDelivery = Boolean.valueOf(request.get("isRushDelivery").toString());
 
-			Cart cart = cartService.findById((long) 1);
+			Cart cart = cartService.findById(cartId);
 			order = new Order(cart, 0, 0, new DeliveryInfo("Ha","0123", "a@gmail.com","HN", false));
 			if (province == null) {
 				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(0, 0, false);
@@ -95,12 +95,20 @@ public class PlaceOrderController {
 			}
 			else {
 				List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartService.getAllProductsInCart(cartId));
-				double normalShippingFee = calculateNormalShippingFee(rushDeliveryProducts, province);
-				double rushShippingFee = calculateRushShippingFee(rushDeliveryProducts, province);
-				this.normalShippingFees = normalShippingFee;
-				this.rushShippingFees = rushShippingFee;
-				RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, rushShippingFee, false);
-				return ResponseEntity.ok(response);
+				if (rushDeliveryProducts.isEmpty() || rushDeliveryProducts == null) {
+					double normalShippingFee = calculateNormalShippingFee(cartService.getAllProductsInCart(cartId), province);
+					this.normalShippingFees = normalShippingFee;
+					RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, 0, false);
+					return ResponseEntity.ok(response);
+				}
+				else {
+					double normalShippingFee = calculateNormalShippingFee(rushDeliveryProducts, province);
+					double rushShippingFee = calculateRushShippingFee(rushDeliveryProducts, province);
+					this.normalShippingFees = normalShippingFee;
+					this.rushShippingFees = rushShippingFee;
+					RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, rushShippingFee, true);
+					return ResponseEntity.ok(response);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,7 +138,7 @@ public class PlaceOrderController {
 				return ResponseEntity.status(404).body("Invalid delivery information");
 			}
 			
-			Cart cart = cartService.findById((long) 1);
+			Cart cart = cartService.findById(cartId);
 			this.order = new Order(cart, this.normalShippingFees, this.rushShippingFees, deliveryInfo);
 			
 			return ResponseEntity.ok("Order created successfully");
