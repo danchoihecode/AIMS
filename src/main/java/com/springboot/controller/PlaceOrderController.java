@@ -133,6 +133,7 @@ public class PlaceOrderController {
 			
 			Cart cart = cartService.findById(cartId);
 			this.order = new Order(cart, this.normalShippingFees, this.rushShippingFees, deliveryInfo);
+			paymentController.payOrder(order);
 			
 			return ResponseEntity.ok("Order created successfully");
 		} catch (Exception e) {
