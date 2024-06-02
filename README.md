@@ -40,7 +40,7 @@ All use cases related to Place order
 - Bui Hoang Ha 20205149: Handles API calls from the frontend in PlaceOrderController
 - Duong Hoang Hai 20215198:
   + Create skeleton source code for project (model, service, repository, exception, controller)
-  + Handles API calls from the frontend in CartController, PaymentController
+  + Handles API calls from the frontend in ViewCartController, PaymentController
   + VNPay subsystem (backend)
 - Dang Phuc Hieu 20194759: Did not participate
 ### Review code
