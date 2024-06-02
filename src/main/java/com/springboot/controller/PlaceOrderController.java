@@ -48,11 +48,9 @@ public class PlaceOrderController {
 		return ResponseEntity.ok().build();
 	}
 
-	// test for cart delivery
 	@GetMapping("/cart/delivery")
-	public ResponseEntity<CartProductResponse> getCartDelivery(@RequestBody Map<String, Object> request) {
+	public ResponseEntity<CartProductResponse> getCartDelivery(@RequestParam("cartId") Long cartId) {
 		try {
-			Long cartId = Long.valueOf(request.get("cartId").toString());
 			List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
 			CartProductResponse response = CartProductResponse.fromCartProducts(cartProducts);
 			return ResponseEntity.ok(response);
@@ -63,7 +61,7 @@ public class PlaceOrderController {
 	}
 
 	// test for check rush delivery
-	@GetMapping("/cart/delivery/checkRushOrder")
+	@PostMapping("/cart/delivery/checkRushOrder")
 	public ResponseEntity<RushDeliveryCheckResponse> checkRushOrder(@RequestBody Map<String, Object> request) {
 		try {
 			Integer province = null;
@@ -87,15 +85,17 @@ public class PlaceOrderController {
 				return ResponseEntity.ok(response);
 			}
 			else {
-				List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartService.getAllProductsInCart(cartId));
+				List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
+				List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartProducts);
 				if (rushDeliveryProducts.isEmpty() || rushDeliveryProducts == null) {
-					double normalShippingFee = calculateNormalShippingFee(cartService.getAllProductsInCart(cartId), province);
+					double normalShippingFee = calculateNormalShippingFee(cartProducts, province);
 					this.normalShippingFees = normalShippingFee;
 					RushDeliveryCheckResponse response = new RushDeliveryCheckResponse(normalShippingFee, 0, false);
 					return ResponseEntity.ok(response);
 				}
 				else {
-					double normalShippingFee = calculateNormalShippingFee(rushDeliveryProducts, province);
+					List<CartProduct> normalDeliveryProducts = getNonRushDeliveryProducts(cartProducts);
+					double normalShippingFee = calculateNormalShippingFee(normalDeliveryProducts, province);
 					double rushShippingFee = calculateRushShippingFee(rushDeliveryProducts, province);
 					this.normalShippingFees = normalShippingFee;
 					this.rushShippingFees = rushShippingFee;
@@ -211,6 +211,12 @@ public class PlaceOrderController {
 	public List<CartProduct> getRushDeliveryProducts(List<CartProduct> cartProducts) {
 		return cartProducts.stream()
 			.filter(cartProduct -> cartProduct.getProduct().isRushOrderEligible())
+			.collect(Collectors.toList());
+	}
+
+	public List<CartProduct> getNonRushDeliveryProducts(List<CartProduct> cartProducts) {
+		return cartProducts.stream()
+			.filter(cartProduct -> !cartProduct.getProduct().isRushOrderEligible())
 			.collect(Collectors.toList());
 	}
 }
