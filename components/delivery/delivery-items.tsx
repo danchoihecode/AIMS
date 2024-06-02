@@ -17,8 +17,8 @@ export default function DeliveryItems({ items, shippingFee }: DeliveryItemsProps
                 <p className="w-1/6 font-semibold">Qty</p>
                 <p className="w-1/3 font-semibold">Price</p>
             </div>
-            {items.map((item) => (
-                <DeliveryItem item={item} />
+            {items.map((item, index) => (
+                <DeliveryItem item={item} key={index} />
             ))}
             <div className="flex space-x-2 text-sm">
                 <p className="w-2/3 text-slate-500">Shipping fee</p>

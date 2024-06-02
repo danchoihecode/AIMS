@@ -33,13 +33,10 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import DeliveryInfo from "./delivery-info";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
+import { fetchDelivery } from '@/api/delivery'
 
 interface DeliveryFormProps {
     cartItems: CartItemDTO[];
-    shippingFee: {
-    normalShippingFee: number;
-    rushShippingFee: number;
-    };
     taxRate: number;
 }
 
@@ -62,10 +59,8 @@ const DeliveryFormSchema = z.object({
 });
 export default function DeliveryForm({
     cartItems,
-    shippingFee,
     taxRate,
-}: DeliveryFormProps
-) {
+}: DeliveryFormProps) {
     const [isRush, setIsRush] = useState(false);
     const form = useForm<z.infer<typeof DeliveryFormSchema>>({
         resolver: zodResolver(DeliveryFormSchema),
@@ -83,9 +78,16 @@ export default function DeliveryForm({
     const onSubmit = (data: z.infer<typeof DeliveryFormSchema>) => {
         console.log(data);
     };
-    const onRushDeliveryChange = (checked: boolean) => {
+    const onRushDeliveryChange = async (checked: boolean) => {
+        const { normalShippingFee, rushShippingFee, isRushDelivery } = await fetchDelivery("0", provinceWatch, checked);
+        console.log(normalShippingFee, rushShippingFee, isRushDelivery);
+        if (isRushDelivery === false) {
+            toast.error("Your order cannot be rush delivery.");
+            return;
+        }
         setIsRush(checked);
-        toast.success("Rush delivery is changed to " + checked);
+        setNormalShippingFee(normalShippingFee);
+        setRushShippingFee(rushShippingFee);
         if (checked) {
             setNormalDeliveryItems(
                 cartItems.filter((item) => !item.isRushDelivery)
@@ -93,16 +95,19 @@ export default function DeliveryForm({
             setRushDeliveryItems(
                 cartItems.filter((item) => item.isRushDelivery)
             );
-            setRushShippingFee(shippingFee.rushShippingFee);
         } else {
             setNormalDeliveryItems(cartItems);
             setRushDeliveryItems([]);
-            setRushShippingFee(0);
         }
+        
     };
-    
-    const [normalDeliveryItems, setNormalDeliveryItems] = useState<CartItemDTO[]>(cartItems);
-    const [rushDeliveryItems, setRushDeliveryItems] = useState<CartItemDTO[]>([]);
+    const provinceWatch = form.watch('province');
+    const [normalDeliveryItems, setNormalDeliveryItems] =
+        useState<CartItemDTO[]>(cartItems);
+    const [rushDeliveryItems, setRushDeliveryItems] = useState<CartItemDTO[]>(
+        []
+    );
+    const [normalShippingFee, setNormalShippingFee] = useState(0);
     const [rushShippingFee, setRushShippingFee] = useState(0);
     return (
         <>
@@ -110,7 +115,7 @@ export default function DeliveryForm({
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="lg:flex lg:space-x-8"
+                    className="lg:flex lg:space-x-8 lg:space-y-0 space-y-8"
                 >
                     <div className="space-y-8 grow">
                         <div className="grid grid-cols-2 gap-4">
@@ -177,7 +182,20 @@ export default function DeliveryForm({
                                     <FormItem>
                                         <FormLabel>Province</FormLabel>
                                         <Select
-                                            onValueChange={field.onChange}
+                                            onValueChange={async (value) => {
+                                                field.onChange(value);
+                                                const { normalShippingFee } =
+                                                    await fetchDelivery(
+                                                        "0",
+                                                        value,
+                                                        false
+                                                    );
+                                                setNormalShippingFee(
+                                                    normalShippingFee
+                                                );
+                                                setIsRush(false);
+                                                onRushDeliveryChange(false);
+                                            }}
                                             value={field.value}
                                         >
                                             <FormControl>
@@ -315,11 +333,10 @@ export default function DeliveryForm({
                             />
                         </div>
                     </div>
-                    {/* <Separator orientation="vertical" /> */}
                     <DeliveryInfo
                         normalDeliveryItems={normalDeliveryItems}
                         rushDeliveryItems={rushDeliveryItems}
-                        normalShippingFee={shippingFee.normalShippingFee}
+                        normalShippingFee={normalShippingFee}
                         rushShippingFee={rushShippingFee}
                         taxRate={taxRate}
                     />

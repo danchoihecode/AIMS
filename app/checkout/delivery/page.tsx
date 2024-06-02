@@ -1,6 +1,4 @@
-import DeliveryForm from "@/components/checkout/delivery-form";
-import DeliveryItems from "@/components/checkout/delivery-items";
-import { Separator } from "@/components/ui/separator";
+import DeliveryForm from "@/components/delivery/delivery-form";
 
 export default function Checkout() {
     const allItems = [
@@ -37,10 +35,11 @@ export default function Checkout() {
             isRushDelivery: true,
         },
     ];
-    const normalShippingFee = 20000;
-    const rushShippingFee = 50000;
     const taxRate = 0.1;
     return (
-            <DeliveryForm cartItems={allItems} shippingFee={{normalShippingFee, rushShippingFee}} taxRate={taxRate} />
+        <DeliveryForm
+            cartItems={allItems}
+            taxRate={taxRate}
+        />
     );
 }
