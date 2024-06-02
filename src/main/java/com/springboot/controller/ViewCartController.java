@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.model.entity.CartProduct;
+import com.springboot.model.response.CartProductResponse;
 import com.springboot.model.response.StockAvailabilityResponse;
 import com.springboot.model.response.TaxResponse;
 import com.springboot.model.response.UpdateCartResponse;
@@ -28,23 +29,25 @@ public class ViewCartController {
 	private ProductService productService;
 
 	@GetMapping("/cart")
-	public ResponseEntity<List<CartProduct>> getAllProductsInCart() {
-		List<CartProduct> cartProducts = cartService.getAllProductsInCart(1L);
+	public ResponseEntity<CartProductResponse> getAllProductsInCart(@RequestBody Map<String, Object> request) {
+		Long cartId = Long.valueOf(request.get("cartId").toString());
+		List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
 		if (cartProducts == null) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(cartProducts);
+		return ResponseEntity.ok(CartProductResponse.fromCartProducts(cartProducts));
 	}
 
 	@PostMapping("/cart")
 	public ResponseEntity<UpdateCartResponse> updateCart(@RequestBody Map<String, Object> request) {
 		Long productId = Long.valueOf(request.get("product_id").toString());
 		Integer qty = Integer.valueOf(request.get("qty").toString());
+		Long cartId = Long.valueOf(request.get("cartId").toString());
 
 		try {
-			List<CartProduct> cart = cartService.updateCart(1L, productId, qty);
+			List<CartProduct> cart = cartService.updateCart(cartId, productId, qty);
 
-			return ResponseEntity.ok(new UpdateCartResponse("Cart updated successfully", cart));
+			return ResponseEntity.ok(UpdateCartResponse.fromCartProducts("Cart updated successfully", cart));
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
