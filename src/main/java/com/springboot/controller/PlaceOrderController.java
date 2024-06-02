@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.model.entity.Cart;
@@ -33,20 +34,6 @@ public class PlaceOrderController {
 	private Double rushShippingFees = 0.0;
 	@Autowired
 	private CartService cartService;
-
-	//test for pay order
-	@GetMapping("/pay")
-	public ResponseEntity<Void> payOrder() {
-		
-		try {
-			Cart cart = cartService.findById((long) 1);
-            order = new Order(cart,20000,30000,new DeliveryInfo("Ha","0123", "a@gmail.com","HN", false));
-			paymentController.payOrder(order);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return ResponseEntity.ok().build();
-	}
 
 	@GetMapping("/cart/delivery")
 	public ResponseEntity<CartProductResponse> getCartDelivery(@RequestParam("cartId") Long cartId) {
