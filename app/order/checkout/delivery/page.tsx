@@ -1,4 +1,5 @@
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
+import { getCartItems } from "@/api/DTO/apifunc";
 import DeliveryForm from "@/components/delivery/delivery-form";
 
 interface CheckoutDTO {
@@ -6,41 +7,9 @@ interface CheckoutDTO {
     taxRate: number;
 }
 
-export default function Checkout() {
-    const allItems = [
-        {
-            id: "1",
-            title: "Killer of the flower moon",
-            price: 200000,
-            quantity: 1,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: true,
-        },
-        {
-            id: "2",
-            title: "Oppenheimer",
-            price: 20000,
-            quantity: 2,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: false,
-        },
-        {
-            id: "3",
-            title: "The last duel",
-            price: 30000,
-            quantity: 3,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: false,
-        },
-        {
-            id: "4",
-            title: "Barbie",
-            price: 30000,
-            quantity: 3,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: true,
-        },
-    ];
+export default async function Checkout() {
+    const allItems = await getCartItems();
+    console.log(allItems);
     const taxRate = 0.1;
     return (
         <DeliveryForm

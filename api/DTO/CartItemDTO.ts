@@ -4,5 +4,7 @@ export interface CartItemDTO {
     price: number;
     imageUrl: string;
     quantity: number;
+    category: string;
+    year: number;
     isRushDelivery?: boolean;
 }

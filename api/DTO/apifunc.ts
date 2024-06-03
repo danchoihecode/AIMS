@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CartItemDTO } from './CartItemDTO';
 
 interface Product {
   id: number;
@@ -38,10 +39,29 @@ interface CartResponse {
   cart: CartItem[];
 }
 
-const apiBaseUrl = 'http://localhost:3000';
+const apiBaseUrl = 'http://localhost:8080';
+
+export const getCartItems = async (): Promise<CartItemDTO[]> => {
+  const response = await axios.get(`${apiBaseUrl}/cart`);
+  const data = response.data;
+  return data.map((item: any) => {
+    const qty = item.qty;
+    const product = item.product;
+    return {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      imageUrl: product.image,
+      quantity: qty,
+      category: product.category,
+      year: product.year,
+      isRushDelivery: product.rushOrderEligible,
+    }
+  });
+}
 
 // GET /inventory/check
-const checkInventory = async (productId: number, qty: number): Promise<CheckInventoryResponse> => {
+export const checkInventory = async (productId: string, qty: number): Promise<CheckInventoryResponse> => {
   const response = await axios.get<CheckInventoryResponse>(`${apiBaseUrl}/inventory/check`, {
     params: {
       product_id: productId,
@@ -52,7 +72,7 @@ const checkInventory = async (productId: number, qty: number): Promise<CheckInve
 };
 
 // GET /tax
-const getTaxRate = async (): Promise<TaxResponse> => {
+export const getTaxRate = async (): Promise<TaxResponse> => {
   const response = await axios.get<TaxResponse>(`${apiBaseUrl}/tax`);
   return response.data;
 };
