@@ -59,7 +59,7 @@ Complete the entire AIMS project
 - Nguyen Huu Hai 20215200: 
 - Dang Phuc Hieu 20194759: CRUD user, Manage user role, Block/unblock user, Login (Frontend)
 # Tech stack
-- Frontend : HTML, CSS, Javascript, ReactJS, Next.js Framework.
+- Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
 - Backend :  Spring Boot and JWT authentication, Java, MySQL
 
 # Project Setup Instructions
