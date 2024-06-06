@@ -49,9 +49,18 @@ All use cases related to Place order
 - Duong Hoang Hai 20215198: SRP: The Single Responsibility Principle
 - Nguyen Huu Hai 20215200: OCP: The Open Closed Principle
 - Dang Phuc Hieu 20194759: ISP: The Interface Segregation Principle
+
+## 3/6-15/6/2024
+Complete the entire AIMS project
+## Work done
+- Bui Hoang Ha 20205149: CRUD Product, Update product price, Change password (Frontend)
+- Do Hong Hai 20215199: 
+- Duong Hoang Hai 20215198: View list of orders, Approve order, Login (Backend), Change password (Backend)
+- Nguyen Huu Hai 20215200: 
+- Dang Phuc Hieu 20194759: CRUD user, Manage user role, Block/unblock user, Login (Frontend)
 # Tech stack
-- Frontend : HTML, CSS, Javascript, Next.js Framework.
-- Backend :  Spring Boot, Java, MySQL
+- Frontend : HTML, CSS, Javascript, ReactJS, Next.js Framework.
+- Backend :  Spring Boot and JWT authentication, Java, MySQL
 
 # Project Setup Instructions
 1. Download XAMPP https://www.apachefriends.org/download.html
