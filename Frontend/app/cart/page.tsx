@@ -22,7 +22,7 @@ export default function Cart() {
             if (data) setCartItems(data);
         });
         getTaxRate().then((data) => {
-            taxRate.current = data.taxRate / 100;
+            taxRate.current = data;
         });
     }, []);
     return (

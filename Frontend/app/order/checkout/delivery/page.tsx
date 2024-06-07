@@ -1,5 +1,5 @@
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { getCartItems } from "@/api/DTO/apifunc";
+import { getCartItems, getTaxRate } from "@/api/DTO/apifunc";
 import DeliveryForm from "@/components/delivery/delivery-form";
 
 interface CheckoutDTO {
@@ -9,8 +9,8 @@ interface CheckoutDTO {
 
 export default async function Checkout() {
     const allItems = await getCartItems();
-    console.log(allItems);
-    const taxRate = 0.1;
+    const taxRate = await getTaxRate();
+    console.log(allItems, taxRate);
     return (
         <DeliveryForm
             cartItems={allItems}
