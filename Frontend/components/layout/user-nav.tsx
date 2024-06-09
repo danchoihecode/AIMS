@@ -2,63 +2,66 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { Session } from "next-auth";
 
 export function UserNav() {
-  // const { data: session } = useSession();
-  const session = true
-  if (session) {
+    const router = useRouter();
+
+    const handleChangePasswordClick = () => {
+        router.push('/auth/change-password');
+    };
     return (
-      <DropdownMenu>
+        <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage
+                <AvatarImage
                 src={''}
                 alt={''}
-              />
-              <AvatarFallback>{}</AvatarFallback>
+                />
+                <AvatarFallback>{}</AvatarFallback>
             </Avatar>
-          </Button>
+            </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
+            <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">
+                <p className="text-sm font-medium leading-none">
+                    Settings
+                </p>
+                <p className="text-xs leading-none text-muted-foreground">
                 {}
-              </p>
-              <p className="text-xs leading-none text-muted-foreground">
-                {}
-              </p>
+                </p>
             </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
             <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                Profile
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              Change Password
-              <DropdownMenuShortcut>⇧⌘W</DropdownMenuShortcut>
+            <DropdownMenuItem onClick={handleChangePasswordClick}>
+                Change Password
+                <DropdownMenuShortcut>⇧⌘W</DropdownMenuShortcut>
             </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
-            Log out
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => signOut()}>
+                Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
+            </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+        </DropdownMenu>
     );
-  }
 }

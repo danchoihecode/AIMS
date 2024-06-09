@@ -2,7 +2,7 @@ import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
 import { cn } from '@/lib/utils';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
-import { ChangePassword } from './change-password';
+import { Session } from "next-auth";
 
 export default function Header() {
   return (
@@ -31,7 +31,6 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <UserNav />
           <ThemeToggle />
-          <ChangePassword />
         </div>
       </nav>
     </div>
