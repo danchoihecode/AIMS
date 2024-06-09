@@ -12,7 +12,6 @@ import com.springboot.model.entity.Order;
 import com.springboot.model.entity.Product;
 import com.springboot.model.response.OrderDetailResponse;
 import com.springboot.model.response.OrderResponse;
-import com.springboot.model.response.RushDeliveryCheckResponse;
 import com.springboot.repository.CartProductRepository;
 import com.springboot.repository.OrderRepository;
 import com.springboot.repository.ProductRepository;
@@ -25,14 +24,9 @@ public class OrderService {
 
 	@Autowired
 	private OrderRepository orderRepository;
-	
 
-    @Autowired
-    private ProductRepository productRepository;
-
-	public RushDeliveryCheckResponse checkRushDelivery(Order order) {
-		return null;
-	}
+	@Autowired
+	private ProductRepository productRepository;
 
 	public Order findById(Long id) throws Exception {
 		Order order = orderRepository.findById(id).orElseThrow(() -> new Exception("Order not found"));
@@ -55,37 +49,45 @@ public class OrderService {
 		}
 		throw new Exception("Order not found with id: " + id);
 	}
-	 public OrderDetailResponse updateOrderState(Long id, String newState) throws Exception {
-	        Optional<Order> orderOpt = orderRepository.findById(id);
-	        if (orderOpt.isPresent()) {
-	            Order order = orderOpt.get();
-	            if ("Rejected".equals(order.getState())) {
-	                throw new IllegalStateException("Cannot update a rejected order");
-	            }
 
-	            if ("Approved".equals(newState)) {
-	                List<CartProduct> cartProducts = cartProductRepository.findByCartId(order.getCart().getId());
-	                for (CartProduct cartProduct : cartProducts) {
-	                    Product product = productRepository.findById(cartProduct.getProduct().getId())
-	                            .orElseThrow(() -> new Exception("Product not found"));
-	                    if (cartProduct.getQty() > product.getQtyInStock()) {
-	                        throw new IllegalStateException("Quantity in cart exceeds stock for product: " + product.getTitle());
-	                    }
-	                }
-	            }
+	public OrderDetailResponse approveOrder(Long id) throws Exception {
+		Optional<Order> orderOpt = orderRepository.findById(id);
+		if (orderOpt.isPresent()) {
+			Order order = orderOpt.get();
+//			if (!"Pending".equals(order.getState())) {
+//				throw new IllegalStateException("Order must be in pending state");
+//			}
 
-	            order.setState(newState);
-	            orderRepository.save(order);
-	            List<CartProduct> cartProducts = cartProductRepository.findByCartId(order.getCart().getId());
-	            return new OrderDetailResponse(
-	                    cartProducts,
-	                    order.getDeliveryInfo(),
-	                    order.getNormalShippingFees(),
-	                    order.getRushShippingFees(),
-	                    order.getState(),
-	                    order.getTotalAmount()
-	            );
-	        }
-	        throw new Exception("Order not found with id: " + id);
-	    }
+			List<CartProduct> cartProducts = cartProductRepository.findByCartId(order.getCart().getId());
+			for (CartProduct cartProduct : cartProducts) {
+				Product product = productRepository.findById(cartProduct.getProduct().getId())
+						.orElseThrow(() -> new Exception("Product not found"));
+				if (cartProduct.getQty() > product.getQtyInStock()) {
+					throw new IllegalStateException(
+							"Quantity in cart exceeds stock for product: " + product.getTitle());
+				}
+			}
+
+			order.setState("Approved");
+			orderRepository.save(order);
+			return new OrderDetailResponse(cartProducts, order.getDeliveryInfo(), order.getNormalShippingFees(),
+					order.getRushShippingFees(), order.getState(), order.getTotalAmount());
+		}
+		throw new Exception("Order not found with id: " + id);
+	}
+
+	public void rejectOrder(Long id) throws Exception {
+		Optional<Order> orderOpt = orderRepository.findById(id);
+		if (orderOpt.isPresent()) {
+			Order order = orderOpt.get();
+//			if (!"Pending".equals(order.getState())) {
+//				throw new IllegalStateException("Order must be in pending state");
+//			}
+
+			order.setState("Rejected");
+			orderRepository.save(order);
+
+		}
+		throw new Exception("Order not found with id: " + id);
+	}
 }
