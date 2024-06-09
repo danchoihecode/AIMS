@@ -77,7 +77,7 @@ public class RefundRequestVNPay {
         wr.flush();
         wr.close();
         int responseCode = connection.getResponseCode();
-        System.out.println("nSending 'POST' request to URL : " + url);
+        System.out.println("Sending 'POST' request to URL : " + url);
         System.out.println("Post Data : " + vnp_Params);
         System.out.println("Response Code : " + responseCode);
         BufferedReader in = new BufferedReader(
