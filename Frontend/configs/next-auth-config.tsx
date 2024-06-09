@@ -35,7 +35,7 @@ export const authOption:NextAuthOptions = {
                     password:{label:"Password",type:"password"}
                 },
                 async authorize(credentials){
-                    const res = await fetch(process.env.BACK_END_URL +"/auth/login",{
+                    const res = await fetch(process.env.BACK_END_URL + "/auth/login",{
                         method: 'POST',
                         body: JSON.stringify(credentials),
                         headers:{ "Content-Type": "application/json" },
@@ -61,7 +61,7 @@ export const authOption:NextAuthOptions = {
                     password:{label:"Password",type:"password"}
                 },
                 async authorize(credentials) {
-                    const res = await fetch(process.env.BACK_END_URL + "/auth/signup", {
+                    const res = await fetch("localhost:8080" + "/auth/signup", {
                         method: 'POST',
                         body: JSON.stringify(credentials),
                         headers: {"Content-Type": "application/json"},
