@@ -11,10 +11,5 @@ export default async function Checkout() {
     const allItems = await getCartItems();
     const taxRate = await getTaxRate();
     console.log(allItems, taxRate);
-    return (
-        <DeliveryForm
-            cartItems={allItems}
-            taxRate={taxRate}
-        />
-    );
+    return <DeliveryForm cartItems={allItems} taxRate={taxRate} />;
 }

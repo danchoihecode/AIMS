@@ -1,5 +1,7 @@
 package com.springboot.service;
 
+import com.springboot.model.entity.DeliveryInfo;
+import com.springboot.repository.DeliveryInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,27 +9,26 @@ import com.springboot.model.entity.Order;
 import com.springboot.model.response.RushDeliveryCheckResponse;
 import com.springboot.repository.OrderRepository;
 
+import java.util.Optional;
+
 @Service
 public class OrderService {
 
 	@Autowired
+	private DeliveryInfoRepository deliveryInfoRepository;
+	@Autowired
 	private OrderRepository orderRepository;
-
-	// Logic to check if the order is eligible for rush delivery
-	public RushDeliveryCheckResponse checkRushDelivery(Order order) {
-		return null;
+	private DeliveryInfo createDeliveryInfo(DeliveryInfo deliveryInfo) {
+		return deliveryInfoRepository.save(deliveryInfo);
 	}
-
-	// // Logic to handle delivery form submission
-	// public void submitDeliveryForm(DeliveryFormRequest deliveryFormRequest) {
-	// // Save the delivery information to the database (implementation depends on
-	// your persistence layer)
-	// // For example:
-	// // deliveryInfoRepository.save(new DeliveryInfo(...));
-	// }
-
-	public Order findById(Long id) throws Exception {
-		Order order = orderRepository.findById(id).orElseThrow(() -> new Exception("Order not found"));
-		return order;
+	public Order createOrder(Order order) {
+		Optional<Order> existingOrder = orderRepository.findByCartId(order.getCart().getId());
+        existingOrder.ifPresent(value -> orderRepository.delete(value));
+		DeliveryInfo deliveryInfo = order.getDeliveryInfo();
+		if (deliveryInfo != null) {
+			deliveryInfo = createDeliveryInfo(deliveryInfo);
+			order.setDeliveryInfo(deliveryInfo);
+		}
+		return orderRepository.save(order);
 	}
 }

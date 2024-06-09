@@ -33,7 +33,9 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import DeliveryInfo from "./delivery-info";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { fetchDelivery } from '@/api/delivery'
+import { fetchDelivery, submitDelivery } from '@/api/delivery'
+import { DeliveryInfoDTO } from "@/api/DTO/DeliveryFormDTO";
+import { useRouter } from "next/navigation";
 
 interface DeliveryFormProps {
     cartItems: CartItemDTO[];
@@ -43,24 +45,25 @@ interface DeliveryFormProps {
 const DeliveryFormSchema = z.object({
     name: z.string().min(5),
     email: z.string().email(),
-    province: z.enum(province.map((p) => p.id) as any, {
+    province: z.enum(province.map((p) => p.id) as [string, ...string[]], {
         message: "Invalid province",
-    }),
+    }) ,
     district: z.string().min(5),
     street: z.string().min(5),
     phone: z.string().min(10).max(10),
-    date: z
+    deliveryTime: z
         .date()
         .refine(isWithinNextWeek, {
             message: "Date must be in the future",
         })
         .optional(),
-    note: z.string().optional(),
+    instructions: z.string().optional(),
 });
 export default function DeliveryForm({
     cartItems,
     taxRate,
 }: DeliveryFormProps) {
+    const router = useRouter();
     const [isRush, setIsRush] = useState(false);
     const form = useForm<z.infer<typeof DeliveryFormSchema>>({
         resolver: zodResolver(DeliveryFormSchema),
@@ -71,15 +74,29 @@ export default function DeliveryForm({
             district: "",
             street: "",
             phone: "",
-            date: new Date(),
-            note: "",
+            deliveryTime: undefined,
+            instructions: "",
         },
     });
-    const onSubmit = (data: z.infer<typeof DeliveryFormSchema>) => {
-        console.log(data);
+    const onSubmit = async (deliveryInfo: z.infer<typeof DeliveryFormSchema>) => {
+        const deliveryData : DeliveryInfoDTO = {
+            ...deliveryInfo,
+            address: deliveryInfo.street + " " + deliveryInfo.district,
+            isRushOrder: isRush,
+        }
+        const {data, error} = await submitDelivery(deliveryData, normalShippingFee, rushShippingFee, 1);
+        if (error) {
+            toast.error("An error occurred while submitting the order");
+            return;
+        }
+        console.log(data)
+        //router.push("/order/checkout/success");
+        
+
+
     };
     const setDelivery = async (province: string, isRush: boolean) => {
-        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } = await fetchDelivery("1", province, isRush);
+        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } = await fetchDelivery(province, isRush);
         if (isRush && rushDeliveryAvailable === false) {
             toast.error("Your order cannot be rush delivery.");
             return;
@@ -100,6 +117,10 @@ export default function DeliveryForm({
         }
     }
     const onRushDeliveryChange = async (checked: boolean) => {
+        if (!provinceWatch) {
+            toast.error("Please select a province first");
+            return;
+        }
         setDelivery(provinceWatch, checked);
     };
     const provinceWatch = form.watch('province');
@@ -258,7 +279,7 @@ export default function DeliveryForm({
                             </h2>
                             <FormField
                                 control={form.control}
-                                name="date"
+                                name="deliveryTime"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Shipping Date</FormLabel>
@@ -308,7 +329,7 @@ export default function DeliveryForm({
                             />
                             <FormField
                                 control={form.control}
-                                name="note"
+                                name="instructions"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
                                         <FormLabel>

@@ -1,11 +1,15 @@
 "use client";
+import { CartItemDTO } from "@/api/DTO/CartItemDTO";
+import {
+    deleteCartItem,
+    updateCartItemQty
+} from "@/api/DTO/apifunc";
+import { MinusIcon, PlusIcon, X } from "lucide-react";
 import Image from "next/image";
+import toast, { Toaster } from "react-hot-toast";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import toast, { Toaster } from "react-hot-toast";
-import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { checkInventory } from "@/api/DTO/apifunc";
-import { MinusIcon, PlusIcon, X } from "lucide-react";
+import useSWR from "swr";
 
 interface CartItemProps {
     item: CartItemDTO;
@@ -21,24 +25,23 @@ const isValidQty = async (itemId: string, qty: string) => {
         toast.error("You can only order between 1 and 100 items");
         return false;
     }
-    const response = await checkInventory(itemId, parsedQty);
-    if (!response.available) {
+    const response = await updateCartItemQty(itemId, parsedQty);
+    if (!response) {
         toast.error("The quantity is out of stock");
     }
-    return response.available;
+    return response;
 };
 export default function CartItem({ item, setCartItems }: CartItemProps) {
-    console.log(item.quantity);
     const formatter = new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency: "VND",
     });
     const handleChangeQty = async (qty: string | number) => {
-        const isValid = await isValidQty(item.id, qty.toString());
+        const isValid = await isValidQty(item.productId, qty.toString());
         if (!isValid) return;
-        setCartItems((prev: any) => {
-            return prev.map((i: any) => {
-                if (i.id === item.id) {
+        setCartItems((prev: CartItemDTO[]) => {
+            return prev.map((i: CartItemDTO) => {
+                if (i.productId === item.productId) {
                     return {
                         ...i,
                         quantity: qty,
@@ -47,7 +50,20 @@ export default function CartItem({ item, setCartItems }: CartItemProps) {
                 return i;
             });
         });
-    }
+    };
+    const handleDelete = async () => {
+        const {data, error} = await deleteCartItem(item.productId);
+        if (error) {
+            toast.error("An error occurred while removing the item");
+            return;
+        }
+        toast.success("Item removed from cart");
+        setCartItems((prev: CartItemDTO[]) => {
+            return prev.filter(
+                (i: CartItemDTO) => i.productId !== item.productId
+            );
+        });
+    };
     return (
         <div className="flex space-x-8 items-center p-8">
             <Toaster />
@@ -75,14 +91,14 @@ export default function CartItem({ item, setCartItems }: CartItemProps) {
                         handleChangeQty(item.quantity - 1);
                     }}
                 >
-                    <MinusIcon size={16}/>
+                    <MinusIcon size={16} />
                 </Button>
                 <Input
-                    className="w-16"
+                    className="w-12"
                     value={item.quantity}
                     onChange={async (e) => {
                         const value = e.target.value;
-                        handleChangeQty(value)
+                        handleChangeQty(value);
                     }}
                 />
                 <Button
@@ -93,7 +109,7 @@ export default function CartItem({ item, setCartItems }: CartItemProps) {
                         handleChangeQty(item.quantity + 1);
                     }}
                 >
-                    <PlusIcon size={16}/>
+                    <PlusIcon size={16} />
                 </Button>
             </div>
 
@@ -101,13 +117,9 @@ export default function CartItem({ item, setCartItems }: CartItemProps) {
                 variant="secondary"
                 size="icon"
                 className="shrink-0"
-                onClick={() => {
-                    setCartItems((prev: any) => {
-                        return prev.filter((i: any) => i.id !== item.id);
-                    });
-                }}
+                onClick={handleDelete}
             >
-                <X size={16}/>
+                <X size={16} />
             </Button>
         </div>
     );

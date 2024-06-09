@@ -1,17 +1,19 @@
 package com.springboot.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.springboot.common.Constant;
+import com.springboot.dto.CartProductDTO;
+import com.springboot.model.entity.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.model.entity.CartProduct;
-import com.springboot.model.response.CartProductResponse;
 import com.springboot.model.response.StockAvailabilityResponse;
-import com.springboot.model.response.TaxResponse;
-import com.springboot.model.response.UpdateCartResponse;
 import com.springboot.service.CartService;
 import com.springboot.service.ProductService;
 
@@ -23,54 +25,61 @@ public class ViewCartController {
 	private CartService cartService;
 	@Autowired
 	private ProductService productService;
-
+	@GetMapping("/new")
+	public ResponseEntity<Cart> getAllProductsInCart() {
+		return ResponseEntity.ok(cartService.createEmptyCart());
+	}
 	@GetMapping()
-	public ResponseEntity<CartProductResponse> getAllProductsInCart(@RequestParam("cartId") Long cartId) {
-		System.out.println("cartId: " + cartId);
+	public ResponseEntity<List<CartProductDTO>> getAllProductsInCart(@RequestParam("cartId") Long cartId) {
 		List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
 		if (cartProducts == null) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(CartProductResponse.fromCartProducts(cartProducts));
-	}
-
-	public ResponseEntity<CartProductResponse> getAllProductsInCart(@RequestBody Map<String, Object> request) {
-		Long cartId = Long.valueOf(request.get("cartId").toString());
-		List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
-		if (cartProducts == null) {
-			return ResponseEntity.notFound().build();
+		List<CartProductDTO> cartItems = new ArrayList<>();
+		for (CartProduct cartProduct : cartProducts) {
+			cartItems.add(new CartProductDTO(cartProduct));
 		}
-		return ResponseEntity.ok(CartProductResponse.fromCartProducts(cartProducts));
+		return ResponseEntity.ok(cartItems);
 	}
-
-	@PostMapping("/cart")
-	public ResponseEntity<UpdateCartResponse> updateCart(@RequestBody Map<String, Object> request) {
-		Long productId = Long.valueOf(request.get("product_id").toString());
-		Integer qty = Integer.valueOf(request.get("qty").toString());
-		Long cartId = Long.valueOf(request.get("cartId").toString());
-
+	@PostMapping("/{cartId}")
+	public ResponseEntity<String> updatedCart(@RequestBody List<CartProductDTO> cartItems, @PathVariable("cartId") Long cartId) {
 		try {
-			List<CartProduct> cart = cartService.updateCart(cartId, productId, qty);
-
-			return ResponseEntity.ok(UpdateCartResponse.fromCartProducts("Cart updated successfully", cart));
+			for (CartProductDTO cartItem : cartItems) {
+				cartService.updateCart(cartId, cartItem.getProductId(), cartItem.getQuantity());
+			}
+			return ResponseEntity.ok("Update cart successfully");
 		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
+			return new ResponseEntity<>("Update cart failed", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-	@GetMapping("/inventory/check")
-	public ResponseEntity<StockAvailabilityResponse> checkQtyInStock(@RequestParam("product_id") Long productId,
-			@RequestParam("qty") Integer qty) {
+	@PutMapping("/{cartId}")
+	public ResponseEntity<String> updatedCartItem(@RequestBody CartProductDTO item, @PathVariable("cartId") Long cartId) {
 		try {
-			boolean isAvailable = productService.checkInventory(productId, qty);
-			return ResponseEntity.ok(new StockAvailabilityResponse(productId, qty, isAvailable) );
+			boolean isAvailable = productService.checkInventory(item.getProductId(), item.getQuantity());
+			if (!isAvailable) {
+				return new ResponseEntity<>("Not enough product in stock", HttpStatus.BAD_REQUEST);
+			}
+			System.out.println(cartId + " " + item.getProductId() + " " + item.getQuantity());
+			cartService.updateCart(cartId, item.getProductId(), item.getQuantity());
+			return ResponseEntity.ok("Update cart successfully");
 		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
+			System.out.println(e);
+			return new ResponseEntity<>("Update cart failed", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-	@GetMapping(value = "/tax")
-	public ResponseEntity<TaxResponse> getTax() {
-		return ResponseEntity.ok(new TaxResponse(10));
+	@DeleteMapping("/{cartId}")
+	public ResponseEntity<String> deleteCartItem(@PathVariable("cartId") Long cartId, @RequestBody Map<String, Object> body) {
+		try {
+			Long productId = Long.valueOf(body.get("productId").toString());
+			cartService.deleteCartItem(cartId, productId);
+			return ResponseEntity.ok("Delete cart item successfully");
+		} catch (Exception e) {
+			return new ResponseEntity<>("Delete cart item failed", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
+	@GetMapping("/tax")
+	public ResponseEntity<Double> getTax() {
+		return ResponseEntity.ok(Constant.TAX_RATE);
+	}
+
 }

@@ -8,7 +8,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.springboot.common.Constant;
+import com.springboot.dto.DeliveryInfoDTO;
+import com.springboot.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,14 +26,12 @@ import com.springboot.service.CartService;
 @RestController
 @RequestMapping("/delivery")
 public class PlaceOrderController {
-
-    @Autowired
-    private PaymentController paymentController;
-    private Order order;
-    private Double normalShippingFees = 0.0;
-    private Double rushShippingFees = 0.0;
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
+
 
     @GetMapping("shipping-fee")
     public ResponseEntity<RushDeliveryCheckResponse> checkRushOrder(@RequestParam("cartId") Long cartId,
@@ -57,40 +58,21 @@ public class PlaceOrderController {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @PostMapping("/cart/delivery/submit")
-    public ResponseEntity<String> submitDeliveryForm(@RequestBody Map<String, Object> request) {
+    @PostMapping("")
+    public ResponseEntity<Order> submitDeliveryForm(@RequestBody DeliveryInfoDTO deliveryInfoDTO) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            Long cartId = Long.valueOf(request.get("cartId").toString());
-            Map<String, Object> deliveryFormDTO = (Map<String, Object>) request.get("DeliveryFormDTO");
-            String name = deliveryFormDTO.get("name").toString();
-            String phone = deliveryFormDTO.get("phone").toString();
-            String email = deliveryFormDTO.get("email").toString();
-            String address = deliveryFormDTO.get("address").toString();
-            Long province = Long.valueOf(deliveryFormDTO.get("province").toString());
-            String instructions = deliveryFormDTO.get("note").toString();
-            LocalDate date = LocalDate.parse(deliveryFormDTO.get("date").toString(), formatter);
-            Boolean isRushDelivery = Boolean.valueOf(deliveryFormDTO.get("isRushDelivery").toString());
-
-            DeliveryInfo deliveryInfo = new DeliveryInfo(name, phone, email, province, instructions, address, date,
-                    isRushDelivery);
-
-            if (!deliveryInfo.isValid()) {
-                return ResponseEntity.status(404).body("Invalid delivery information");
-            }
-
-            Cart cart = cartService.findById(cartId);
-            this.order = new Order(cart, this.normalShippingFees, this.rushShippingFees, deliveryInfo);
-            paymentController.payOrder(order);
-
-            return ResponseEntity.ok("Order created successfully");
+            Cart cart = cartService.findById(deliveryInfoDTO.getCartId());
+            Order order = new Order(cart, deliveryInfoDTO.getNormalShippingFee(), deliveryInfoDTO.getRushShippingFee(), deliveryInfoDTO.getDeliveryInfo());
+            order = orderService.createOrder(order);
+            return ResponseEntity.ok(order);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(404).body("Failed to create order");
+            System.out.println(e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     private double calculateShippingFee(List<CartProduct> cartProducts, int province, boolean isRush) {
+        if (cartProducts.isEmpty()) return 0;
         int cartTotal = calculateTotalPrice(cartProducts);
         double maxWeight = getMaxWeight(cartProducts);
         int baseShippingFee = getBaseShippingFee(maxWeight, province);
@@ -99,9 +81,11 @@ public class PlaceOrderController {
             else return baseShippingFee;
         return baseShippingFee + getTotalNumberOfItems(cartProducts) * 10000;
     }
+
     private int getTotalNumberOfItems(List<CartProduct> cartProducts) {
         return cartProducts.stream().mapToInt(CartProduct::getQty).sum();
     }
+
     private double getMaxWeight(List<CartProduct> cartProducts) {
         return cartProducts.stream()
                 .mapToDouble(cartProduct -> cartProduct.getProduct().getWeight() * cartProduct.getQty()).max()

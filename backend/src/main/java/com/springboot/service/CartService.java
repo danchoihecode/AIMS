@@ -25,18 +25,22 @@ public class CartService {
 	@Autowired
 	private ProductRepository productRepository;
 
+	public Cart createEmptyCart() {
+		Cart cart = new Cart();
+		cartRepository.save(cart);
+		return cart;
+	}
 	public List<CartProduct> getAllProductsInCart(Long cartId) {
 		return cartProductRepository.findByCartId(cartId);
 	}
 
-	public List<CartProduct> updateCart(Long cartId, Long productId, Integer qty) throws Exception {
+	public void updateCart(Long cartId, Long productId, Integer qty) throws Exception {
 		Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
 		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new Exception("Cart not found"));
 
 		CartProductKey key = new CartProductKey(cartId, productId);
 
-		CartProduct cartProduct = cartProductRepository.findById(key).orElse(new CartProduct(key, cart, product, 0));
-
+		CartProduct cartProduct = cartProductRepository.findById(key).orElse(new CartProduct(key, cart, product, qty));
 		cartProduct.setQty(qty);
 
 		cartProductRepository.save(cartProduct);
@@ -46,13 +50,13 @@ public class CartService {
 
 		cart.setSubTotal(subTotal);
 		cartRepository.save(cart);
-
-		return cartProducts;
 	}
 
 	public Cart findById(Long id) throws Exception {
-		Cart cart = cartRepository.findById(id).orElseThrow(() -> new Exception("Cart not found"));
-		return cart;
+        return cartRepository.findById(id).orElseThrow(() -> new Exception("Cart not found"));
 	}
-
+	public void deleteCartItem(Long cartId, Long productId) {
+		CartProductKey key = new CartProductKey(cartId, productId);
+		cartProductRepository.deleteById(key);
+	}
 }

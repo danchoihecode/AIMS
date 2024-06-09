@@ -1,5 +1,7 @@
 import axios from "axios";
 import { CartItemDTO } from "./CartItemDTO";
+import { cookies } from "next/headers";
+import { getData } from "@/lib/cookies-data";
 
 interface Product {
     id: number;
@@ -40,23 +42,54 @@ interface CartResponse {
     message: string;
     cart: CartItem[];
 }
+interface Response {
+    data: any;
+    error: any;
+}
 
 const apiBaseUrl = "http://localhost:8080/cart";
-
-export const getCartItems = async (): Promise<CartItemDTO[]> => {
+const axiosInstance = axios.create({
+    baseURL: `${process.env.NEXT_PUBLIC_API_URL}/cart`,
+    timeout: 5000,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+export const axiosWithErrorHandling = async (
+    config: any
+): Promise<Response> => {
     try {
-        const response = await axios.get(`${apiBaseUrl}`, {
-            params: {
-                cartId: "1",
-            },
-        });
-        console.log(response.data);
-        const data = response.data;
-        return data.items;
+        const response = await axiosInstance(config);
+        return {
+            data: response.data,
+            error: null,
+        };
     } catch (error) {
-        console.log(error);
-        return [];
+        return {
+            data: null,
+            error: error,
+        };
     }
+};
+
+export const getEmptyCart = async (): Promise<Response> => {
+    const { data, error } = await axiosWithErrorHandling({
+        method: "GET",
+        url: `/new`,
+    });
+    return {
+        data: data?.id,
+        error: error,
+    };
+};
+export const getCartItems = async (): Promise<CartItemDTO[]> => {
+    const { data, error } = await axiosWithErrorHandling({
+        method: "GET",
+        params: {
+            cartId: await getData("cartId"),
+        },
+    });
+    return error ? [] : data;
 };
 
 // GET /inventory/check
@@ -75,19 +108,55 @@ export const checkInventory = async (
     );
     return response.data;
 };
-
+export const updateCartItemQty = async (
+    productId: string,
+    quantity: number
+) => {
+  const cartId = await getData("cartId");
+  const {error} = await axiosWithErrorHandling({
+    method: "PUT",
+    url: `/${cartId}`,
+    data: {
+      productId,
+      quantity,
+    },
+  });
+  return error ? false : true;
+};
+export const deleteCartItem = async (productId: string) => {
+    const cartId = await getData("cartId");
+    return axiosWithErrorHandling({
+        method: "DELETE",
+        url: `/${cartId}`,
+        data: {
+            productId,
+        },
+    });
+};
 // GET /tax
 export const getTaxRate = async (): Promise<number> => {
     try {
-        const response = await axios.get<TaxResponse>(`${apiBaseUrl}/tax`);
-        const data = response.data;
-        return data.taxRate / 100;
+        const response = await axios.get(`${apiBaseUrl}/tax`);
+        return response.data;
     } catch (error) {
-        console.log(error);
         return 0.1;
     }
 };
-
+export const updateCart = async (
+    cartId: string,
+    productId: string,
+    qty: number
+) => {
+    try {
+        await axios.put(`${apiBaseUrl}`, {
+            cartId,
+            productId,
+            qty,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
 // GET /cart
 const getCart = async (): Promise<CartItem[]> => {
     const response = await axios.get<CartItem[]>(`${apiBaseUrl}/cart`);

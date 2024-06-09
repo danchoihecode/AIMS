@@ -1,13 +1,14 @@
 import { CartItemDTO } from "./CartItemDTO";
 
-export interface DeliveryFormDTO {
+export interface DeliveryInfoDTO {
     name: string;
     email: string;
     phone: string;
     province: string;
     address: string;
-    date: Date;
-    note: string;
+    deliveryTime?: Date;
+    instructions?: string;
+    isRushOrder: boolean;
 }
 export interface DeliveryInputDTO {
     cartItems: CartItemDTO[];
