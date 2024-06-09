@@ -31,4 +31,7 @@ public class OrderService {
 		}
 		return orderRepository.save(order);
 	}
+	public Order getOrderById(Long orderId) {
+		return orderRepository.findById(orderId).orElse(null);
+	}
 }

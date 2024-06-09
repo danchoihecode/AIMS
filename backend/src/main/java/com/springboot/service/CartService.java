@@ -45,18 +45,21 @@ public class CartService {
 
 		cartProductRepository.save(cartProduct);
 
+		recalculateCartTotal(cart);
+	}
+
+	private void recalculateCartTotal(Cart cart) {
 		List<CartProduct> cartProducts = cartProductRepository.findByCartId(cart.getId());
 		double subTotal = cartProducts.stream().mapToDouble(cp -> cp.getProduct().getPrice() * cp.getQty()).sum();
-
 		cart.setSubTotal(subTotal);
 		cartRepository.save(cart);
 	}
-
-	public Cart findById(Long id) throws Exception {
+	public Cart getCartByCartId(Long id) throws Exception {
         return cartRepository.findById(id).orElseThrow(() -> new Exception("Cart not found"));
 	}
 	public void deleteCartItem(Long cartId, Long productId) {
 		CartProductKey key = new CartProductKey(cartId, productId);
 		cartProductRepository.deleteById(key);
+		cartRepository.findById(cartId).ifPresent(this::recalculateCartTotal);
 	}
 }

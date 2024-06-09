@@ -11,8 +11,8 @@ export default function Cart() {
     const taxRate = useRef(0);
     const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
     useEffect(() => {
-        getCartItems().then((data) => {
-            if (data) setCartItems(data);
+        getCartItems().then((response) => {
+            if (response) setCartItems(response.data);
         });
         getTaxRate().then((data) => {
             taxRate.current = data;

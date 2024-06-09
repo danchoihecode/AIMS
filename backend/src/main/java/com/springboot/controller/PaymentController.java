@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
+import com.springboot.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springboot.model.entity.Invoice;
 import com.springboot.model.entity.Order;
@@ -33,6 +30,8 @@ public class PaymentController {
 	@Autowired
 	InvoiceService invoiceService;
 	@Autowired
+	OrderService orderService;
+	@Autowired
 	private CartService cartService;
 
 	public PaymentController() {
@@ -44,9 +43,12 @@ public class PaymentController {
 	}
 	
 	@GetMapping("/invoice")
-	public ResponseEntity<InvoiceDetailResponse> getInvoiceDetail()  {
-		
-		return ResponseEntity.ok(new InvoiceDetailResponse(invoice.getOrder(), cartService));
+	public ResponseEntity<Order> getInvoiceDetail(@RequestParam Long orderId)  {
+		Order order = orderService.getOrderById(orderId);
+		if (order == null) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(order);
 	}
 
 	@PostMapping("/result")

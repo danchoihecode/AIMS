@@ -16,7 +16,7 @@ export interface DeliveryInputDTO {
     rushShippingFee: number;
     taxRate: number;
 }
-export interface DeliveryInputDTO_ {
+export interface ShippingFeeDTO {
     normalShippingFee: number;
     rushShippingFee: number;
     rushDeliveryAvailable: boolean;

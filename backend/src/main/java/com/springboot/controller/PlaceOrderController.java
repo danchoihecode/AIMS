@@ -1,7 +1,5 @@
 package com.springboot.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.springboot.common.Constant;
 import com.springboot.dto.DeliveryInfoDTO;
+import com.springboot.model.entity.DeliveryInfo;
 import com.springboot.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.springboot.model.entity.Cart;
 import com.springboot.model.entity.CartProduct;
-import com.springboot.model.entity.DeliveryInfo;
 import com.springboot.model.entity.Order;
 import com.springboot.model.response.RushDeliveryCheckResponse;
 import com.springboot.service.CartService;
@@ -60,10 +58,13 @@ public class PlaceOrderController {
 
     @PostMapping("")
     public ResponseEntity<Order> submitDeliveryForm(@RequestBody DeliveryInfoDTO deliveryInfoDTO) {
+        System.out.println(deliveryInfoDTO);
         try {
-            Cart cart = cartService.findById(deliveryInfoDTO.getCartId());
+            System.out.println(deliveryInfoDTO);
+            Cart cart = cartService.getCartByCartId(deliveryInfoDTO.getCartId());
             Order order = new Order(cart, deliveryInfoDTO.getNormalShippingFee(), deliveryInfoDTO.getRushShippingFee(), deliveryInfoDTO.getDeliveryInfo());
             order = orderService.createOrder(order);
+            System.out.println(order);
             return ResponseEntity.ok(order);
         } catch (Exception e) {
             System.out.println(e);

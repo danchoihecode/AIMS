@@ -1,15 +1,22 @@
+'use client'
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import { getCartItems, getTaxRate } from "@/api/DTO/apifunc";
 import DeliveryForm from "@/components/delivery/delivery-form";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
-interface CheckoutDTO {
-    allItems: CartItemDTO[];
-    taxRate: number;
-}
-
-export default async function Checkout() {
-    const allItems = await getCartItems();
-    const taxRate = await getTaxRate();
-    console.log(allItems, taxRate);
-    return <DeliveryForm cartItems={allItems} taxRate={taxRate} />;
+export default function Checkout() {
+    const router = useRouter();
+    const taxRate = useRef(0);
+    const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
+    useEffect(() => {
+        getCartItems().then((response) => {
+            if (response.error || !response.data.length) router.push("/cart");
+            setCartItems(response.data);
+        });
+        getTaxRate().then((data) => {
+            taxRate.current = data;
+        });
+    }, []);
+    return <DeliveryForm cartItems={cartItems} taxRate={taxRate.current} />;
 }

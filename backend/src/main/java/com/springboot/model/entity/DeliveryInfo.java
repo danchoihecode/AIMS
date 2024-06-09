@@ -2,6 +2,7 @@ package com.springboot.model.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,37 +20,15 @@ public class DeliveryInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String phone;
     private String email;
     private String address;
     private String instructions;
     private LocalDate deliveryTime;
+    @JsonProperty("isRushOrder")
     private boolean isRushOrder;
     private Long province;
-
-    public DeliveryInfo(String name, String phone, String email, String address, boolean isRushOrder) {
-        super();
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.isRushOrder = isRushOrder;
-    }
-
-    public DeliveryInfo(String name, String phone, String email, Long province, String instructions, String address, LocalDate deliveryTime,
-                        boolean isRushOrder) {
-        super();
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.province = province;
-        this.instructions = instructions;
-        this.address = address;
-        this.deliveryTime = deliveryTime;
-        this.isRushOrder = isRushOrder;
-    }
 
     public boolean isValid() {
         return validateName(this.name) && validatePhoneNumber(this.phone) && validateAddress(this.address) && validateEmail(this.email)

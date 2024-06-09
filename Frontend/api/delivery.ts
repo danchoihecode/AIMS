@@ -1,13 +1,13 @@
 import axios from "axios";
 import { CartItemDTO } from "./DTO/CartItemDTO";
-import { DeliveryInfoDTO, DeliveryInputDTO_ } from "./DTO/DeliveryFormDTO";
+import { DeliveryInfoDTO, ShippingFeeDTO } from "./DTO/DeliveryFormDTO";
 import { axiosWithErrorHandling } from "./DTO/apifunc";
 import { getData } from "@/lib/cookies-data";
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/delivery`;
 export const fetchDelivery = async (
     provinceId: string,
     isRushDelivery: boolean
-): Promise<DeliveryInputDTO_> => {
+): Promise<ShippingFeeDTO> => {
     try {
         const cartId = await getData("cartId");
         const response = await axios.get(`${API_URL}/shipping-fee`, {
@@ -32,6 +32,8 @@ export const submitDelivery = async (
     rushShippingFee: number,
 ) => {
     const cartId = await getData("cartId");
+    console.log(JSON.stringify({ deliveryInfo, normalShippingFee, rushShippingFee, cartId }))
+    console.log(JSON.stringify(deliveryInfo))
     return axiosWithErrorHandling({
         method: "POST",
         url: `${API_URL}`,

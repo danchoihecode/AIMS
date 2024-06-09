@@ -4,7 +4,6 @@ export const getData = async (key: string) => {
     const data = cookies().get(key);
     return data?.value;
 };
-export const setData = (key: string, value: string) => {
-    'use server'
+export const setData = async (key: string, value: string) => {
     return cookies().set(key, value);
 };

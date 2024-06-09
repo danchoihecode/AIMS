@@ -33,9 +33,10 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import DeliveryInfo from "./delivery-info";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { fetchDelivery, submitDelivery } from '@/api/delivery'
+import { fetchDelivery, submitDelivery } from "@/api/delivery";
 import { DeliveryInfoDTO } from "@/api/DTO/DeliveryFormDTO";
 import { useRouter } from "next/navigation";
+import { setData } from "@/lib/cookies-data";
 
 interface DeliveryFormProps {
     cartItems: CartItemDTO[];
@@ -47,7 +48,7 @@ const DeliveryFormSchema = z.object({
     email: z.string().email(),
     province: z.enum(province.map((p) => p.id) as [string, ...string[]], {
         message: "Invalid province",
-    }) ,
+    }),
     district: z.string().min(5),
     street: z.string().min(5),
     phone: z.string().min(10).max(10),
@@ -63,6 +64,7 @@ export default function DeliveryForm({
     cartItems,
     taxRate,
 }: DeliveryFormProps) {
+    console.log(cartItems);
     const router = useRouter();
     const [isRush, setIsRush] = useState(false);
     const form = useForm<z.infer<typeof DeliveryFormSchema>>({
@@ -78,25 +80,26 @@ export default function DeliveryForm({
             instructions: "",
         },
     });
-    const onSubmit = async (deliveryInfo: z.infer<typeof DeliveryFormSchema>) => {
-        const deliveryData : DeliveryInfoDTO = {
+    const onSubmit = async (
+        deliveryInfo: z.infer<typeof DeliveryFormSchema>
+    ) => {
+        const deliveryData: DeliveryInfoDTO = {
             ...deliveryInfo,
             address: deliveryInfo.street + " " + deliveryInfo.district,
-            isRushOrder: isRush,
-        }
-        const {data, error} = await submitDelivery(deliveryData, normalShippingFee, rushShippingFee, 1);
+            isRushOrder: true,
+        };
+        console.log(deliveryData);
+        const {data, error} = await submitDelivery(deliveryData, normalShippingFee, rushShippingFee);
         if (error) {
             toast.error("An error occurred while submitting the order");
             return;
         }
-        console.log(data)
-        //router.push("/order/checkout/success");
-        
-
-
+        localStorage.setItem("orderId", data.id);
+        router.push("/order/checkout/review");
     };
     const setDelivery = async (province: string, isRush: boolean) => {
-        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } = await fetchDelivery(province, isRush);
+        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } =
+            await fetchDelivery(province, isRush);
         if (isRush && rushDeliveryAvailable === false) {
             toast.error("Your order cannot be rush delivery.");
             return;
@@ -115,7 +118,7 @@ export default function DeliveryForm({
             setNormalDeliveryItems(cartItems);
             setRushDeliveryItems([]);
         }
-    }
+    };
     const onRushDeliveryChange = async (checked: boolean) => {
         if (!provinceWatch) {
             toast.error("Please select a province first");
@@ -123,12 +126,16 @@ export default function DeliveryForm({
         }
         setDelivery(provinceWatch, checked);
     };
-    const provinceWatch = form.watch('province');
-    const [normalDeliveryItems, setNormalDeliveryItems] =
-        useState<CartItemDTO[]>(cartItems);
+    const provinceWatch = form.watch("province");
+    const [normalDeliveryItems, setNormalDeliveryItems] = useState<
+        CartItemDTO[]
+    >([]);
     const [rushDeliveryItems, setRushDeliveryItems] = useState<CartItemDTO[]>(
         []
     );
+    useEffect(() => {
+        setNormalDeliveryItems(cartItems);
+    }, [cartItems]);
     const [normalShippingFee, setNormalShippingFee] = useState(0);
     const [rushShippingFee, setRushShippingFee] = useState(0);
     return (
@@ -205,12 +212,10 @@ export default function DeliveryForm({
                                         <FormLabel>Province</FormLabel>
                                         <Select
                                             value={field.value}
-                                            onValueChange={
-                                                async (value) => {
-                                                    field.onChange(value);
-                                                    await setDelivery(value, false);
-                                                }
-                                            }
+                                            onValueChange={async (value) => {
+                                                field.onChange(value);
+                                                await setDelivery(value, false);
+                                            }}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>

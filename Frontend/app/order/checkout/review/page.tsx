@@ -1,4 +1,7 @@
+"use client";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
+import { OrderDTO } from "@/api/DTO/OrderDTO";
+import { getCartItems, getOrder, getTaxRate } from "@/api/DTO/apifunc";
 import CheckoutButtons from "@/components/checkout/buttons";
 import CheckoutDeliveryInfo from "@/components/checkout/checkout-delivery-info";
 import {
@@ -9,78 +12,54 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-
-interface CheckoutPageProps {
-    normalDeliveryItems: CartItemDTO[];
-    rushDeliveryItems: CartItemDTO[];
-    normalShippingFee: number;
-    rushShippingFee: number;
-    taxRate: number;
-}
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function CheckoutPage() {
-    const deliveryInfo = {
-        name: "John Doe",
-        email: "john.doe@gmail.com",
-        phone: "0123456789",
-        address: "123 Main Street",
-        province: "Hà Nội",
-        date: "2021-10-10",
-        note: "Please deliver before 5pm",
-    };
-    const allItems = [
-        {
-            id: "1",
-            title: "Killer of the flower moon",
-            price: 200000,
-            quantity: 1,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: true,
-        },
-        {
-            id: "2",
-            title: "Oppenheimer",
-            price: 20000,
-            quantity: 2,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: false,
-        },
-        {
-            id: "3",
-            title: "The last duel",
-            price: 30000,
-            quantity: 3,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: false,
-        },
-        {
-            id: "4",
-            title: "Barbie",
-            price: 30000,
-            quantity: 3,
-            imageUrl: "/sample.jpg",
-            isRushDelivery: true,
-        },
-    ];
-    const taxRate = 0.1;
-    const formatter = new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-    });
+    const [order, setOrder] = useState<OrderDTO | undefined>(undefined);
+    const router = useRouter();
+    const taxRate = useRef(0);
+    const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
+    useEffect(() => {
+        getOrder().then((response) => {
+            console.log(response);
+            if (response.error) router.push("/cart");
+            setOrder(response.data);
+        });
+        getCartItems().then((response) => {
+            if (response.error || !response.data.length) router.push("/cart");
+            setCartItems(response.data);
+        });
+        getTaxRate().then((data) => {
+            taxRate.current = data;
+        });
+    }, []);
+    const normalDeliveryItems = cartItems.filter((item) => !item.isRushDelivery || !order?.deliveryInfo.isRushOrder);
+    const rushDeliveryItems = cartItems.filter((item) => item.isRushDelivery && order?.deliveryInfo.isRushOrder);
+    console.log(order?.deliveryInfo.isRushOrder);
+    const subTotal = cartItems.reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+    }, 0);
+    const tax = subTotal * taxRate.current;
+    const total = subTotal + tax + (order?.normalShippingFees || 0) + (order?.rushShippingFees || 0);
     return (
         <div className=" max-w-[48rem] space-y-8 m-auto">
             <h1 className="text-xl font-bold text-center">Your Order</h1>
-            <CheckoutDeliveryInfo deliveryInfo={deliveryInfo} />
+            <CheckoutDeliveryInfo deliveryInfo={order?.deliveryInfo} />{" "}
             <Separator orientation="horizontal" />
             <div className="space-y-4">
                 <h2 className="font-semibold text-center mb-8 text-slate-500">
                     Normal Shipping
                 </h2>
                 <ItemsHeader />
-                {allItems.map((item, index) => (
-                    <Item item={item} key={index} />
-                ))}
-                <SummaryItem label="Shipping Fee" value={100000} />
+                {normalDeliveryItems
+                    .map((item, index) => (
+                        <Item item={item} key={index} />
+                    ))}
+                <SummaryItem
+                    label="Shipping Fee"
+                    value={order ? order.normalShippingFees : 0}
+                />
             </div>
             <Separator orientation="horizontal" />
             <div className="space-y-4">
@@ -88,17 +67,28 @@ export default function CheckoutPage() {
                     Rush Shipping
                 </h2>
                 <ItemsHeader />
-                {allItems.map((item, index) => (
-                    <Item item={item} key={index} />
-                ))}
-                <SummaryItem label="Shipping Fee" value={100000} />
+                {rushDeliveryItems
+                    .map((item, index) => (
+                        <Item item={item} key={index} />
+                    ))}
+                <SummaryItem
+                    label="Shipping Fee"
+                    value={order ? order.rushShippingFees : 0}
+                />
             </div>
             <Separator orientation="horizontal" />
-            <SummaryItem label="SubTotal" value={100000} />
-            <SummaryItem label="Tax" value={100000} />
-            <SummaryItem label="Shipping Fee" value={10000} />
+            <SummaryItem label="SubTotal" value={subTotal} />
+            <SummaryItem label="Tax" value={tax} />
+            <SummaryItem
+                label="Shipping Fee"
+                value={
+                    order
+                        ? order.normalShippingFees + order.rushShippingFees
+                        : 0
+                }
+            />
             <Separator orientation="horizontal" />
-            <SummaryItem label="Total" value={10000} />
+            <SummaryItem label="Total" value={total} />
             <div>
                 <CheckoutButtons />
             </div>
