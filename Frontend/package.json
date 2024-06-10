@@ -11,6 +11,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.4.2",
     "@mui/material": "^5.15.19",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -33,7 +35,9 @@
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "context": "^3.0.29",
     "date-fns": "^3.6.0",
+    "formik": "^2.4.6",
     "formik": "^2.4.6",
     "lucide-react": "^0.379.0",
     "mdi-material-ui": "^7.9.1",
