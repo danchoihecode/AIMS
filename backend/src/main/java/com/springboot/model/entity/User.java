@@ -105,9 +105,18 @@ public class User implements UserDetails {
 		this.blocked = blocked;
 	}
 
+	public User(UUID id, String fullName, String email, Boolean isAdmin,
+							Boolean isManager, Boolean blocked) {
+		this.id = id;
+		this.fullName = fullName;
+		this.email = email;
+		this.isAdmin = isAdmin;
+		this.isManager = isManager;
+		this.blocked = blocked;
+	}
+
 	public boolean isValid() {
-		return validateFullName(this.fullName) && validateEmail(this.email) && validatePassword(this.password)
-							&& validatePhoneNumber(this.phone) && validateAddress(this.address);
+		return validateFullName(this.fullName) && validateEmail(this.email) && validatePhoneNumber(this.phone) && validateAddress(this.address);
 	}
 
 	public boolean validateFullName(String fullName) {
@@ -132,9 +141,9 @@ public class User implements UserDetails {
 		if (phoneNumber.length() != 10) return false;
 		if (phoneNumber.charAt(0) != '0') return false;
 		try {
-				Integer.parseInt(phoneNumber);
+			Integer.parseInt(phoneNumber);
 		} catch (NumberFormatException e) {
-				return false;
+			return false;
 		}
 		return true;
 	}
