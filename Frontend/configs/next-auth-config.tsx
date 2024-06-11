@@ -53,7 +53,7 @@ export const authOption:NextAuthOptions = {
                         const data = await res.json()
                         if(data) return data
                     }else{
-                        return {error: {status:res.status,message:res.statusText}}
+                        return {error: {status:res.status, message:res.statusText}}
                     }
                 }
             }

@@ -3,9 +3,8 @@
 import Box from '@mui/material/Box'
 import {
     Checkbox,
-    FormControlLabel,
     IconButton,
-    InputAdornment, Link, Radio, RadioGroup, Stack,
+    InputAdornment, Link, Stack,
     TextField,
     Typography
 } from "@mui/material";
@@ -166,7 +165,7 @@ const LoginPage = () => {
 
                 </Box>
                 <Button
-                    className="w-full" size="lg"
+                    className="w-full" size="lg" type="submit"
                 >
                     Login
                 </Button>
