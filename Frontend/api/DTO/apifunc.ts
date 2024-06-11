@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { CartItemDTO } from './CartItemDTO';
+import { UserDTO } from './UserDTO';
 
 interface Product {
   id: number;
@@ -94,5 +95,48 @@ const addToCart = async (data: AddToCartRequest): Promise<CartResponse> => {
   return response.data;
 };
 
+export const getUsers = async (): Promise<UserDTO[]> => {
+  const response = await axios.get(`${apiBaseUrl}/admin/users`);
+  const data = response.data;
+  return data.map((item: any) => {
+    const qty = item.qty;
+    const user = item.user;
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      password: user.password,
+      phone: user.phone,
+      address: user.address,
+      isAdmin: user.isAdmin,
+      isManager: user.isManager,
+      isBlocked: user.isBlocked,
+    }
+  });
+}
 
+export const updateUser = async (user: UserDTO): Promise<UserDTO[]> => {
+  const response = await axios.put(`${apiBaseUrl}/admin/users/${user.id}`, user);
+  return response.data;
+}
 
+export const createUser = async (user: UserDTO): Promise<UserDTO[]> => {
+  const response = await axios.post(`${apiBaseUrl}/admin/users/create`, user);
+  return response.data;
+}
+
+export const getUser = async (id: string): Promise<UserDTO> => {
+  const response = await axios.get(`${apiBaseUrl}/admin/users/${id}`);
+  const user = response.data;
+  return {
+    id: user.id,
+    fullName: user.fullName,
+    email: user.email,
+    password: user.password,
+    phone: user.phone,
+    address: user.address,
+    isAdmin: user.isAdmin,
+    isManager: user.isManager,
+    isBlocked: user.isBlocked,
+  }
+}

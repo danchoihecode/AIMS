@@ -2,11 +2,9 @@
 
 import Box from '@mui/material/Box'
 import {
-    
     Checkbox,
-    FormControlLabel,
     IconButton,
-    InputAdornment, Link, Radio, RadioGroup, Stack,
+    InputAdornment, Link, Stack,
     TextField,
     Typography
 } from "@mui/material";
@@ -21,11 +19,9 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 
 const LoginPage = () => {
-    // ** State
     const [showPassword, setShowPassword] = useState(false);
-    const [userType, setUserType] = useState("admin"); // Default to "Login as Admin"
+    const [userType, setUserType] = useState("admin");
 
-    // ** Hook
     const router = useRouter();
 
     const formik = useFormik({
@@ -53,7 +49,6 @@ const LoginPage = () => {
             });
 
             if (response && !response.error) {
-                // Determine the route based on user type
                 const route = userType === "admin" ? "/admin" : "/manager";
                 router.push(route);
             } else {
@@ -91,7 +86,7 @@ const LoginPage = () => {
             <Typography variant="h5" sx={{ marginBottom: 3 }}>
                     Sign In
                 </Typography>
-                <Stack spacing={3} sx={{ minWidth: '55vh' }}>
+                <Stack spacing={3} sx={{ minWidth: '43vh' }}>
                     {formik.errors.submit && (
                         <Typography
                             color="error"
@@ -170,7 +165,7 @@ const LoginPage = () => {
 
                 </Box>
                 <Button
-                    className="w-full" size="lg"
+                    className="w-full" size="lg" type="submit"
                 >
                     Login
                 </Button>

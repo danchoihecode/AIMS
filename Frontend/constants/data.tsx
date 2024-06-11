@@ -1,5 +1,4 @@
-import { Icons } from '@/components/icons';
-import { NavItem, SidebarNavItem } from '@/types';
+import { NavItem } from '@/types';
 
 export type User = {
   id: number;
@@ -99,25 +98,19 @@ export type Employee = {
   email: string;
   phone: string;
   gender: string;
-  date_of_birth: string; // Consider using a proper date type if possible
+  date_of_birth: string;
   street: string;
   city: string;
   state: string;
   country: string;
   zipcode: string;
-  longitude?: number; // Optional field
-  latitude?: number; // Optional field
+  longitude?: number;
+  latitude?: number;
   job: string;
-  profile_picture?: string | null; // Profile picture can be a string (URL) or null (if no picture)
+  profile_picture?: string | null;
 };
 
 export const adminNavItems: NavItem[] = [
-  {
-    title: 'Admin Dashboard',
-    href: '/admin',
-    icon: 'dashboard',
-    label: 'Admin Dashboard'
-  },
   {
     title: 'Users',
     href: '/admin/users',
@@ -127,12 +120,6 @@ export const adminNavItems: NavItem[] = [
 ];
 
 export const managerNavItems: NavItem[] = [
-  {
-    title: 'Manager Dashboard',
-    href: '/manager',
-    icon: 'dashboard',
-    label: 'Manager Dashboard'
-  },
   {
     title: 'Products',
     href: '/manager/products',

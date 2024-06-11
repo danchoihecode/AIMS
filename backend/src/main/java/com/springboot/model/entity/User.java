@@ -17,8 +17,10 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -45,6 +47,7 @@ public class User implements UserDetails {
 
 	@Column(name = "phone")
 	private String phone;
+	
 	@Column(name = "address")
 	private String address;
 
@@ -88,5 +91,57 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public User(String fullName, String email, String password, String phone, String address, Boolean isAdmin,
+							Boolean isManager, Boolean blocked) {
+		this.fullName = fullName;
+		this.email = email;
+		this.password = password;
+		this.phone = phone;
+		this.address = address;
+		this.isAdmin = isAdmin;
+		this.isManager = isManager;
+		this.blocked = blocked;
+	}
+
+	public boolean isValid() {
+		return validateFullName(this.fullName) && validateEmail(this.email) && validatePassword(this.password)
+							&& validatePhoneNumber(this.phone) && validateAddress(this.address);
+	}
+
+	public boolean validateFullName(String fullName) {
+		if (fullName == null) return false;
+		if (fullName.trim().isEmpty()) return false;
+		return fullName.matches("^[a-zA-Z ]*$");
+	}
+
+	public boolean validateEmail(String email) {
+		if (email == null) return false;
+		if (email.trim().isEmpty()) return false;
+		return email.matches("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$");
+	}
+
+	public boolean validatePassword(String password) {
+		if (password == null) return false;
+		return !password.trim().isEmpty();
+	}
+
+	public boolean validatePhoneNumber(String phoneNumber) {
+		if (phoneNumber == null) return false;
+		if (phoneNumber.length() != 10) return false;
+		if (phoneNumber.charAt(0) != '0') return false;
+		try {
+				Integer.parseInt(phoneNumber);
+		} catch (NumberFormatException e) {
+				return false;
+		}
+		return true;
+	}
+
+	public boolean validateAddress(String address) {
+		if (address == null) return false;
+		if (address.trim().isEmpty()) return false;
+		return address.matches("^[a-zA-Z0-9 ]*$");
 	}
 }

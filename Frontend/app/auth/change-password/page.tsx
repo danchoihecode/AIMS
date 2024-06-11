@@ -27,13 +27,6 @@ import {
 import { Label } from "@/components/ui/label"
 
 const ChangePasswordPage = () => {
-    // test session
-    const session = {
-        access_token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYUBnbWFpbC5jb20iLCJpYXQiOjE3MTc5MzU5NTksImV4cCI6MTcxODAyMjM1OX0.rvzdlmQa2Kt1HgVJ6gEHJJINKCdOn2q58ItZbWl3vHo",
-        exp: 86400000,
-        admin: true,
-        manager: true
-    }
     const [showPassword, setShowPassword] = useState(false)
     const router = useRouter()
 
@@ -56,7 +49,7 @@ const ChangePasswordPage = () => {
                 .required('Confirm Password is required'),
         }),
         onSubmit: async (values, helpers) => {
-            // const session = await getServerSession(authOption) as Session;
+            const session = await getServerSession(authOption) as Session;
             const response = await signIn('change-password', {
                 redirect: false,
                 newPassword: values.newPassword,
