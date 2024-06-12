@@ -53,11 +53,11 @@ All use cases related to Place order
 ## 3/6-15/6/2024
 Complete the entire AIMS project
 ## Work done
-- Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Login (Frontend)
+- Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
 - Do Hong Hai 20215199: 
 - Duong Hoang Hai 20215198: View list of orders, Approve order, Login (Backend), Change password (Backend)
 - Nguyen Huu Hai 20215200: 
-- Dang Phuc Hieu 20194759: CRUD Product, Update product price, Change password (Frontend)
+- Dang Phuc Hieu 20194759: CRUD Product, Update product price, Login (Frontend)
 # Tech stack
 - Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
 - Backend :  Spring Boot and JWT authentication, Java, MySQL
