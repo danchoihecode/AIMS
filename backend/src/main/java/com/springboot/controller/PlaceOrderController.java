@@ -58,13 +58,10 @@ public class PlaceOrderController {
 
     @PostMapping("")
     public ResponseEntity<Order> submitDeliveryForm(@RequestBody DeliveryInfoDTO deliveryInfoDTO) {
-        System.out.println(deliveryInfoDTO);
         try {
-            System.out.println(deliveryInfoDTO);
             Cart cart = cartService.getCartByCartId(deliveryInfoDTO.getCartId());
             Order order = new Order(cart, deliveryInfoDTO.getNormalShippingFee(), deliveryInfoDTO.getRushShippingFee(), deliveryInfoDTO.getDeliveryInfo());
             order = orderService.createOrder(order);
-            System.out.println(order);
             return ResponseEntity.ok(order);
         } catch (Exception e) {
             System.out.println(e);

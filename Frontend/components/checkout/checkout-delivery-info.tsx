@@ -55,7 +55,26 @@ export default function CheckoutDeliveryInfo({
                     </p>
                 )}
             </div>
-            
+            {
+                deliveryInfo?.deliveryTime && (
+                    <div className="flex">
+                        <p className="text-medium w-5/12">Delivery Time</p>
+                        <p className="text-right text-slate-500 w-7/12">
+                            {new Date(deliveryInfo.deliveryTime).toLocaleString()}
+                        </p>
+                    </div>
+                )
+            }
+            {
+                deliveryInfo?.instructions && (
+                    <div className="flex">
+                        <p className="text-medium w-5/12">Instructions</p>
+                        <p className="text-right text-slate-500 w-7/12">
+                            {deliveryInfo.instructions}
+                        </p>
+                    </div>
+                )
+            }
         </div>
     );
 }
