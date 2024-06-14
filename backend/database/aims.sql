@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th6 02, 2024 lúc 12:56 PM
+-- Thời gian đã tạo: Th6 06, 2024 lúc 06:26 PM
 -- Phiên bản máy phục vụ: 10.4.25-MariaDB
 -- Phiên bản PHP: 8.1.10
 
@@ -24,6 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `book`
+--
+
+CREATE TABLE `book` (
+  `id` bigint(20) NOT NULL,
+  `author` varchar(255) DEFAULT NULL,
+  `cover_type` varchar(255) DEFAULT NULL,
+  `genre` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `number_of_pages` int(11) NOT NULL,
+  `publication_date` datetime(6) DEFAULT NULL,
+  `publisher` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `cart`
 --
 
@@ -37,7 +54,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`subtotal`, `id`) VALUES
-(250, 1);
+(270, 1);
 
 -- --------------------------------------------------------
 
@@ -56,8 +73,23 @@ CREATE TABLE `cart_product` (
 --
 
 INSERT INTO `cart_product` (`qty`, `cart_id`, `product_id`) VALUES
-(2, 1, 1),
+(3, 1, 1),
 (7, 1, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `cd`
+--
+
+CREATE TABLE `cd` (
+  `id` bigint(20) NOT NULL,
+  `artist` varchar(255) DEFAULT NULL,
+  `genre` varchar(255) DEFAULT NULL,
+  `record_label` varchar(255) DEFAULT NULL,
+  `release_date` datetime(6) DEFAULT NULL,
+  `tracklist` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -80,6 +112,24 @@ CREATE TABLE `delivery_info` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `dvd`
+--
+
+CREATE TABLE `dvd` (
+  `id` bigint(20) NOT NULL,
+  `director` varchar(255) DEFAULT NULL,
+  `disc_type` varchar(255) DEFAULT NULL,
+  `genre` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `release_date` datetime(6) DEFAULT NULL,
+  `runtime` int(11) NOT NULL,
+  `studio` varchar(255) DEFAULT NULL,
+  `subtitles` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `invoice`
 --
 
@@ -94,6 +144,21 @@ CREATE TABLE `invoice` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `lp`
+--
+
+CREATE TABLE `lp` (
+  `id` bigint(20) NOT NULL,
+  `artist` varchar(255) DEFAULT NULL,
+  `genre` varchar(255) DEFAULT NULL,
+  `record_label` varchar(255) DEFAULT NULL,
+  `release_date` datetime(6) DEFAULT NULL,
+  `tracklist` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `orders`
 --
 
@@ -102,7 +167,8 @@ CREATE TABLE `orders` (
   `cart_id` bigint(20) DEFAULT NULL,
   `delivery_info_id` bigint(20) DEFAULT NULL,
   `normal_shipping_fees` double DEFAULT NULL,
-  `rush_shipping_fees` double DEFAULT NULL
+  `rush_shipping_fees` double DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -137,20 +203,55 @@ CREATE TABLE `product` (
   `id` bigint(20) NOT NULL,
   `category` varchar(255) NOT NULL,
   `image_url` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL
+  `title` varchar(255) NOT NULL,
+  `value` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Đang đổ dữ liệu cho bảng `product`
 --
 
-INSERT INTO `product` (`price`, `qty_in_stock`, `rush_order_eligible`, `weight`, `year`, `id`, `category`, `image_url`, `title`) VALUES
-(20, 10, b'1', 3.5, 2020, 1, 'Electronics', '/poster/anh1.png', 'Title 1'),
-(30, 10, b'0', 3.5, 2021, 2, 'Books', '/poster/anh2.png', 'Title 2');
+INSERT INTO `product` (`price`, `qty_in_stock`, `rush_order_eligible`, `weight`, `year`, `id`, `category`, `image_url`, `title`, `value`) VALUES
+(20, 10, b'1', 3.5, 2020, 1, 'Electronics', '/poster/anh1.png', 'Title 1', '100'),
+(30, 10, b'0', 3.5, 2021, 2, 'Books', '/poster/anh2.png', 'Title 2', '100');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` binary(16) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `is_admin` bit(1) NOT NULL DEFAULT b'0',
+  `password` longtext NOT NULL,
+  `is_manager` bit(1) NOT NULL DEFAULT b'0',
+  `address` varchar(255) DEFAULT NULL,
+  `blocked` bit(1) NOT NULL DEFAULT b'0',
+  `phone` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `users`
+--
+
+INSERT INTO `users` (`user_id`, `email`, `full_name`, `is_admin`, `password`, `is_manager`, `address`, `blocked`, `phone`) VALUES
+(0x39fb720dcd614f87841e3ca1f67c26ed, 'admin@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$YBYR5zBMR/ZOdzS2uOY3FOHtC/Gy.VHqopkfc63grRrnUvbDl2s4a', b'0', NULL, b'0', NULL),
+(0x40f26975cb874a59bead90ff25837b8a, 'an@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$NJ96ubd3VVklbz1pxE.3eOsHa55cpdpMASfGO/05nc0gtZis5byMa', b'1', NULL, b'0', NULL),
+(0x4f5126bf31634648837da10649204646, 'abc@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$2qsyIDxyZqKvAFY6tvoo5e3krHEDR6K0YS6uJDPBloOun4aXxxV/6', b'0', NULL, b'0', NULL),
+(0xc7109ae171834cc7a146e5e69a0ceec8, 'g@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$BDf46zXNfyZRp2U5C26TSO0WVVzPVUlB1Pg8ciEpjwSeLhMMMcvfS', b'0', NULL, b'0', NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
 --
+
+--
+-- Chỉ mục cho bảng `book`
+--
+ALTER TABLE `book`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `cart`
@@ -166,9 +267,21 @@ ALTER TABLE `cart_product`
   ADD KEY `FK2kdlr8hs2bwl14u8oop49vrxi` (`product_id`);
 
 --
+-- Chỉ mục cho bảng `cd`
+--
+ALTER TABLE `cd`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Chỉ mục cho bảng `delivery_info`
 --
 ALTER TABLE `delivery_info`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `dvd`
+--
+ALTER TABLE `dvd`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -178,6 +291,12 @@ ALTER TABLE `invoice`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `UKgnfabg6rvhoc3c9o4deqb1hn4` (`order_id`),
   ADD UNIQUE KEY `UKg8w1kpogyegms2fbtqjqdshjl` (`payment_transaction_id`);
+
+--
+-- Chỉ mục cho bảng `lp`
+--
+ALTER TABLE `lp`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Chỉ mục cho bảng `orders`
@@ -200,8 +319,20 @@ ALTER TABLE `product`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Chỉ mục cho bảng `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
+
+--
+-- AUTO_INCREMENT cho bảng `book`
+--
+ALTER TABLE `book`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `cart`
@@ -210,16 +341,34 @@ ALTER TABLE `cart`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT cho bảng `cd`
+--
+ALTER TABLE `cd`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `delivery_info`
 --
 ALTER TABLE `delivery_info`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT cho bảng `dvd`
+--
+ALTER TABLE `dvd`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `invoice`
 --
 ALTER TABLE `invoice`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT cho bảng `lp`
+--
+ALTER TABLE `lp`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT cho bảng `orders`
@@ -244,6 +393,12 @@ ALTER TABLE `product`
 --
 
 --
+-- Các ràng buộc cho bảng `book`
+--
+ALTER TABLE `book`
+  ADD CONSTRAINT `FK8cjf4cjanicu58p2l5t8d9xvu` FOREIGN KEY (`id`) REFERENCES `product` (`id`);
+
+--
 -- Các ràng buộc cho bảng `cart_product`
 --
 ALTER TABLE `cart_product`
@@ -251,11 +406,29 @@ ALTER TABLE `cart_product`
   ADD CONSTRAINT `FKlv5x4iresnv4xspvomrwd8ej9` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`);
 
 --
+-- Các ràng buộc cho bảng `cd`
+--
+ALTER TABLE `cd`
+  ADD CONSTRAINT `FKg450nkyhi3a0t7kn2cosol0xf` FOREIGN KEY (`id`) REFERENCES `product` (`id`);
+
+--
+-- Các ràng buộc cho bảng `dvd`
+--
+ALTER TABLE `dvd`
+  ADD CONSTRAINT `FK8767xtav39bmxqpras2ivshb9` FOREIGN KEY (`id`) REFERENCES `product` (`id`);
+
+--
 -- Các ràng buộc cho bảng `invoice`
 --
 ALTER TABLE `invoice`
   ADD CONSTRAINT `FK9m8ufclck00o6ovi1v0dgoeww` FOREIGN KEY (`payment_transaction_id`) REFERENCES `payment_transaction` (`id`),
   ADD CONSTRAINT `FKthf5w8xuexpjinfl7xheakhqn` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`);
+
+--
+-- Các ràng buộc cho bảng `lp`
+--
+ALTER TABLE `lp`
+  ADD CONSTRAINT `FKm8q2bkr1mx9vxhjq1g5durpsr` FOREIGN KEY (`id`) REFERENCES `product` (`id`);
 
 --
 -- Các ràng buộc cho bảng `orders`

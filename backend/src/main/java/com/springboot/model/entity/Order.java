@@ -30,6 +30,8 @@ public class Order {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "delivery_info_id", referencedColumnName = "id")
 	private DeliveryInfo deliveryInfo;
+	
+	private String state;
 
 	public Order() {}
 	public Order(Cart cart, double normalShippingFees, double rushShippingFees, DeliveryInfo deliveryInfo) {
