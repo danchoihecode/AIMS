@@ -55,7 +55,7 @@ Complete the entire AIMS project
 ## Work done
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
 - Do Hong Hai 20215199: 
-- Duong Hoang Hai 20215198: View list of orders, Approve order, Login (Backend), Change password (Backend)
+- Duong Hoang Hai 20215198: View list of orders, Approve order, Reject order, Login (Backend), Change password (Backend)
 - Nguyen Huu Hai 20215200: 
 - Dang Phuc Hieu 20194759: CRUD Product, Update product price, Login (Frontend)
 # Tech stack
