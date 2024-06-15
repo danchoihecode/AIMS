@@ -98,25 +98,30 @@ const addToCart = async (data: AddToCartRequest): Promise<CartResponse> => {
 export const getUsers = async (): Promise<UserDTO[]> => {
   const response = await axios.get(`${apiBaseUrl}/admin/users`);
   const data = response.data;
-  return data.map((item: any) => {
-    const qty = item.qty;
-    const user = item.user;
+  return data.map((user: any) => {
     return {
       id: user.id,
       fullName: user.fullName,
       email: user.email,
-      password: user.password,
-      phone: user.phone,
-      address: user.address,
       isAdmin: user.isAdmin,
       isManager: user.isManager,
-      isBlocked: user.isBlocked,
+      isBlocked: user.blocked,
     }
   });
 }
 
 export const updateUser = async (user: UserDTO): Promise<UserDTO[]> => {
-  const response = await axios.put(`${apiBaseUrl}/admin/users/${user.id}`, user);
+  let response = {} as any;
+  try {
+    response = await axios.post(`${apiBaseUrl}/admin/users/${user.id}/update`, user, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('User updated successfully:', response.data);
+  } catch (error) {
+    console.error('Error updating user:', error);
+  }
   return response.data;
 }
 
@@ -126,17 +131,47 @@ export const createUser = async (user: UserDTO): Promise<UserDTO[]> => {
 }
 
 export const getUser = async (id: string): Promise<UserDTO> => {
-  const response = await axios.get(`${apiBaseUrl}/admin/users/${id}`);
+  const response = await axios.get(`${apiBaseUrl}/admin/users/${id}/edit`);
   const user = response.data;
   return {
     id: user.id,
     fullName: user.fullName,
     email: user.email,
-    password: user.password,
+    password: 'password',
     phone: user.phone,
     address: user.address,
     isAdmin: user.isAdmin,
     isManager: user.isManager,
     isBlocked: user.isBlocked,
+  }
+}
+
+export async function deleteUser(id: string) {
+  try {
+    const response = await axios.delete(`${apiBaseUrl}/admin/users/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
+  }
+}
+
+export async function blockUser(id: string) {
+  try {
+    const response = await axios.post(`${apiBaseUrl}/admin/users/${id}/block`);
+    return response.data;
+  } catch (error) {
+    console.error('Error blocking user:', error);
+    throw error;
+  }
+}
+
+export async function unblockUser(id: string) {
+  try {
+    const response = await axios.post(`${apiBaseUrl}/admin/users/${id}/unblock`);
+    return response.data;
+  } catch (error) {
+    console.error('Error unblocking user:', error);
+    throw error;
   }
 }

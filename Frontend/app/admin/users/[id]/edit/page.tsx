@@ -28,30 +28,29 @@ import {
 } from "@/components/ui/select"
 import { UserDTO } from "@/api/DTO/UserDTO";
 import { getUser, updateUser } from "@/api/DTO/apifunc";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import UserFormSkeleton from "@/components/layout/user-form-skeleton";
 
 const UserEdit = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-
+  const { id } = useParams();
   const [user, setUser] = useState<UserDTO | null>(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState<number | "">("");
+  const [phone, setPhone] = useState<number | null>(null);
   const [address, setAddress] = useState("");
   const [role, setRole] = useState<string>("");
 
   const handleResetPassword = () => {
-    setPassword("");
+    setPassword("password");
   };
 
   useEffect(() => {
     if (id) {
-      getUser(id as string).then((userData) => {
+      const userId = Array.isArray(id) ? id[0] : id;
+      getUser(userId).then((userData) => {
         setUser(userData);
         setFullName(userData.fullName);
         setEmail(userData.email);
@@ -67,6 +66,8 @@ const UserEdit = () => {
             ? "manager"
             : ""
         );
+      }).catch(error => {
+        console.error("Error fetching user:", error);
       });
     }
   }, [id]);
@@ -93,7 +94,7 @@ const UserEdit = () => {
     }
   };
 
-  if (user) {
+  if (!user) {
     return (
       <div>
         <UserFormSkeleton />
@@ -164,14 +165,6 @@ const UserEdit = () => {
                           Reset Password
                         </Button>
                       </div>
-                      <Input
-                        id="password"
-                        type="password"
-                        className="w-full"
-                        placeholder="Enter user password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="phone">Phone</Label>
@@ -180,7 +173,7 @@ const UserEdit = () => {
                         type="number"
                         className="w-full"
                         placeholder="Enter user phone number"
-                        value={phone}
+                        value={phone?.toString()}
                         onChange={(e) => setPhone(Number(e.target.value))}
                       />
                     </div>

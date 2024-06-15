@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import axios from "axios";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,47 +15,50 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { TextField, MenuItem } from "@mui/material";
+import validator from "validator";
 import { createUser } from "@/api/DTO/apifunc";
+import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation";
+import { UserDTO } from "@/api/DTO/UserDTO";
 
-export interface UserDTO {
-  id: string;
-  fullName: string;
-  email: string;
-  password: string;
-  phone: number;
-  address: string;
-  isAdmin?: boolean;
-  isManager?: boolean;
-  isBlocked?: boolean;
-}
+const UserCreate = () => {
+  const router = useRouter()
 
-export default function UserCreate() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState<number | "">("");
+  const [password] = useState("password");
+  const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [role, setRole] = useState<string>("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateFields = () => {
+    let errors: { [key: string]: string } = {};
+    if (validator.isEmpty(fullName)) errors.fullName = "Full Name is required";
+    if (!validator.isEmail(email)) errors.email = "Invalid email";
+    if (!validator.isNumeric(phone)) errors.phone = "Phone number must be digits";
+    if (validator.isEmpty(address)) errors.address = "Address is required";
+    return errors;
+  };
 
   const handleCreateUser = async () => {
+    const validationErrors = validateFields();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     const user: UserDTO = {
       id: "",
       fullName,
       email,
       password,
-      phone: phone as number,
+      phone: Number(phone),
       address,
       isAdmin: role.includes("admin"),
       isManager: role.includes("manager"),
@@ -65,7 +67,7 @@ export default function UserCreate() {
 
     try {
       const createdUser = await createUser(user);
-      console.log("User created:", createdUser);
+      router.push("/admin/users");
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -101,90 +103,89 @@ export default function UserCreate() {
               <Card x-chunk="dashboard-08-chunk-0">
                 <CardHeader>
                   <CardTitle>Create User</CardTitle>
-                  <CardDescription>Enter user details below</CardDescription>
+                  <CardDescription>Enter user details below. New user will has default password.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="name">Full Name</Label>
-                      <Input
+                      <TextField
                         id="name"
                         type="text"
                         className="w-full"
                         placeholder="Enter user full name"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
+                        error={!!errors.fullName}
+                        helperText={errors.fullName}
+                        fullWidth
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="email">Email</Label>
-                      <Input
+                      <TextField
                         id="email"
                         type="email"
                         className="w-full"
                         placeholder="Enter user email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        className="w-full"
-                        placeholder="Enter user password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                        fullWidth
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="phone">Phone</Label>
-                      <Input
+                      <TextField
                         id="phone"
-                        type="number"
+                        type="text"
                         className="w-full"
                         placeholder="Enter user phone number"
                         value={phone}
-                        onChange={(e) => setPhone(Number(e.target.value))}
+                        onChange={(e) => setPhone(e.target.value)}
+                        error={!!errors.phone}
+                        helperText={errors.phone}
+                        fullWidth
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="address">Address</Label>
-                      <Input
+                      <TextField
                         id="address"
                         type="text"
                         className="w-full"
                         placeholder="Enter user address"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
+                        error={!!errors.address}
+                        helperText={errors.address}
+                        fullWidth
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="role">Roles</Label>
-                      <Select onValueChange={(value) => setRole(value)}>
-                        <SelectTrigger id="role" aria-label="Select role">
-                          <SelectValue placeholder="Select role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="manager">Manager</SelectItem>
-                          <SelectItem value="admin-manager">
-                            Admin & Manager
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                      <Button variant="outline" size="sm">
-                        Discard
-                      </Button>
-                      <Button size="sm" onClick={handleCreateUser}>
-                        Create User
-                      </Button>
+                      <TextField
+                        select
+                        id="role"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        error={!!errors.role}
+                        helperText={errors.role}
+                        fullWidth
+                      >
+                        <MenuItem value="admin">Admin</MenuItem>
+                        <MenuItem value="manager">Manager</MenuItem>
+                        <MenuItem value="admin-manager">Admin & Manager</MenuItem>
+                      </TextField>
                     </div>
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <Button className="w-full" onClick={handleCreateUser}>
+                    Create User
+                  </Button>
+                </CardFooter>
               </Card>
             </div>
           </div>
@@ -192,4 +193,6 @@ export default function UserCreate() {
       </div>
     </div>
   );
-}
+};
+
+export default UserCreate;

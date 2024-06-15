@@ -5,7 +5,7 @@ export interface UserDTO {
   password: string;
   phone: number;
   address: string;
-  isAdmin?: boolean;
-  isManager?: boolean;
-  isBlocked?: boolean;
+  isAdmin: boolean;
+  isManager: boolean;
+  isBlocked: boolean;
 }

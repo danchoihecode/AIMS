@@ -1,5 +1,6 @@
 'use client'
-import Box from '@mui/material/Box'
+
+import Box from '@mui/material/Box';
 import {
     IconButton,
     InputAdornment,
@@ -12,10 +13,7 @@ import { EyeOffOutline, EyeOutline } from "mdi-material-ui";
 import { signIn } from "next-auth/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { getServerSession } from "next-auth/next";
-import { Session } from "next-auth";
-import { authOption } from "@/configs/next-auth-config";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -23,16 +21,18 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-  } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { useSessionContext } from '@/context/SessionContext';
 
 const ChangePasswordPage = () => {
-    const [showPassword, setShowPassword] = useState(false)
-    const router = useRouter()
+    const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
+    const { session, loading } = useSessionContext();
 
     const formik = useFormik({
         initialValues: {
-            newPassword:'',
+            newPassword: '',
             confirmPassword: '',
             submit: null
         },
@@ -44,19 +44,23 @@ const ChangePasswordPage = () => {
                 .required('New Password is required'),
             confirmPassword: Yup
                 .string()
-                .min(8, 'Password must be at least 8 characters')
-                .max(100, 'Password must be at most 100 characters')
+                .oneOf([Yup.ref('newPassword'), undefined], 'Passwords must match')
                 .required('Confirm Password is required'),
         }),
         onSubmit: async (values, helpers) => {
-            const session = await getServerSession(authOption) as Session;
+            if (!session) {
+                helpers.setErrors({ submit: "Session not found" });
+                helpers.setSubmitting(false);
+                return;
+            }
+
             const response = await signIn('change-password', {
                 redirect: false,
                 newPassword: values.newPassword,
                 token: session.access_token
-            }) as ResponseData
+            }) as ResponseData;
 
-            if (!response.error){
+            if (!response.error) {
                 if (session?.admin) {
                     router.push('/admin');
                 } else if (session?.manager) {
@@ -72,6 +76,9 @@ const ChangePasswordPage = () => {
         }
     });
 
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <Box className="flex justify-center items-center min-h-screen">
@@ -154,8 +161,7 @@ const ChangePasswordPage = () => {
                 </form>
             </Card>
         </Box>
-    )
+    );
 }
 
-
-export default ChangePasswordPage
+export default ChangePasswordPage;
