@@ -1,5 +1,8 @@
 'use client';
+<<<<<<< HEAD
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -13,7 +16,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+<<<<<<< HEAD
 import { Session } from "next-auth";
+=======
+import { Icons } from '@/components/icons';
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 
 export function UserNav() {
     const router = useRouter();
@@ -21,6 +28,7 @@ export function UserNav() {
     const handleChangePasswordClick = () => {
         router.push('/auth/change-password');
     };
+<<<<<<< HEAD
     return (
         <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -32,6 +40,16 @@ export function UserNav() {
                 />
                 <AvatarFallback>{}</AvatarFallback>
             </Avatar>
+=======
+
+    const Icon = Icons['profile'];
+
+    return (
+        <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
+                <Icon className="size-5" />
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -47,10 +65,13 @@ export function UserNav() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
+<<<<<<< HEAD
             <DropdownMenuItem>
                 Profile
                 <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
             <DropdownMenuItem onClick={handleChangePasswordClick}>
                 Change Password
                 <DropdownMenuShortcut>⇧⌘W</DropdownMenuShortcut>

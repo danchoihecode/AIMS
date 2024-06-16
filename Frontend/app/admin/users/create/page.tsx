@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+<<<<<<< HEAD
 import axios from "axios";
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +19,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+<<<<<<< HEAD
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -51,12 +55,56 @@ export default function UserCreate() {
   const [role, setRole] = useState<string>("");
 
   const handleCreateUser = async () => {
+=======
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { TextField, MenuItem } from "@mui/material";
+import validator from "validator";
+import { createUser } from "@/api/DTO/apifunc";
+import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation";
+import { UserDTO } from "@/api/DTO/UserDTO";
+
+const UserCreate = () => {
+  const router = useRouter()
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password] = useState("password");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [role, setRole] = useState<string>("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateFields = () => {
+    let errors: { [key: string]: string } = {};
+    if (validator.isEmpty(fullName)) errors.fullName = "Full Name is required";
+    if (!validator.isEmail(email)) errors.email = "Invalid email";
+    if (!validator.isNumeric(phone)) errors.phone = "Phone number must be digits";
+    if (validator.isEmpty(address)) errors.address = "Address is required";
+    return errors;
+  };
+
+  const handleCreateUser = async () => {
+    const validationErrors = validateFields();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     const user: UserDTO = {
       id: "",
       fullName,
       email,
       password,
+<<<<<<< HEAD
       phone: phone as number,
+=======
+      phone: Number(phone),
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
       address,
       isAdmin: role.includes("admin"),
       isManager: role.includes("manager"),
@@ -65,7 +113,11 @@ export default function UserCreate() {
 
     try {
       const createdUser = await createUser(user);
+<<<<<<< HEAD
       console.log("User created:", createdUser);
+=======
+      router.push("/admin/users");
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -101,30 +153,49 @@ export default function UserCreate() {
               <Card x-chunk="dashboard-08-chunk-0">
                 <CardHeader>
                   <CardTitle>Create User</CardTitle>
+<<<<<<< HEAD
                   <CardDescription>Enter user details below</CardDescription>
+=======
+                  <CardDescription>Enter user details below. New user will has default password.</CardDescription>
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="name">Full Name</Label>
+<<<<<<< HEAD
                       <Input
+=======
+                      <TextField
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                         id="name"
                         type="text"
                         className="w-full"
                         placeholder="Enter user full name"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
+<<<<<<< HEAD
+=======
+                        error={!!errors.fullName}
+                        helperText={errors.fullName}
+                        fullWidth
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="email">Email</Label>
+<<<<<<< HEAD
                       <Input
+=======
+                      <TextField
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                         id="email"
                         type="email"
                         className="w-full"
                         placeholder="Enter user email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+<<<<<<< HEAD
                       />
                     </div>
                     <div className="grid gap-3">
@@ -136,10 +207,16 @@ export default function UserCreate() {
                         placeholder="Enter user password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+=======
+                        error={!!errors.email}
+                        helperText={errors.email}
+                        fullWidth
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="phone">Phone</Label>
+<<<<<<< HEAD
                       <Input
                         id="phone"
                         type="number"
@@ -147,21 +224,44 @@ export default function UserCreate() {
                         placeholder="Enter user phone number"
                         value={phone}
                         onChange={(e) => setPhone(Number(e.target.value))}
+=======
+                      <TextField
+                        id="phone"
+                        type="text"
+                        className="w-full"
+                        placeholder="Enter user phone number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        error={!!errors.phone}
+                        helperText={errors.phone}
+                        fullWidth
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="address">Address</Label>
+<<<<<<< HEAD
                       <Input
+=======
+                      <TextField
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                         id="address"
                         type="text"
                         className="w-full"
                         placeholder="Enter user address"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
+<<<<<<< HEAD
+=======
+                        error={!!errors.address}
+                        helperText={errors.address}
+                        fullWidth
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                       />
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="role">Roles</Label>
+<<<<<<< HEAD
                       <Select onValueChange={(value) => setRole(value)}>
                         <SelectTrigger id="role" aria-label="Select role">
                           <SelectValue placeholder="Select role" />
@@ -185,6 +285,29 @@ export default function UserCreate() {
                     </div>
                   </div>
                 </CardContent>
+=======
+                      <TextField
+                        select
+                        id="role"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        error={!!errors.role}
+                        helperText={errors.role}
+                        fullWidth
+                      >
+                        <MenuItem value="admin">Admin</MenuItem>
+                        <MenuItem value="manager">Manager</MenuItem>
+                        <MenuItem value="admin-manager">Admin & Manager</MenuItem>
+                      </TextField>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full" onClick={handleCreateUser}>
+                    Create User
+                  </Button>
+                </CardFooter>
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
               </Card>
             </div>
           </div>
@@ -192,4 +315,10 @@ export default function UserCreate() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+};
+
+export default UserCreate;
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48

@@ -15,9 +15,9 @@ import lombok.Data;
 @Data
 public class InvoiceDetailResponse {
 	private DeliveryInfo deliveryInfo;
-	private List<ProductResponse> normalShipping = new ArrayList<>();
+	private List<ProductResponseDTO> normalShipping = new ArrayList<>();
 	private double normalShippingFee;
-	private List<ProductResponse> rushShipping = new ArrayList<>();
+	private List<ProductResponseDTO> rushShipping = new ArrayList<>();
 	private double rushShippingFee;
 	private double subTotal;
 	private double tax;
@@ -39,7 +39,7 @@ public class InvoiceDetailResponse {
 			int qty = cartProduct.getQty();
 			double totalProductPrice = product.getPrice() * qty;
 
-			ProductResponse productResponse = new ProductResponse(product.getTitle(), qty, product.getPrice(),
+			ProductResponseDTO productResponse = new ProductResponseDTO(product.getTitle(), qty, product.getPrice(),
 					totalProductPrice);
 
 			if (isRushOrder && product.isRushOrderEligible()) {

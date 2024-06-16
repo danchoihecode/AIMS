@@ -25,7 +25,11 @@ export default async function AdminLayout({
       <Header />
       <div className="flex h-screen overflow-hidden">
         <AdminSidebar />
+<<<<<<< HEAD
         <main className="flex-1 overflow-hidden pt-16">{children}</main>
+=======
+        <main className="flex-1 overflow-auto pt-16">{children}</main>
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
       </div>
     </div>
   );
