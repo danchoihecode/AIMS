@@ -1,7 +1,8 @@
+"use client"
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import {
     updateCartItemQty
-} from "@/api/DTO/apifunc";
+} from "@/api/Cart";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
@@ -25,24 +26,18 @@ const isValidQty = async (itemId: string, qty: string) => {
 
 interface ChangeQuantityProps {
     item: CartItemDTO;
-    setCartItems: any;
+    setItem: any;
 }
 
-export default function ChangeQuantity({ item, setCartItems } : ChangeQuantityProps) {
+export default function ChangeQuantity({ item, setItem } : ChangeQuantityProps) {
     const handleChangeQty = async (qty: string | number) => {
         const isValid = await isValidQty(item.productId, qty.toString());
         if (!isValid) return;
-        setCartItems((prev: CartItemDTO[]) => {
-            return prev.map((i: CartItemDTO) => {
-                if (i.productId === item.productId) {
-                    return {
-                        ...i,
-                        quantity: qty,
-                    };
-                }
-                return i;
-            });
-        });
+        setItem((prevItem: CartItemDTO) => ({
+            ...prevItem,
+            quantity: Number(qty)
+        })
+        )
     };
     return (
         <div className="space-x-2 flex items-center">

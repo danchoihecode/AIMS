@@ -36,7 +36,6 @@ import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import { fetchDelivery, submitDelivery } from "@/api/delivery";
 import { DeliveryInfoDTO } from "@/api/DTO/DeliveryFormDTO";
 import { useRouter } from "next/navigation";
-import { setData } from "@/lib/cookies-data";
 
 interface DeliveryFormProps {
     cartItems: CartItemDTO[];

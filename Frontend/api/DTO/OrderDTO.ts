@@ -8,4 +8,5 @@ export interface OrderDTO {
     normalShippingFees: number;
     rushShippingFees: number;
     deliveryInfo: DeliveryInfoDTO;
+    state: string;
 }

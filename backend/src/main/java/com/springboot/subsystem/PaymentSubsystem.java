@@ -10,7 +10,7 @@ import com.springboot.model.entity.RefundTransaction;
 
 public class PaymentSubsystem implements IPaymentSubsystem {
 
-	private IPaymentSubsystem controller;
+	private final IPaymentSubsystem controller;
 
 	public PaymentSubsystem(IPaymentSubsystem controller) {
 		this.controller = controller;

@@ -1,6 +1,6 @@
 "use client";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { getCartItems, getTaxRate } from "@/api/DTO/apifunc";
+import { getCartItems, getTaxRate } from "@/api/Cart";
 import CartItems from "@/components/cart/cart-items";
 import CartTotal from "@/components/cart/cart-total";
 import { Separator } from "@/components/ui/separator";

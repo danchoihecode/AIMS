@@ -33,10 +33,6 @@ public class Invoice {
 	@JoinColumn(name = "payment_transaction_id", referencedColumnName = "id")
 	private PaymentTransaction paymentTransaction;
 
-	public Invoice() {
-
-	}
-
 	public Invoice(Order order) {
 
 		this.order = order;

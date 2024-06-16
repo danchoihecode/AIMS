@@ -1,65 +1,47 @@
-import { BookDTO, CDDTO, CartItemDTO, DVDDTO, LDDTO } from "@/api/DTO/CartItemDTO";
-import { Badge } from "@/components/ui/badge";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableRow
-} from "@/components/ui/table";
+import { Product } from "@/api/DTO/CartItemDTO";
+import { getProductDetails } from "@/api/Product";
+import AddToCart from "@/components/product-detail/add-to-cart";
+import { BookRows, CDRows, DVDRows, LPRows } from "@/components/product-detail/item-details";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { ServerCrash } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function ProductDetail() {
-    const item: CartItemDTO = {
-        productId: "1",
-        title: "Oppenheimer",
-        price: 100000,
-        imageUrl: "/poster/anh2.png",
-        quantity: 1,
-        category: "DVD",
-        year: 2021,
-    };
-    const dvd: DVDDTO = {
-        id: 1,
-        director: "HAIDOHONG",
-        genre: "Documentary",
-        language: "English",
-        subtitles: "Vietnamese",
-        studio: "HAIDOHONG",
-        runtime: 120,
-
+export default async function ProductDetail({
+    params,
+}: {
+    params: { product_id: string };
+}) {
+    const { data, error } = await getProductDetails(params.product_id);
+    if (error) {
+        return (
+            <div className="flex space-x-4 justify-center">
+                <ServerCrash size={96} strokeWidth={1} />
+                <div className="space-y-4">
+                    <p className="text-slate-500 block">
+                        An error occurred while fetching the product details
+                    </p>
+                    <Link href="/" className="block">
+                        <Button>Go back to home</Button>
+                    </Link>
+                </div>
+            </div>
+        );
     }
-    const cd: CDDTO = {
-        id: 1,
-        artist: "HAIDOHONG",
-        genre: "Documentary",
-        record_label: "HAIDOHONG",
-        tracklist: "HAIDOHONG",
-    }
-    const book: BookDTO = {
-        id: 1,
-        author: "HAIDOHONG",
-        genre: "Documentary",
-        language: "English",
-        number_of_pages: 120,
-        publication_date: "2021",
-        publisher: "HAIDOHONG",
-    }
-    const ld: LDDTO = {
-        id: 1,
-        artist: "HAIDOHONG",
-        genre: "Documentary",
-        record_label: "HAIDOHONG",
-        tracklist: "HAIDOHONG",
-    }
-
+    const item: Product = data.product;
+    const book = data.book;
+    const dvd = data.dvd;
+    const cd = data.cd;
+    const lp = data.lp;
     const formatter = new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency: "VND",
     });
     return (
-        <div className="md:flex md:space-x-8 items-center space-y-8">
+        <div className="md:flex md:space-x-8 space-y-8 items-start">
             <Image
-                src={item.imageUrl}
+                src={item.image}
                 width={400}
                 height={400}
                 alt="product"
@@ -82,94 +64,14 @@ export default function ProductDetail() {
                             <TableCell className="font-medium">Year</TableCell>
                             <TableCell>{item.year}</TableCell>
                         </TableRow>
-                        {dvd && <DVDRows dvd={dvd} /> }
+                        {dvd && <DVDRows dvd={dvd} />}
                         {cd && <CDRows cd={cd} />}
                         {book && <BookRows book={book} />}
-                        {ld && <CDRows cd={cd} />}
+                        {lp && <LPRows lp={lp} />}
                     </TableBody>
                 </Table>
+                <AddToCart product={item}/>
             </div>
         </div>
-    );
-} 
-const DVDRows = ({dvd}: {dvd: DVDDTO}) => {
-    return (
-        <>
-            <TableRow>
-                <TableCell className="font-medium">Director</TableCell>
-                <TableCell>{dvd.director}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Genre</TableCell>
-                <TableCell>{dvd.genre}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Language</TableCell>
-                <TableCell className="space-x-2">
-                    <Badge>{dvd.language}</Badge>
-                    <Badge variant="secondary">{dvd.subtitles}</Badge>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Studio</TableCell>
-                <TableCell>{dvd.studio}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Duration</TableCell>
-                <TableCell>{dvd.runtime} minutes</TableCell>
-            </TableRow>
-        </>
-    );
-};
-const CDRows = ({cd}: {cd: CDDTO}) => {
-    return (
-        <>
-            <TableRow>
-                <TableCell className="font-medium">Artist</TableCell>
-                <TableCell>{cd.artist}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Genre</TableCell>
-                <TableCell>{cd.genre}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Record Label</TableCell>
-                <TableCell>{cd.record_label}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Tracklist</TableCell>
-                <TableCell>{cd.tracklist}</TableCell>
-            </TableRow>
-        </>
-    );
-}
-const BookRows = ({book}: {book: BookDTO}) => {
-    return (
-        <>
-            <TableRow>
-                <TableCell className="font-medium">Author</TableCell>
-                <TableCell>{book.author}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Genre</TableCell>
-                <TableCell>{book.genre}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Language</TableCell>
-                <TableCell>{book.language}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Number of Pages</TableCell>
-                <TableCell>{book.number_of_pages}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Publication Date</TableCell>
-                <TableCell>{book.publication_date}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell className="font-medium">Publisher</TableCell>
-                <TableCell>{book.publisher}</TableCell>
-            </TableRow>
-        </>
     );
 }

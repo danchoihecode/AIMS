@@ -46,9 +46,7 @@ public class RefundResponseVNPay {
 		int amount = Integer.parseInt(response.get("vnp_Amount")) / 100;
 		String content = response.get("vnp_OrderInfo");
 
-		RefundTransaction refundTransaction = new RefundTransaction(id, message, errorCode, amount, content);
-
-		return refundTransaction;
+        return new RefundTransaction(id, message, errorCode, amount, content);
 	}
 
 }

@@ -56,7 +56,17 @@ public class OrderService {
 				order.getDeliveryInfo().getName(), order.getTotalAmount(), order.getState()))
 				.collect(Collectors.toList());
 	}
-
+	public void serOrderPending(Long id) throws Exception {
+		Order order = orderRepository.findById(id).orElse(null);
+		if (order == null) {
+			throw new Exception("Order not found with id: " + id);
+		}
+		if (order.getState() != null) {
+			throw new Exception("Order is already in state: " + order.getState());
+		}
+		order.setState("Pending");
+		orderRepository.save(order);
+	}
 	public OrderDetailResponse getOrderDetail(Long id) throws Exception {
 		Optional<Order> orderOpt = orderRepository.findById(id);
 		if (orderOpt.isPresent()) {

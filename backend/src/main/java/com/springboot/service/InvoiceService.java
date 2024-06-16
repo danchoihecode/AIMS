@@ -1,5 +1,7 @@
 package com.springboot.service;
 
+import com.springboot.model.entity.Order;
+import com.springboot.repository.PaymentTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ public class InvoiceService {
 
 	@Autowired
 	InvoiceRepository invoiceRepository;
+	@Autowired
+	PaymentTransactionRepository paymentTransactionRepository;
 
 	public void save(Invoice invoice) {
 		invoiceRepository.save(invoice);
@@ -22,9 +26,18 @@ public class InvoiceService {
 
 		Invoice invoice = invoiceRepository.findByOrderId(orderId);
 
-		PaymentTransaction paymentTransaction = invoice.getPaymentTransaction();
+        return invoice.getPaymentTransaction();
 
-		return paymentTransaction;
+	}
+	public Invoice getInvoiceByOrderId(Long orderId) {
+		return invoiceRepository.findByOrderId(orderId);
+	}
+	public void saveInvoice(Invoice invoice, PaymentTransaction transaction) {
+		paymentTransactionRepository.save(transaction);
+		invoiceRepository.save(invoice);
+	}
 
+	public void cancelInvoice(Invoice invoice) {
+		invoiceRepository.delete(invoice);
 	}
 }

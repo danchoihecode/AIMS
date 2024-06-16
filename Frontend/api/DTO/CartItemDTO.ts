@@ -8,6 +8,17 @@ export interface CartItemDTO {
     year: number;
     isRushDelivery?: boolean;
 }
+export interface Product {
+    id: number;
+    title: string;
+    price: number;
+    qtyInStock: number;
+    weight: number;
+    image: string;
+    year: number;
+    category: string;
+    rushOrderEligible: boolean;
+}
 export interface DVDDTO {
     id: number;
     director: string;
@@ -21,7 +32,7 @@ export interface CDDTO {
     id: number;
     artist: string;
     genre: string;
-    record_label: string;
+    recordLabel: string;
     tracklist: string;
 }
 export interface BookDTO {
@@ -29,14 +40,14 @@ export interface BookDTO {
     author: string;
     genre: string;
     language: string;
-    number_of_pages: number;
-    publication_date: string;
+    numberOfPages: number;
+    publicationDate: string;
     publisher: string;
 }
-export interface LDDTO {
+export interface LPDTO {
     id: number;
     artist: string;
     genre: string;
-    record_label: string;
+    recordLabel: string;
     tracklist: string;
 }

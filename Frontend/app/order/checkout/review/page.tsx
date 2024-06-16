@@ -1,7 +1,8 @@
 "use client";
+import { getCartItems, getTaxRate } from "@/api/Cart";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import { OrderDTO } from "@/api/DTO/OrderDTO";
-import { getCartItems, getOrder, getTaxRate } from "@/api/DTO/apifunc";
+import { getOrder } from "@/api/Order";
 import CheckoutButtons from "@/components/checkout/buttons";
 import CheckoutDeliveryInfo from "@/components/checkout/checkout-delivery-info";
 import {
@@ -9,9 +10,7 @@ import {
     ItemsHeader,
     SummaryItem,
 } from "@/components/checkout/delivery-item";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -22,7 +21,6 @@ export default function CheckoutPage() {
     const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
     useEffect(() => {
         getOrder().then((response) => {
-            console.log(response);
             if (response.error) router.push("/cart");
             setOrder(response.data);
         });
@@ -34,14 +32,21 @@ export default function CheckoutPage() {
             taxRate.current = data;
         });
     }, []);
-    const normalDeliveryItems = cartItems.filter((item) => !item.isRushDelivery || !order?.deliveryInfo.isRushOrder);
-    const rushDeliveryItems = cartItems.filter((item) => item.isRushDelivery && order?.deliveryInfo.isRushOrder);
-    console.log(order?.deliveryInfo.isRushOrder);
+    const normalDeliveryItems = cartItems.filter(
+        (item) => !item.isRushDelivery || !order?.deliveryInfo.isRushOrder
+    );
+    const rushDeliveryItems = cartItems.filter(
+        (item) => item.isRushDelivery && order?.deliveryInfo.isRushOrder
+    );
     const subTotal = cartItems.reduce((acc, item) => {
         return acc + item.price * item.quantity;
     }, 0);
     const tax = subTotal * taxRate.current;
-    const total = subTotal + tax + (order?.normalShippingFees || 0) + (order?.rushShippingFees || 0);
+    const total =
+        subTotal +
+        tax +
+        (order?.normalShippingFees || 0) +
+        (order?.rushShippingFees || 0);
     return (
         <div className=" max-w-[48rem] space-y-8 m-auto">
             <h1 className="text-xl font-bold text-center">Your Order</h1>
@@ -52,10 +57,9 @@ export default function CheckoutPage() {
                     Normal Shipping
                 </h2>
                 <ItemsHeader />
-                {normalDeliveryItems
-                    .map((item, index) => (
-                        <Item item={item} key={index} />
-                    ))}
+                {normalDeliveryItems.map((item, index) => (
+                    <Item item={item} key={index} />
+                ))}
                 <SummaryItem
                     label="Shipping Fee"
                     value={order ? order.normalShippingFees : 0}
@@ -67,10 +71,9 @@ export default function CheckoutPage() {
                     Rush Shipping
                 </h2>
                 <ItemsHeader />
-                {rushDeliveryItems
-                    .map((item, index) => (
-                        <Item item={item} key={index} />
-                    ))}
+                {rushDeliveryItems.map((item, index) => (
+                    <Item item={item} key={index} />
+                ))}
                 <SummaryItem
                     label="Shipping Fee"
                     value={order ? order.rushShippingFees : 0}
@@ -89,9 +92,7 @@ export default function CheckoutPage() {
             />
             <Separator orientation="horizontal" />
             <SummaryItem label="Total" value={total} />
-            <div>
-                <CheckoutButtons />
-            </div>
+                <CheckoutButtons/>
         </div>
     );
 }

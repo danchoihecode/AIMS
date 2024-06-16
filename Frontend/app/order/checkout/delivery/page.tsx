@@ -1,6 +1,6 @@
 'use client'
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { getCartItems, getTaxRate } from "@/api/DTO/apifunc";
+import { getCartItems, getTaxRate } from "@/api/Cart";
 import DeliveryForm from "@/components/delivery/delivery-form";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";

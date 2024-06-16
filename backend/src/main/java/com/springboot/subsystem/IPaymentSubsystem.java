@@ -10,10 +10,10 @@ import com.springboot.model.entity.RefundTransaction;
 
 public interface IPaymentSubsystem {
 
-	public abstract PaymentTransaction getPaymentTransaction(Map<String,String> res)
+	PaymentTransaction getPaymentTransaction(Map<String, String> res)
 			throws PaymentException, UnrecognizedException, IOException;
 
-	public abstract String generateURL(double d, String content) throws IOException;
-	public abstract RefundTransaction refund(PaymentTransaction paymentTransaction) throws IOException;
+	String generateURL(double d, String content) throws IOException;
+	RefundTransaction refund(PaymentTransaction paymentTransaction) throws IOException;
 
 }

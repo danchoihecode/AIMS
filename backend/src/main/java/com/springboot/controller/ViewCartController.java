@@ -52,6 +52,20 @@ public class ViewCartController {
 			return new ResponseEntity<>("Update cart failed", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	@PostMapping("/{cartId}/add")
+	public ResponseEntity<String> addCartItem(@RequestBody CartProductDTO item, @PathVariable("cartId") Long cartId) {
+		try {
+			boolean isAvailable = productService.checkInventory(item.getProductId(), item.getQuantity());
+			if (!isAvailable) {
+				return new ResponseEntity<>("Not enough product in stock", HttpStatus.BAD_REQUEST);
+			}
+			cartService.addItemToCart(cartId, item.getProductId(), item.getQuantity());
+			return ResponseEntity.ok("Add cart item successfully");
+		} catch (Exception e) {
+			System.out.println(e);
+			return new ResponseEntity<>("Add cart item failed", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	@PutMapping("/{cartId}")
 	public ResponseEntity<String> updatedCartItem(@RequestBody CartProductDTO item, @PathVariable("cartId") Long cartId) {
 		try {
@@ -59,7 +73,6 @@ public class ViewCartController {
 			if (!isAvailable) {
 				return new ResponseEntity<>("Not enough product in stock", HttpStatus.BAD_REQUEST);
 			}
-			System.out.println(cartId + " " + item.getProductId() + " " + item.getQuantity());
 			cartService.updateCart(cartId, item.getProductId(), item.getQuantity());
 			return ResponseEntity.ok("Update cart successfully");
 		} catch (Exception e) {

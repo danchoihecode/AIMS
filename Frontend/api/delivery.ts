@@ -1,15 +1,21 @@
 import axios from "axios";
 import { CartItemDTO } from "./DTO/CartItemDTO";
 import { DeliveryInfoDTO, ShippingFeeDTO } from "./DTO/DeliveryFormDTO";
-import { axiosWithErrorHandling } from "./DTO/apifunc";
-import { getData } from "@/lib/cookies-data";
+import { axiosWithErrorHandling } from "./axiosConfig";
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/delivery`;
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    timeout: 5000,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
 export const fetchDelivery = async (
     provinceId: string,
     isRushDelivery: boolean
 ): Promise<ShippingFeeDTO> => {
     try {
-        const cartId = await getData("cartId");
+        const cartId = localStorage.getItem("cartId");
         const response = await axios.get(`${API_URL}/shipping-fee`, {
             params: {
                 cartId,
@@ -29,12 +35,10 @@ export const fetchDelivery = async (
 export const submitDelivery = async (
     deliveryInfo: DeliveryInfoDTO,
     normalShippingFee: number,
-    rushShippingFee: number,
+    rushShippingFee: number
 ) => {
-    const cartId = await getData("cartId");
-    console.log(JSON.stringify({ deliveryInfo, normalShippingFee, rushShippingFee, cartId }))
-    console.log(JSON.stringify(deliveryInfo))
-    return axiosWithErrorHandling({
+    const cartId = localStorage.getItem("cartId");
+    return axiosWithErrorHandling(axiosInstance, {
         method: "POST",
         url: `${API_URL}`,
         data: { deliveryInfo, normalShippingFee, rushShippingFee, cartId },
