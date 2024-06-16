@@ -24,9 +24,17 @@ public class LP {
     private String tracklist;
     private String genre;
     private Date releaseDate;
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> origin
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private Product product;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin

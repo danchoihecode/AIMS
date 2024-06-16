@@ -13,14 +13,18 @@ interface CartItemProps {
 }
 const isValidQty = async (itemId: string, qty: string) => {
     if (/^[0-9]*$/.test(qty) === false) {
+        toast.error("Quantity must be a number");
         return false;
     }
     const parsedQty = parseInt(qty);
     if (isNaN(parsedQty) || parsedQty < 0 || parsedQty > 100) {
+        toast.error("You can only order between 1 and 100 items");
         return false;
     }
-    console.log(itemId, parsedQty);
     const response = await checkInventory(itemId, parsedQty);
+    if (!response.available) {
+        toast.error("The quantity is out of stock");
+    }
     return response.available;
 };
 export default function CartItem({ item, setCartItems }: CartItemProps) {
@@ -31,10 +35,7 @@ export default function CartItem({ item, setCartItems }: CartItemProps) {
     });
     const handleChangeQty = async (qty: string | number) => {
         const isValid = await isValidQty(item.id, qty.toString());
-        if (!isValid) {
-            toast.error("Invalid quantity or out of stock");
-            return;
-        }
+        if (!isValid) return;
         setCartItems((prev: any) => {
             return prev.map((i: any) => {
                 if (i.id === item.id) {

@@ -27,9 +27,17 @@ public class DVD {
     private String subtitles;
     private String genre;
     private Date releaseDate;
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> origin
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private Product product;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin

@@ -24,7 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import toast, { Toaster } from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { cn, isWithinNextWeek } from "@/lib/utils";
@@ -78,17 +78,16 @@ export default function DeliveryForm({
     const onSubmit = (data: z.infer<typeof DeliveryFormSchema>) => {
         console.log(data);
     };
-    const onRushDeliveryChange = async (checked: boolean) => {
-        const { normalShippingFee, rushShippingFee, isRushDelivery } = await fetchDelivery("0", provinceWatch, checked);
-        console.log(normalShippingFee, rushShippingFee, isRushDelivery);
-        if (isRushDelivery === false) {
+    const setDelivery = async (province: string, isRush: boolean) => {
+        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } = await fetchDelivery("1", province, isRush);
+        if (isRush && rushDeliveryAvailable === false) {
             toast.error("Your order cannot be rush delivery.");
             return;
         }
-        setIsRush(checked);
+        setIsRush(isRush);
         setNormalShippingFee(normalShippingFee);
         setRushShippingFee(rushShippingFee);
-        if (checked) {
+        if (isRush) {
             setNormalDeliveryItems(
                 cartItems.filter((item) => !item.isRushDelivery)
             );
@@ -99,7 +98,9 @@ export default function DeliveryForm({
             setNormalDeliveryItems(cartItems);
             setRushDeliveryItems([]);
         }
-        
+    }
+    const onRushDeliveryChange = async (checked: boolean) => {
+        setDelivery(provinceWatch, checked);
     };
     const provinceWatch = form.watch('province');
     const [normalDeliveryItems, setNormalDeliveryItems] =
@@ -182,21 +183,13 @@ export default function DeliveryForm({
                                     <FormItem>
                                         <FormLabel>Province</FormLabel>
                                         <Select
-                                            onValueChange={async (value) => {
-                                                field.onChange(value);
-                                                const { normalShippingFee } =
-                                                    await fetchDelivery(
-                                                        "0",
-                                                        value,
-                                                        false
-                                                    );
-                                                setNormalShippingFee(
-                                                    normalShippingFee
-                                                );
-                                                setIsRush(false);
-                                                onRushDeliveryChange(false);
-                                            }}
                                             value={field.value}
+                                            onValueChange={
+                                                async (value) => {
+                                                    field.onChange(value);
+                                                    await setDelivery(value, false);
+                                                }
+                                            }
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
