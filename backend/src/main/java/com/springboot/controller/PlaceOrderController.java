@@ -102,7 +102,7 @@ public class PlaceOrderController {
 			String phone = deliveryFormDTO.get("phone").toString();
 			String email = deliveryFormDTO.get("email").toString();
 			String address = deliveryFormDTO.get("address").toString();
-			Long province = Long.valueOf(deliveryFormDTO.get("province").toString());
+			String province = deliveryFormDTO.get("province").toString();
 			String instructions = deliveryFormDTO.get("note").toString();
 			LocalDate date = LocalDate.parse(deliveryFormDTO.get("date").toString(), formatter);
 			Boolean isRushDelivery = Boolean.valueOf(deliveryFormDTO.get("isRushDelivery").toString());

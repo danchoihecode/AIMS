@@ -24,7 +24,7 @@ import com.springboot.subsystem.PaymentSubsystem;
 import com.springboot.subsystem.vnpaysubsystem.VNPaySubsystemController;
 
 @RestController
-@RequestMapping
+@RequestMapping("/payment")
 public class PaymentController {
 
 	private IPaymentSubsystem payment;
@@ -43,13 +43,13 @@ public class PaymentController {
 		invoice = new Invoice(order);
 	}
 	
-	@GetMapping("/payment/invoice")
+	@GetMapping("/invoice")
 	public ResponseEntity<InvoiceDetailResponse> getInvoiceDetail()  {
 		
 		return ResponseEntity.ok(new InvoiceDetailResponse(invoice.getOrder(), cartService));
 	}
 
-	@PostMapping("/payment/result")
+	@PostMapping("/result")
 	public ResponseEntity<Void> makePayment(@RequestBody Map<String, String> res) throws IOException, SQLException {
 		PaymentTransaction transaction = payment.getPaymentTransaction(res);
 		invoice.setPaymentTransaction(transaction);
@@ -57,7 +57,7 @@ public class PaymentController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/payment/VNPayURL")
+	@GetMapping("/VNPayURL")
 	public PaymentURLResponse generateURL() throws IOException {
 		return new PaymentURLResponse(payment.generateURL(invoice.getAmount(), "Payment"));
 	}
