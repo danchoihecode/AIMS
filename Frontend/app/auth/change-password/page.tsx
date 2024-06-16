@@ -1,6 +1,10 @@
 'use client'
+<<<<<<< HEAD
+import Box from '@mui/material/Box'
+=======
 
 import Box from '@mui/material/Box';
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 import {
     IconButton,
     InputAdornment,
@@ -13,7 +17,14 @@ import { EyeOffOutline, EyeOutline } from "mdi-material-ui";
 import { signIn } from "next-auth/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+<<<<<<< HEAD
+import { getServerSession } from "next-auth/next";
+import { Session } from "next-auth";
+import { authOption } from "@/configs/next-auth-config";
+import { Button } from "@/components/ui/button"
+=======
 import { Button } from "@/components/ui/button";
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 import {
     Card,
     CardContent,
@@ -21,6 +32,25 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
+<<<<<<< HEAD
+  } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+
+const ChangePasswordPage = () => {
+    // test session
+    // const session = {
+    //     access_token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYUBnbWFpbC5jb20iLCJpYXQiOjE3MTc5MzU5NTksImV4cCI6MTcxODAyMjM1OX0.rvzdlmQa2Kt1HgVJ6gEHJJINKCdOn2q58ItZbWl3vHo",
+    //     exp: 86400000,
+    //     admin: true,
+    //     manager: true
+    // }
+    const [showPassword, setShowPassword] = useState(false)
+    const router = useRouter()
+
+    const formik = useFormik({
+        initialValues: {
+            newPassword:'',
+=======
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useSessionContext } from '@/context/SessionContext';
@@ -33,6 +63,7 @@ const ChangePasswordPage = () => {
     const formik = useFormik({
         initialValues: {
             newPassword: '',
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
             confirmPassword: '',
             submit: null
         },
@@ -44,6 +75,14 @@ const ChangePasswordPage = () => {
                 .required('New Password is required'),
             confirmPassword: Yup
                 .string()
+<<<<<<< HEAD
+                .min(8, 'Password must be at least 8 characters')
+                .max(100, 'Password must be at most 100 characters')
+                .required('Confirm Password is required'),
+        }),
+        onSubmit: async (values, helpers) => {
+            const session = await getServerSession(authOption) as Session;
+=======
                 .oneOf([Yup.ref('newPassword'), undefined], 'Passwords must match')
                 .required('Confirm Password is required'),
         }),
@@ -54,13 +93,20 @@ const ChangePasswordPage = () => {
                 return;
             }
 
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
             const response = await signIn('change-password', {
                 redirect: false,
                 newPassword: values.newPassword,
                 token: session.access_token
+<<<<<<< HEAD
+            }) as ResponseData
+
+            if (!response.error){
+=======
             }) as ResponseData;
 
             if (!response.error) {
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                 if (session?.admin) {
                     router.push('/admin');
                 } else if (session?.manager) {
@@ -76,9 +122,12 @@ const ChangePasswordPage = () => {
         }
     });
 
+<<<<<<< HEAD
+=======
     if (loading) {
         return <p>Loading...</p>;
     }
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 
     return (
         <Box className="flex justify-center items-center min-h-screen">
@@ -161,7 +210,15 @@ const ChangePasswordPage = () => {
                 </form>
             </Card>
         </Box>
+<<<<<<< HEAD
+    )
+}
+
+
+export default ChangePasswordPage
+=======
     );
 }
 
 export default ChangePasswordPage;
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48

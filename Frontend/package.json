@@ -27,10 +27,19 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
+<<<<<<< HEAD
+    "@radix-ui/react-toggle": "^1.0.3",
+    "@radix-ui/react-toggle-group": "^1.0.4",
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     "@radix-ui/react-tooltip": "^1.0.7",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+<<<<<<< HEAD
+    "context": "^3.0.29",
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     "date-fns": "^3.6.0",
     "formik": "^2.4.6",
     "lucide-react": "^0.379.0",
@@ -46,6 +55,10 @@
     "react-hook-form": "^7.51.5",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.23.1",
+<<<<<<< HEAD
+    "react-toastify": "^10.0.5",
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     "recharts": "^2.12.7",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",

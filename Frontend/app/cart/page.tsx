@@ -22,7 +22,11 @@ export default function Cart() {
             if (data) setCartItems(data);
         });
         getTaxRate().then((data) => {
+<<<<<<< HEAD
+            taxRate.current = data.taxRate / 100;
+=======
             taxRate.current = data;
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
         });
     }, []);
     return (

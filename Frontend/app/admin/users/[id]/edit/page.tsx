@@ -28,29 +28,51 @@ import {
 } from "@/components/ui/select"
 import { UserDTO } from "@/api/DTO/UserDTO";
 import { getUser, updateUser } from "@/api/DTO/apifunc";
+<<<<<<< HEAD
+import { useRouter, useSearchParams } from "next/navigation";
+=======
 import { useParams, useRouter } from 'next/navigation';
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 import { useEffect, useState } from "react";
 import UserFormSkeleton from "@/components/layout/user-form-skeleton";
 
 const UserEdit = () => {
   const router = useRouter();
+<<<<<<< HEAD
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+=======
   const { id } = useParams();
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   const [user, setUser] = useState<UserDTO | null>(null);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+<<<<<<< HEAD
+  const [phone, setPhone] = useState<number | "">("");
+=======
   const [phone, setPhone] = useState<number | null>(null);
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   const [address, setAddress] = useState("");
   const [role, setRole] = useState<string>("");
 
   const handleResetPassword = () => {
+<<<<<<< HEAD
+    setPassword("");
+=======
     setPassword("password");
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   };
 
   useEffect(() => {
     if (id) {
+<<<<<<< HEAD
+      getUser(id as string).then((userData) => {
+=======
       const userId = Array.isArray(id) ? id[0] : id;
       getUser(userId).then((userData) => {
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
         setUser(userData);
         setFullName(userData.fullName);
         setEmail(userData.email);
@@ -66,8 +88,11 @@ const UserEdit = () => {
             ? "manager"
             : ""
         );
+<<<<<<< HEAD
+=======
       }).catch(error => {
         console.error("Error fetching user:", error);
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
       });
     }
   }, [id]);
@@ -94,7 +119,11 @@ const UserEdit = () => {
     }
   };
 
+<<<<<<< HEAD
+  if (user) {
+=======
   if (!user) {
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     return (
       <div>
         <UserFormSkeleton />
@@ -165,6 +194,17 @@ const UserEdit = () => {
                           Reset Password
                         </Button>
                       </div>
+<<<<<<< HEAD
+                      <Input
+                        id="password"
+                        type="password"
+                        className="w-full"
+                        placeholder="Enter user password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+=======
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                     </div>
                     <div className="grid gap-3">
                       <Label htmlFor="phone">Phone</Label>
@@ -173,7 +213,11 @@ const UserEdit = () => {
                         type="number"
                         className="w-full"
                         placeholder="Enter user phone number"
+<<<<<<< HEAD
+                        value={phone}
+=======
                         value={phone?.toString()}
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                         onChange={(e) => setPhone(Number(e.target.value))}
                       />
                     </div>

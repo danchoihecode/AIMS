@@ -54,9 +54,9 @@ public class OrderService {
 		Optional<Order> orderOpt = orderRepository.findById(id);
 		if (orderOpt.isPresent()) {
 			Order order = orderOpt.get();
-//			if (!"Pending".equals(order.getState())) {
-//				throw new IllegalStateException("Order must be in pending state");
-//			}
+			if (!"Pending".equals(order.getState())) {
+				throw new IllegalStateException("Order must be in pending state");
+			}
 
 			List<CartProduct> cartProducts = cartProductRepository.findByCartId(order.getCart().getId());
 			for (CartProduct cartProduct : cartProducts) {
@@ -76,16 +76,19 @@ public class OrderService {
 		throw new Exception("Order not found with id: " + id);
 	}
 
-	public void rejectOrder(Long id) throws Exception {
+	public OrderDetailResponse rejectOrder(Long id) throws Exception {
 		Optional<Order> orderOpt = orderRepository.findById(id);
 		if (orderOpt.isPresent()) {
 			Order order = orderOpt.get();
-//			if (!"Pending".equals(order.getState())) {
-//				throw new IllegalStateException("Order must be in pending state");
-//			}
+			if (!"Pending".equals(order.getState())) {
+				throw new IllegalStateException("Order must be in pending state");
+			}
+			List<CartProduct> cartProducts = cartProductRepository.findByCartId(order.getCart().getId());
 
 			order.setState("Rejected");
 			orderRepository.save(order);
+			return new OrderDetailResponse(cartProducts, order.getDeliveryInfo(), order.getNormalShippingFees(),
+					order.getRushShippingFees(), order.getState(), order.getTotalAmount());
 
 		}
 		throw new Exception("Order not found with id: " + id);

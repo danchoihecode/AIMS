@@ -26,17 +26,9 @@ public class Book {
     private int numberOfPages;
     private String language;
     private String genre;
-<<<<<<< HEAD
-
-=======
     
->>>>>>> origin
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
     private Product product;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin

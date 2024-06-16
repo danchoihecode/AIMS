@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+export const fetchDelivery = async (cartId: string, provinceId: string, isRushDelivery: boolean) => {
+    if (isRushDelivery) return {
+        isRushDelivery: provinceId == "01",
+        normalShippingFee: 20000,
+        rushShippingFee: 30000
+    }
+    return {
+        normalShippingFee: 20000,
+        rushShippingFee: 0
+    }
+    // const response = await fetch(`/api/delivery/${id}`);
+    // return response.json();
+=======
 import axios from "axios";
 import { CartItemDTO } from "./DTO/CartItemDTO";
 import { DeliveryInputDTO_ } from "./DTO/DeliveryFormDTO";
@@ -24,4 +38,5 @@ export const fetchDelivery = async (cartId: string, provinceId: string, isRushDe
             rushDeliveryAvailable: false
         }
     }
+>>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 }
