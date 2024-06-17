@@ -28,11 +28,6 @@ public class OrderService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	public Order findById(Long id) throws Exception {
-		Order order = orderRepository.findById(id).orElseThrow(() -> new Exception("Order not found"));
-		return order;
-	}
-
 	public List<OrderResponse> getAllOrders() {
 		return orderRepository.findAll().stream().map(order -> new OrderResponse(order.getId(),
 				order.getDeliveryInfo().getName(), order.getTotalAmount(), order.getState()))
