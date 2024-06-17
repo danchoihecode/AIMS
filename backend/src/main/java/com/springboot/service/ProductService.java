@@ -1,5 +1,7 @@
 package com.springboot.service;
 
+import ch.qos.logback.core.net.server.Client;
+import com.springboot.exception.product.ProductNotFoundException;
 import com.springboot.model.entity.Book;
 import com.springboot.model.entity.CD;
 import com.springboot.model.entity.DVD;
@@ -30,36 +32,20 @@ public class ProductService {
     @Autowired
     private LPRespository lpRespository;
 
-    public boolean checkInventory(Long productId, Integer qty) throws Exception {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new Exception("Product not found"));
+    public boolean isInventoryGreaterThanQty(Long productId, Integer qty) throws Exception {
+        Product product = getProductById(productId);
         return product.getQtyInStock() >= qty;
     }
-
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("The product with id " + id + " does not exist"));
+    }
     public List<Product> getAllProducts(){
-        List<Product> products = new ArrayList<>(productRepository.findAll());
-        List<Book> books = bookRespository.findAll();
-        products.addAll(books.stream().map(Book::getProduct).collect(Collectors.toList()));
-        List<CD> cds = cdRespository.findAll();
-        products.addAll(cds.stream().map(CD::getProduct).collect(Collectors.toList()));
-
-        List<DVD> dvds = dvdRespository.findAll();
-        products.addAll(dvds.stream().map(DVD::getProduct).collect(Collectors.toList()));
-
-        List<LP> lps = lpRespository.findAll();
-        products.addAll(lps.stream().map(LP::getProduct).collect(Collectors.toList()));
-
-        return products;
+        return new ArrayList<>(productRepository.findAll());
     }
-
-    public Optional<Product> getProductById(Long id){
-        return productRepository.findById(id);
-    }
-
     public ClientProductDTO getProductDetailById(Long id) throws Exception{
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new Exception("Product not found"));
-//        System.out.print(product.getCategory());
+                .orElseThrow(() -> new ProductNotFoundException("The product with id " + id + " does not exist"));
 
         Book book = null;
         CD cd = null;
@@ -67,7 +53,7 @@ public class ProductService {
         LP lp = null;
 
         switch (product.getCategory()){
-            case "Books":
+            case "Book":
                 book = bookRespository.findById(id).orElse(null);
                 break;
             case "CD":
@@ -81,7 +67,7 @@ public class ProductService {
                 break;
             default: System.out.print(product.getCategory());
         }
-        return ClientProductDTO.fromEntity(product, book, dvd, cd, lp);
+        return new ClientProductDTO(product, book, dvd, cd, lp);
     }
 
 

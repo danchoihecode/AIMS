@@ -42,57 +42,21 @@ interface CartResponse {
 
 const apiBaseUrl = 'http://localhost:8080';
 
-export const getCartItems = async (): Promise<CartItemDTO[]> => {
-  const response = await axios.get(`${apiBaseUrl}/cart`);
-  const data = response.data;
-  return data.map((item: any) => {
-    const qty = item.qty;
-    const product = item.product;
-    return {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      imageUrl: product.image,
-      quantity: qty,
-      category: product.category,
-      year: product.year,
-      isRushDelivery: product.rushOrderEligible,
-    }
-  });
-}
-
-// GET /inventory/check
-export const checkInventory = async (productId: string, qty: number): Promise<CheckInventoryResponse> => {
-  const response = await axios.get<CheckInventoryResponse>(`${apiBaseUrl}/inventory/check`, {
-    params: {
-      product_id: productId,
-      qty,
-    },
-  });
-  return response.data;
-};
-
-// GET /tax
-export const getTaxRate = async (): Promise<TaxResponse> => {
-  const response = await axios.get<TaxResponse>(`${apiBaseUrl}/tax`);
-  return response.data;
-};
-
 // GET /cart
 const getCart = async (): Promise<CartItem[]> => {
-    const response = await axios.get<CartItem[]>(`${apiBaseUrl}/cart`);
-    return response.data;
+  const response = await axios.get<CartItem[]>(`${apiBaseUrl}/cart`);
+  return response.data;
 };
 
 // POST /cart
 interface AddToCartRequest {
-    product_id: string;
-    qty: string;
+  product_id: string;
+  qty: string;
 }
 
 const addToCart = async (data: AddToCartRequest): Promise<CartResponse> => {
-    const response = await axios.post<CartResponse>(`${apiBaseUrl}/cart`, data);
-    return response.data;
+  const response = await axios.post<CartResponse>(`${apiBaseUrl}/cart`, data);
+  return response.data;
 };
 
 export const getUsers = async (): Promise<UserDTO[]> => {
@@ -131,7 +95,7 @@ export const createUser = async (user: UserDTO): Promise<UserDTO[]> => {
 }
 
 export const getUser = async (id: string): Promise<UserDTO> => {
-  const response = await axios.get(`${apiBaseUrl}/admin/users/${id}/edit`);
+  const response = await axios.get(`${apiBaseUrl}/admin/users/${id}`);
   const user = response.data;
   return {
     id: user.id,
@@ -156,5 +120,33 @@ export const getOrders = async (): Promise<OrderDTO[]> => {
       state: item.state,
     }
   });
+}
+export async function deleteUser(id: string) {
+  try {
+    const response = await axios.delete(`${apiBaseUrl}/admin/users/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
+  }
+}
+export async function blockUser(id: string) {
+  try {
+    const response = await axios.post(`${apiBaseUrl}/admin/users/${id}/block`);
+    return response.data;
+  } catch (error) {
+    console.error('Error blocking user:', error);
+    throw error;
+  }
+}
+
+export async function unblockUser(id: string) {
+  try {
+    const response = await axios.post(`${apiBaseUrl}/admin/users/${id}/unblock`);
+    return response.data;
+  } catch (error) {
+    console.error('Error unblocking user:', error);
+    throw error;
+  }
 }
 

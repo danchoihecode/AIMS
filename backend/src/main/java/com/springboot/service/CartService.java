@@ -2,6 +2,11 @@ package com.springboot.service;
 
 import java.util.List;
 
+import com.springboot.dto.CartProductDTO;
+import com.springboot.exception.cart.CartItemNotFoundException;
+import com.springboot.exception.cart.CartNotFoundException;
+import com.springboot.exception.product.ProductNotFoundException;
+import com.springboot.exception.product.ProductQuantityNotEnoughException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,43 +21,77 @@ import com.springboot.repository.ProductRepository;
 @Service
 public class CartService {
 
-	@Autowired
-	private CartProductRepository cartProductRepository;
+    @Autowired
+    private CartProductRepository cartProductRepository;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private ProductService productService;
 
-	@Autowired
-	private CartRepository cartRepository;
-	
-	@Autowired
-	private ProductRepository productRepository;
+    public Cart createEmptyCart() {
+        Cart cart = new Cart();
+        cartRepository.save(cart);
+        return cart;
+    }
 
-	public List<CartProduct> getAllProductsInCart(Long cartId) {
-		return cartProductRepository.findByCartId(cartId);
-	}
+    public Cart getCartById(Long id) {
+        return cartRepository.findById(id).orElseThrow(() -> new CartNotFoundException("Cart with id " + id + " not found"));
+    }
+    public List<CartProduct> getAllProductsInCart(Long cartId) {
+        getCartById(cartId);
+        return cartProductRepository.findByCartId(cartId);
+    }
 
-	public List<CartProduct> updateCart(Long cartId, Long productId, Integer qty) throws Exception {
-		Product product = productRepository.findById(productId).orElseThrow(() -> new Exception("Product not found"));
-		Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new Exception("Cart not found"));
+    private void checkValidCartProduct(Long cartId, Long productId, Integer qty) throws Exception {
+        getCartById(cartId);
+        if (!productService.isInventoryGreaterThanQty(productId, qty)) {
+            throw new ProductQuantityNotEnoughException("Not enough product in stock");
+        }
+    }
 
-		CartProductKey key = new CartProductKey(cartId, productId);
+    public void addItemToCart(Long cartId, Long productId, Integer qty) throws Exception {
+        checkValidCartProduct(cartId, productId, qty);
+        CartProductKey key = new CartProductKey(cartId, productId);
+        CartProduct cartProduct = cartProductRepository.findById(key).orElse(null);
+        if (cartProduct == null) {
+            this.updateCart(cartId, productId, qty);
+        } else {
+            this.updateCart(cartId, productId, cartProduct.getQty() + qty);
+        }
+    }
 
-		CartProduct cartProduct = cartProductRepository.findById(key).orElse(new CartProduct(key, cart, product, 0));
 
-		cartProduct.setQty(qty);
+    public void updateCart(Long cartId, Long productId, Integer qty) throws Exception {
+        Product product = productService.getProductById(productId);
+        Cart cart = getCartById(cartId);
+        if (!productService.isInventoryGreaterThanQty(productId, qty)) {
+            throw new ProductQuantityNotEnoughException("Not enough product in stock");
+        }
 
-		cartProductRepository.save(cartProduct);
+        CartProductKey key = new CartProductKey(cartId, productId);
 
-		List<CartProduct> cartProducts = cartProductRepository.findByCartId(cart.getId());
-		double subTotal = cartProducts.stream().mapToDouble(cp -> cp.getProduct().getPrice() * cp.getQty()).sum();
+        CartProduct cartProduct = cartProductRepository.findById(key).orElse(new CartProduct(key, cart, product, qty));
+        cartProduct.setQty(qty);
 
-		cart.setSubTotal(subTotal);
-		cartRepository.save(cart);
+        cartProductRepository.save(cartProduct);
+        recalculateCartTotal(cart);
+    }
 
-		return cartProducts;
-	}
+    private void recalculateCartTotal(Cart cart) {
+        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cart.getId());
+        double subTotal = cartProducts.stream().mapToDouble(cp -> cp.getProduct().getPrice() * cp.getQty()).sum();
+        cart.setSubTotal(subTotal);
+        cartRepository.save(cart);
+    }
 
-	public Cart findById(Long id) throws Exception {
-		Cart cart = cartRepository.findById(id).orElseThrow(() -> new Exception("Cart not found"));
-		return cart;
-	}
+    public void deleteCartItem(Long cartId, Long productId) throws Exception {
+        Cart cart = getCartById(cartId);
+        productService.getProductById(productId);
 
+        CartProductKey key = new CartProductKey(cartId, productId);
+        cartProductRepository.findById(key).orElseThrow(() -> new CartItemNotFoundException("Product with id " + productId + " not found in cart"));
+        cartProductRepository.deleteById(key);
+        recalculateCartTotal(cart);
+
+    }
 }

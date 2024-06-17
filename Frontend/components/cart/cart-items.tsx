@@ -7,7 +7,6 @@ interface CartItemsProps {
     setCartItems: any;
 }
 export default function CartItems({items, setCartItems} : CartItemsProps) {
-    console.log(items);
     return (
         <div>
             {items.map((item, index) => (

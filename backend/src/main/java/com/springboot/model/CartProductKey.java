@@ -1,5 +1,6 @@
 package com.springboot.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CartProductKey implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private Long cartId;
 	private Long productId;
