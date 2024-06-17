@@ -33,4 +33,6 @@ public class ProductController {
     public ClientProductDTO getProductDetail(@PathVariable Long id) throws Exception {
         return productService.getProductDetailById(id);
     }
+
+
 }
