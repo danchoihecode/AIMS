@@ -1,7 +1,6 @@
 package com.springboot.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Map;
 
 import com.springboot.model.entity.RefundTransaction;
@@ -14,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import com.springboot.model.entity.Invoice;
 import com.springboot.model.entity.Order;
 import com.springboot.model.entity.PaymentTransaction;
-import com.springboot.model.response.InvoiceDetailResponse;
-import com.springboot.model.response.PaymentURLResponse;
-import com.springboot.service.CartService;
 import com.springboot.service.InvoiceService;
 import com.springboot.subsystem.IPaymentSubsystem;
 import com.springboot.subsystem.PaymentSubsystem;
@@ -60,7 +56,7 @@ public class PaymentController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/VNPayURL")
+	@GetMapping("/pay")
 	public ResponseEntity<String> generateURL(@RequestParam Long orderId, @RequestParam String paymentMethod) throws IOException{
 		if (!paymentMethod.equals("VNPay")) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

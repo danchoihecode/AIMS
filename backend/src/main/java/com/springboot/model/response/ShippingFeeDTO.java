@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RushDeliveryCheckResponse {
+public class ShippingFeeDTO {
     double normalShippingFee;
     double rushShippingFee;
     boolean rushDeliveryAvailable;

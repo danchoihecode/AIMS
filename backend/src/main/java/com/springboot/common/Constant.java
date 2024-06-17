@@ -9,4 +9,6 @@ public class Constant {
     public static final double PROVINCE_BASE_SHIPPING_WEIGHT = 0.5;
     public static final int ADDITIONAL_FEE = 2500;
     public static final double TAX_RATE = 0.1;
+    public static final String[] SUPPORTED_PAYMENT_METHODS = {"VNPay"};
+    public static final String ORDER_STATUS_PENDING = "PENDING";
 }

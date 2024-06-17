@@ -5,8 +5,14 @@ import { BookRows, CDRows, DVDRows, LPRows } from "@/components/product-detail/i
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { ServerCrash } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Product Detail",
+    description: "Product detail page",
+};
 
 export default async function ProductDetail({
     params,
@@ -17,11 +23,15 @@ export default async function ProductDetail({
     if (error) {
         return (
             <div className="flex space-x-4 justify-center">
-                <ServerCrash size={96} strokeWidth={1} />
+                <ServerCrash size={144} strokeWidth={1} />
                 <div className="space-y-4">
-                    <p className="text-slate-500 block">
+                    <p className="font-bold text-lg block">
                         An error occurred while fetching the product details
                     </p>
+                    <p className="text-slate-500 block">
+                        {error.response.data}
+                    </p>
+
                     <Link href="/" className="block">
                         <Button>Go back to home</Button>
                     </Link>

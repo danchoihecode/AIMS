@@ -1,6 +1,7 @@
 package com.springboot.service;
 
 import ch.qos.logback.core.net.server.Client;
+import com.springboot.exception.product.ProductNotFoundException;
 import com.springboot.model.entity.Book;
 import com.springboot.model.entity.CD;
 import com.springboot.model.entity.DVD;
@@ -42,7 +43,7 @@ public class ProductService {
     }
     public ClientProductDTO getProductDetailById(Long id) throws Exception{
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new Exception("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException("The product with id " + id + " does not exist"));
 
         Book book = null;
         CD cd = null;

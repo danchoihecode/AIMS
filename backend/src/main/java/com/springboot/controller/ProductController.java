@@ -29,9 +29,6 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ClientProductDTO getProductDetail(@PathVariable Long id) throws Exception {
-        ClientProductDTO product = productService.getProductDetailById(id);
-
-
         return productService.getProductDetailById(id);
     }
 }

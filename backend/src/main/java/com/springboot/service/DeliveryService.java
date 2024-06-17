@@ -1,0 +1,102 @@
+package com.springboot.service;
+
+import com.springboot.common.Constant;
+import com.springboot.exception.cart.CartNotFoundException;
+import com.springboot.model.entity.Cart;
+import com.springboot.model.entity.CartProduct;
+import com.springboot.model.entity.DeliveryInfo;
+import com.springboot.model.entity.Order;
+import com.springboot.model.response.ShippingFeeDTO;
+import com.springboot.repository.CartProductRepository;
+import com.springboot.repository.CartRepository;
+import com.springboot.repository.DeliveryInfoRepository;
+import com.springboot.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Service
+public class DeliveryService {
+    @Autowired
+    CartRepository cartRepository;
+    @Autowired
+    CartProductRepository cartProductRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    DeliveryInfoRepository deliveryInfoRepository;
+
+    public ShippingFeeDTO getShippingFee(Long cartId, int province, boolean isRushDelivery) {
+        cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("The cart with id " + cartId + " does not exist"));
+        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
+        List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartProducts);
+        boolean isRushSupported = Arrays.stream(Constant.RUSH_SUPPORTED_PROVINCES).anyMatch(p -> p == province) && !rushDeliveryProducts.isEmpty();
+
+        if (!isRushDelivery || !isRushSupported) {
+            double normalShippingFee = calculateShippingFee(cartProducts, province, false);
+            return new ShippingFeeDTO(normalShippingFee, 0, false);
+        }
+
+        List<CartProduct> normalDeliveryProducts = getNonRushDeliveryProducts(cartProducts);
+        double normalShippingFee = calculateShippingFee(normalDeliveryProducts, province, false);
+        double rushShippingFee = calculateShippingFee(rushDeliveryProducts, province, true);
+        return new ShippingFeeDTO(normalShippingFee, rushShippingFee, true);
+
+    }
+    public void saveDeliveryInfo(Long cartId, ShippingFeeDTO shippingFee, DeliveryInfo deliveryInfo) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("The cart with id " + cartId + " does not exist"));
+        Order order = new Order(cart, shippingFee.getNormalShippingFee(), shippingFee.getRushShippingFee(), deliveryInfo);
+        orderRepository.findByCartId(cartId).ifPresent(value -> orderRepository.delete(value));
+        deliveryInfoRepository.save(deliveryInfo);
+        orderRepository.save(order);
+
+    }
+    private double calculateShippingFee(List<CartProduct> cartProducts, int province, boolean isRush) {
+        if (cartProducts.isEmpty()) return 0;
+        int cartTotal = calculateTotalPrice(cartProducts);
+        double maxWeight = getMaxWeight(cartProducts);
+        int baseShippingFee = getBaseShippingFee(maxWeight, province);
+        if (!isRush)
+            if (cartTotal > 100000) return Math.max(baseShippingFee - 25000, 0);
+            else return baseShippingFee;
+        return baseShippingFee + getTotalNumberOfItems(cartProducts) * 10000;
+    }
+
+    private int getTotalNumberOfItems(List<CartProduct> cartProducts) {
+        return cartProducts.stream().mapToInt(CartProduct::getQty).sum();
+    }
+
+    private double getMaxWeight(List<CartProduct> cartProducts) {
+        return cartProducts.stream()
+                .mapToDouble(cartProduct -> cartProduct.getProduct().getWeight() * cartProduct.getQty()).max()
+                .orElse(0.0);
+    }
+
+    private int calculateTotalPrice(List<CartProduct> cartProducts) {
+        return (int) cartProducts.stream()
+                .mapToDouble(cartProduct -> cartProduct.getProduct().getPrice() * cartProduct.getQty()).sum();
+    }
+
+    private List<CartProduct> getRushDeliveryProducts(List<CartProduct> cartProducts) {
+        return cartProducts.stream().filter(cartProduct -> cartProduct.getProduct().isRushOrderEligible())
+                .collect(Collectors.toList());
+    }
+
+    private List<CartProduct> getNonRushDeliveryProducts(List<CartProduct> cartProducts) {
+        return cartProducts.stream().filter(cartProduct -> !cartProduct.getProduct().isRushOrderEligible())
+                .collect(Collectors.toList());
+    }
+
+    private int getBaseShippingFee(double weight, int province) {
+        if (Arrays.stream(Constant.BIG_CITIES).anyMatch(p -> p == province)) {
+            if (weight <= 3) return 22000;
+            return 22000 + (int) Math.ceil((weight - 3) / 0.5) * 2500;
+        }
+        if (weight <= 0.5) return 30000;
+        return 30000 + (int) Math.ceil((weight - 0.5) / 0.5) * 2500;
+    }
+}
