@@ -157,4 +157,32 @@ export const getOrders = async (): Promise<OrderDTO[]> => {
     }
   });
 }
+export async function deleteUser(id: string) {
+  try {
+    const response = await axios.delete(`${apiBaseUrl}/admin/users/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    throw error;
+  }
+}
+export async function blockUser(id: string) {
+  try {
+    const response = await axios.post(`${apiBaseUrl}/admin/users/${id}/block`);
+    return response.data;
+  } catch (error) {
+    console.error('Error blocking user:', error);
+    throw error;
+  }
+}
+
+export async function unblockUser(id: string) {
+  try {
+    const response = await axios.post(`${apiBaseUrl}/admin/users/${id}/unblock`);
+    return response.data;
+  } catch (error) {
+    console.error('Error unblocking user:', error);
+    throw error;
+  }
+}
 
