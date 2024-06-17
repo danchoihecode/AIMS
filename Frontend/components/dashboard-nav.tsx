@@ -33,11 +33,6 @@ export function DashboardNav({
     return null;
   }
 
-<<<<<<< HEAD
-  console.log('isActive', isMobileNav, isMinimized);
-
-=======
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   return (
     <nav className="grid items-start gap-2">
       <TooltipProvider>

@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-'use client'
-export default function ErrorPage(){
-    return <div>
-        Error PAGE
-    </div>
-=======
 'use client';
  
 import { useEffect } from 'react';
@@ -34,5 +27,4 @@ export default function Error({
       </button>
     </main>
   );
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 }
