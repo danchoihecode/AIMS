@@ -7,10 +7,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Invoice {
 
 	@Id
@@ -29,15 +33,17 @@ public class Invoice {
 	@JoinColumn(name = "payment_transaction_id", referencedColumnName = "id")
 	private PaymentTransaction paymentTransaction;
 
-	public Invoice() {
-
-	}
-
 	public Invoice(Order order) {
 
 		this.order = order;
 		this.currency = "VND";
 		this.amount = order.getTotalAmount();
+	}
+	public Invoice(Order order, PaymentTransaction paymentTransaction) {
+		this.order = order;
+		this.currency = "VND";
+		this.amount = order.getTotalAmount();
+		this.paymentTransaction = paymentTransaction;
 	}
 
 }

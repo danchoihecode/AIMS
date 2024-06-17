@@ -25,7 +25,7 @@ interface DeliveryInfo {
   instructions: string;
   deliveryTime: string;
   province: number;
-  rushOrder: boolean;
+  isRushOrder: boolean;
 }
 
 interface OrderDetail {
@@ -124,9 +124,9 @@ const OrderDetail = () => {
               </tr>
               <tr>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Rush Order:</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{deliveryInfo.rushOrder ? "Yes" : "No"}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{deliveryInfo.isRushOrder ? "Yes" : "No"}</td>
               </tr>
-              {deliveryInfo.rushOrder && (
+              {deliveryInfo.isRushOrder && (
                 <>
                   <tr>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Instructions:</td>
@@ -180,7 +180,7 @@ const OrderDetail = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Normal Shipping Fees:</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatAmount(normalShippingFees)}</td>
               </tr>
-              {deliveryInfo.rushOrder && (
+              {deliveryInfo.isRushOrder && (
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Rush Shipping Fees:</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatAmount(rushShippingFees)}</td>

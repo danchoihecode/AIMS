@@ -24,11 +24,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import toast, { Toaster } from "react-hot-toast";
-<<<<<<< HEAD
-import { useState } from "react";
-=======
 import { useEffect, useState } from "react";
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { cn, isWithinNextWeek } from "@/lib/utils";
@@ -37,7 +33,9 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import DeliveryInfo from "./delivery-info";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { fetchDelivery } from '@/api/delivery'
+import { getDeliveryFees, submitDelivery } from "@/api/delivery";
+import { DeliveryInfoDTO } from "@/api/DTO/DeliveryFormDTO";
+import { useRouter } from "next/navigation";
 
 interface DeliveryFormProps {
     cartItems: CartItemDTO[];
@@ -47,24 +45,26 @@ interface DeliveryFormProps {
 const DeliveryFormSchema = z.object({
     name: z.string().min(5),
     email: z.string().email(),
-    province: z.enum(province.map((p) => p.id) as any, {
+    province: z.enum(province.map((p) => p.id) as [string, ...string[]], {
         message: "Invalid province",
     }),
     district: z.string().min(5),
     street: z.string().min(5),
     phone: z.string().min(10).max(10),
-    date: z
+    deliveryTime: z
         .date()
         .refine(isWithinNextWeek, {
             message: "Date must be in the future",
         })
         .optional(),
-    note: z.string().optional(),
+    instructions: z.string().optional(),
 });
 export default function DeliveryForm({
     cartItems,
     taxRate,
 }: DeliveryFormProps) {
+    console.log(cartItems);
+    const router = useRouter();
     const [isRush, setIsRush] = useState(false);
     const form = useForm<z.infer<typeof DeliveryFormSchema>>({
         resolver: zodResolver(DeliveryFormSchema),
@@ -75,28 +75,38 @@ export default function DeliveryForm({
             district: "",
             street: "",
             phone: "",
-            date: new Date(),
-            note: "",
+            deliveryTime: undefined,
+            instructions: "",
         },
     });
-    const onSubmit = (data: z.infer<typeof DeliveryFormSchema>) => {
-        console.log(data);
-    };
-<<<<<<< HEAD
-    const onRushDeliveryChange = async (checked: boolean) => {
-        const { normalShippingFee, rushShippingFee, isRushDelivery } = await fetchDelivery("0", provinceWatch, checked);
-        console.log(normalShippingFee, rushShippingFee, isRushDelivery);
-        if (isRushDelivery === false) {
-            toast.error("Your order cannot be rush delivery.");
+    const onSubmit = async (
+        deliveryInfo: z.infer<typeof DeliveryFormSchema>
+    ) => {
+        const deliveryData: DeliveryInfoDTO = {
+            ...deliveryInfo,
+            address: deliveryInfo.street + " " + deliveryInfo.district,
+            isRushOrder: true,
+        };
+        const shippingFee = {
+            normalShippingFee,
+            rushShippingFee,
+            rushDeliveryAvailable: isRush,
+        };
+        const { data, error } = await submitDelivery(
+            deliveryData,
+            shippingFee
+        );
+        if (error) {
+            toast.error("An error occurred while submitting the order");
             return;
         }
-        setIsRush(checked);
-        setNormalShippingFee(normalShippingFee);
-        setRushShippingFee(rushShippingFee);
-        if (checked) {
-=======
+        console.log("Order submitted successfully:", data);
+        localStorage.setItem("orderId", data.id);
+        router.push("/checkout/review");
+    };
     const setDelivery = async (province: string, isRush: boolean) => {
-        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } = await fetchDelivery("1", province, isRush);
+        const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } =
+            await getDeliveryFees(province, isRush);
         if (isRush && rushDeliveryAvailable === false) {
             toast.error("Your order cannot be rush delivery.");
             return;
@@ -105,7 +115,6 @@ export default function DeliveryForm({
         setNormalShippingFee(normalShippingFee);
         setRushShippingFee(rushShippingFee);
         if (isRush) {
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
             setNormalDeliveryItems(
                 cartItems.filter((item) => !item.isRushDelivery)
             );
@@ -116,20 +125,24 @@ export default function DeliveryForm({
             setNormalDeliveryItems(cartItems);
             setRushDeliveryItems([]);
         }
-<<<<<<< HEAD
-        
-=======
-    }
-    const onRushDeliveryChange = async (checked: boolean) => {
-        setDelivery(provinceWatch, checked);
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
     };
-    const provinceWatch = form.watch('province');
-    const [normalDeliveryItems, setNormalDeliveryItems] =
-        useState<CartItemDTO[]>(cartItems);
+    const onRushDeliveryChange = async (checked: boolean) => {
+        if (!provinceWatch) {
+            toast.error("Please select a province first");
+            return;
+        }
+        setDelivery(provinceWatch, checked);
+    };
+    const provinceWatch = form.watch("province");
+    const [normalDeliveryItems, setNormalDeliveryItems] = useState<
+        CartItemDTO[]
+    >([]);
     const [rushDeliveryItems, setRushDeliveryItems] = useState<CartItemDTO[]>(
         []
     );
+    useEffect(() => {
+        setNormalDeliveryItems(cartItems);
+    }, [cartItems]);
     const [normalShippingFee, setNormalShippingFee] = useState(0);
     const [rushShippingFee, setRushShippingFee] = useState(0);
     return (
@@ -205,31 +218,11 @@ export default function DeliveryForm({
                                     <FormItem>
                                         <FormLabel>Province</FormLabel>
                                         <Select
-<<<<<<< HEAD
+                                            value={field.value}
                                             onValueChange={async (value) => {
                                                 field.onChange(value);
-                                                const { normalShippingFee } =
-                                                    await fetchDelivery(
-                                                        "0",
-                                                        value,
-                                                        false
-                                                    );
-                                                setNormalShippingFee(
-                                                    normalShippingFee
-                                                );
-                                                setIsRush(false);
-                                                onRushDeliveryChange(false);
+                                                await setDelivery(value, false);
                                             }}
-                                            value={field.value}
-=======
-                                            value={field.value}
-                                            onValueChange={
-                                                async (value) => {
-                                                    field.onChange(value);
-                                                    await setDelivery(value, false);
-                                                }
-                                            }
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
@@ -298,7 +291,7 @@ export default function DeliveryForm({
                             </h2>
                             <FormField
                                 control={form.control}
-                                name="date"
+                                name="deliveryTime"
                                 render={({ field }) => (
                                     <FormItem className="flex flex-col">
                                         <FormLabel>Shipping Date</FormLabel>
@@ -348,7 +341,7 @@ export default function DeliveryForm({
                             />
                             <FormField
                                 control={form.control}
-                                name="note"
+                                name="instructions"
                                 render={({ field }) => (
                                     <FormItem className="col-span-2">
                                         <FormLabel>

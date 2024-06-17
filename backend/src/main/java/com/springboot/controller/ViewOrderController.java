@@ -23,12 +23,6 @@ import com.springboot.service.OrderService;
 public class ViewOrderController {
 	@Autowired
 	private OrderService orderService;
-//	@Autowired
-//	private InvoiceService invoiceService;
-//	private IPaymentSubsystem payment;
-//	public ViewOrderController() {
-//		this.payment = new PaymentSubsystem(new VNPaySubsystemController());
-//	}
 
 	@GetMapping("/orders")
 	public ResponseEntity<List<OrderResponse>> getAllOrders() {
@@ -59,6 +53,7 @@ public class ViewOrderController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
 	@GetMapping("/reject-order")
 	public ResponseEntity<?> rejectOrder(@RequestParam Long id) {
 		try {
@@ -72,31 +67,5 @@ public class ViewOrderController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-//	@GetMapping("/reject-order")
-//	public ResponseEntity<?> rejectOrder(@RequestParam Long id) {
-//		try {
-//			PaymentTransaction paymentTransaction = invoiceService.getPaymentTransactionByOrderId(id);
-//			RefundTransaction refundTransaction = payment.refund(paymentTransaction);
-//			orderService.rejectOrder(id);
-//			return ResponseEntity.ok(refundTransaction);
-//		} catch (RefundException e) {
-//			Map<String, String> errorResponse = new HashMap<>();
-//			errorResponse.put("error", e.getMessage());
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-//		} catch (UnrecognizedException e) {
-//			Map<String, String> errorResponse = new HashMap<>();
-//			errorResponse.put("error", e.getMessage());
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-//		}
-//		catch (IOException e) {
-//			Map<String, String> errorResponse = new HashMap<>();
-//			errorResponse.put("error", e.getMessage());
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-//		}
-//		catch (Exception e) {
-//			return ResponseEntity.notFound().build();
-//		}
-//	
-//	}
 
 }

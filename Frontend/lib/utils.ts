@@ -1,15 +1,16 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { cookies } from "next/headers";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs));
 }
 export const capitalizeFirstLetter = (path: string) => {
-  return path
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-}
+    return path
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+};
 export function isWithinNextWeek(date: Date): boolean {
     const today = new Date();
     const nextWeek = new Date();
@@ -17,3 +18,4 @@ export function isWithinNextWeek(date: Date): boolean {
 
     return date >= today && date <= nextWeek;
 }
+

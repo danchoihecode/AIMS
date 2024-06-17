@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.springboot.model.entity.Invoice;
 
+import java.util.Optional;
+
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
-	Invoice findByOrderId(Long orderId);
+	Optional<Invoice> findByOrderId(Long orderId);
 }

@@ -1,65 +1,34 @@
 package com.springboot.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Map;
-
+import com.springboot.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.springboot.model.entity.Invoice;
-import com.springboot.model.entity.Order;
-import com.springboot.model.entity.PaymentTransaction;
-import com.springboot.model.response.InvoiceDetailResponse;
-import com.springboot.model.response.PaymentURLResponse;
-import com.springboot.service.CartService;
-import com.springboot.service.InvoiceService;
-import com.springboot.subsystem.IPaymentSubsystem;
-import com.springboot.subsystem.PaymentSubsystem;
-import com.springboot.subsystem.vnpaysubsystem.VNPaySubsystemController;
-
+import java.io.IOException;
+import java.util.Map;
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/customer/payment")
 public class PaymentController {
-
-	private IPaymentSubsystem payment;
-	private Invoice invoice;
-
 	@Autowired
-	InvoiceService invoiceService;
-	@Autowired
-	private CartService cartService;
+	PaymentService paymentService;
 
-	public PaymentController() {
-		this.payment = new PaymentSubsystem(new VNPaySubsystemController());
-	}
-	
-	public void payOrder(Order order) {
-		invoice = new Invoice(order);
-	}
-	
-	@GetMapping("/invoice")
-	public ResponseEntity<InvoiceDetailResponse> getInvoiceDetail()  {
-		
-		return ResponseEntity.ok(new InvoiceDetailResponse(invoice.getOrder(), cartService));
+	@PostMapping("/result/{orderId}")
+	public String makePayment(@RequestBody Map<String, String> res, @PathVariable Long orderId) throws Exception {
+		System.out.println(res);
+		paymentService.savePaymentResult(orderId, res.get("paymentMethod"), res);
+		return "Payment successful";
 	}
 
-	@PostMapping("/result")
-	public ResponseEntity<Void> makePayment(@RequestBody Map<String, String> res) throws IOException, SQLException {
-		PaymentTransaction transaction = payment.getPaymentTransaction(res);
-		invoice.setPaymentTransaction(transaction);
-		invoiceService.save(invoice);
-		return ResponseEntity.ok().build();
+	@GetMapping("/pay")
+	public String generateURL(@RequestParam Long orderId, @RequestParam String paymentMethod) throws IOException{
+		return paymentService.generatePaymentLink(orderId, paymentMethod);
+
 	}
 
-	@GetMapping("/VNPayURL")
-	public PaymentURLResponse generateURL() throws IOException {
-		return new PaymentURLResponse(payment.generateURL(invoice.getAmount(), "Payment"));
+	@PostMapping("/refund")
+	public void cancelOrder(@RequestBody Map<String, Long> reqBody) throws IOException {
+		paymentService.refundPayment(reqBody.get("orderId"));
 	}
 
 }

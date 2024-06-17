@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, PackageX } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 
+export const metadata : Metadata = {
+    title: "Order Failed",
+    description: "Order failed page",
+};
 export default function OrderSuccess() {
     return (
         <div className="text-center space-y-4">

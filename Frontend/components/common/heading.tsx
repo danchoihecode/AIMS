@@ -22,8 +22,8 @@ export default function Heading() {
                             <Button variant="secondary">Home</Button>
                         </Link>
 
-                        <Link href="/about">
-                            <Button variant="secondary">About</Button>
+                        <Link href="/order">
+                            <Button variant="secondary">Order Tracking</Button>
                         </Link>
                     </div>
                 </div>

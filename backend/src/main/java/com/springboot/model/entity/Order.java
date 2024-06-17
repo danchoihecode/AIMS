@@ -1,5 +1,6 @@
 package com.springboot.model.entity;
 
+import com.springboot.common.Constant;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,9 +39,10 @@ public class Order {
 		this.normalShippingFees = normalShippingFees;
 		this.rushShippingFees = rushShippingFees;
 		this.deliveryInfo = deliveryInfo;
+		this.state = Constant.ORDER_STATUS_CREATED;
 	}
 
 	public Double getTotalAmount() {
-		return cart.getSubTotal() * 1.1 + normalShippingFees + rushShippingFees;
+		return cart.getSubTotal() * (1 + Constant.TAX_RATE) + normalShippingFees + rushShippingFees;
 	}
 }

@@ -16,15 +16,15 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class PayRequestVNPay {
-    private double amount;
-    private String content;
+    private final double amount;
+    private final String content;
 
-    public PayRequestVNPay(double amount2, String content){
-        this.amount = amount2;
+    public PayRequestVNPay(double amount, String content){
+        this.amount = amount;
         this.content = content;
     }
 
-    public String generateURL() throws UnsupportedEncodingException {
+    public String generateURL() {
         String orderType = "other";
         Long amountVNPay = (long) amount * 100L; 
 
@@ -56,23 +56,21 @@ public class PayRequestVNPay {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        List fieldNames = new ArrayList(vnp_Params.keySet());
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
+        Iterator<String> itr = fieldNames.iterator();
         while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                //Build hash data
+            String fieldName = itr.next();
+            String fieldValue = vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (!fieldValue.isEmpty())) {
                 hashData.append(fieldName);
                 hashData.append('=');
-                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                //Build query
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
                 query.append('=');
-                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 if (itr.hasNext()) {
                     query.append('&');
                     hashData.append('&');
