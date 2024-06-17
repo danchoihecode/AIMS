@@ -1,17 +1,11 @@
 package com.springboot.controller;
 
 import com.springboot.dto.DeliveryInfoDTO;
-import com.springboot.service.DeliveryService;
-import com.springboot.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.springboot.model.entity.Cart;
 import com.springboot.model.entity.Order;
 import com.springboot.model.response.ShippingFeeDTO;
-import com.springboot.service.CartService;
+import com.springboot.service.DeliveryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController

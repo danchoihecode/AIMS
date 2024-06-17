@@ -61,7 +61,7 @@ public class DeliveryInfo {
             return false;
         if (address.trim().isEmpty())
             return false;
-        return address.matches("^[a-zA-Z0-9 ]*$");
+        return address.matches("^[a-zA-Z0-9 ,.-]*$");
     }
 
     public boolean validateEmail(String email) {

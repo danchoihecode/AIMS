@@ -44,8 +44,7 @@ public class CartService {
 
     private void checkValidCartProduct(Long cartId, Long productId, Integer qty) throws Exception {
         getCartById(cartId);
-        Product product = productService.getProductById(productId);
-        if (product.getQtyInStock() < qty) {
+        if (!productService.isInventoryGreaterThanQty(productId, qty)) {
             throw new ProductQuantityNotEnoughException("Not enough product in stock");
         }
     }
@@ -65,7 +64,7 @@ public class CartService {
     public void updateCart(Long cartId, Long productId, Integer qty) throws Exception {
         Product product = productService.getProductById(productId);
         Cart cart = getCartById(cartId);
-        if (product.getQtyInStock() < qty) {
+        if (!productService.isInventoryGreaterThanQty(productId, qty)) {
             throw new ProductQuantityNotEnoughException("Not enough product in stock");
         }
 

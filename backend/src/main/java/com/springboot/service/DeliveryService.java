@@ -2,6 +2,7 @@ package com.springboot.service;
 
 import com.springboot.common.Constant;
 import com.springboot.exception.cart.CartNotFoundException;
+import com.springboot.exception.order.InvalidDeliveryInfoException;
 import com.springboot.model.entity.Cart;
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.DeliveryInfo;
@@ -47,6 +48,7 @@ public class DeliveryService {
     }
     public Order saveDeliveryInfo(Long cartId, ShippingFeeDTO shippingFee, DeliveryInfo deliveryInfo) {
         Cart cart = cartService.getCartById(cartId);
+        if (!deliveryInfo.isValid()) throw new InvalidDeliveryInfoException("Invalid delivery information");
         deliveryInfoRepository.save(deliveryInfo);
         return orderService.createOrder(new Order(cart, shippingFee.getNormalShippingFee(), shippingFee.getRushShippingFee(), deliveryInfo));
     }

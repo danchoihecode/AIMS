@@ -2,13 +2,13 @@ package com.springboot.subsystem.vnpaysubsystem;
 
 import java.util.Map;
 
-import com.springboot.exception.InvalidCheckSumException;
-import com.springboot.exception.InvalidIdentifierException;
-import com.springboot.exception.InvalidRefundRequestDataException;
-import com.springboot.exception.NotFoundTransactionException;
-import com.springboot.exception.ProcessingRefundException;
-import com.springboot.exception.RejectRefundTransactionException;
-import com.springboot.exception.UnrecognizedException;
+import com.springboot.exception.payment.vnpay.VNPayException;
+import com.springboot.exception.payment.vnpay.refundrequest.InvalidCheckSumException;
+import com.springboot.exception.payment.vnpay.refundrequest.InvalidIdentifierException;
+import com.springboot.exception.payment.vnpay.refundrequest.InvalidRefundRequestDataException;
+import com.springboot.exception.payment.vnpay.refundrequest.NotFoundTransactionException;
+import com.springboot.exception.payment.vnpay.refundrequest.ProcessingRefundException;
+import com.springboot.exception.payment.vnpay.refundrequest.RejectRefundTransactionException;
 import com.springboot.model.entity.RefundTransaction;
 
 public class RefundResponseVNPay {
@@ -39,7 +39,7 @@ public class RefundResponseVNPay {
 		case "97":
 			throw new InvalidCheckSumException();
 		default:
-			throw new UnrecognizedException();
+			throw new VNPayException();
 		}
 		String id = response.get("vnp_ResponseId");
 		String message = response.get("vnp_Message");

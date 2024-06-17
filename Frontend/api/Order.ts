@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
     },
 });
 
-export const getOrder = async () : Promise<Response>=> {
+export const getOrder = async (): Promise<Response> => {
     const orderId = localStorage.getItem("orderId");
     if (!orderId) {
         return {
@@ -16,14 +16,20 @@ export const getOrder = async () : Promise<Response>=> {
             error: new Error("Order not found"),
         };
     }
-    const { data, error } = await axiosWithErrorHandling(axiosInstance,{
+    const { data, error } = await axiosWithErrorHandling(axiosInstance, {
         method: "GET",
-        params : {
-            orderId
-        }
+        params: {
+            orderId,
+        },
     });
     return {
         data: error ? null : data,
         error,
     };
-}
+};
+export const cancelOrder = async (orderId: string): Promise<Response> => {
+    return axiosWithErrorHandling(axiosInstance, {
+        method: "DELETE",
+        data: orderId,
+    });
+};

@@ -9,6 +9,7 @@ export default function OrderResult() {
     const router = useRouter();
     const searchParams = useSearchParams();
     useEffect(() => {
+        document.title = "Order Result Processing - E-commerce";
         const params: Record<string, string> = {};
         searchParams.forEach((value, key) => {
             params[key] = value;

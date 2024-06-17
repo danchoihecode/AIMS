@@ -30,9 +30,7 @@ export default function TransactionInfo({ transaction }: TransactionInfoProps) {
                 <p className="text-medium w-5/12">Transaction Content</p>
                 {transaction && (
                     <p className="text-right text-slate-500 w-7/12">
-                        {new Date(
-                            transaction.transactionContent
-                        ).toLocaleDateString()}
+                        {transaction.transactionContent}
                     </p>
                 )}
             </div>

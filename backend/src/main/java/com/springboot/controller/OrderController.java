@@ -1,13 +1,13 @@
 package com.springboot.controller;
 
 
-import com.springboot.model.entity.Invoice;
 import com.springboot.model.entity.Order;
-import com.springboot.service.InvoiceService;
 import com.springboot.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -15,16 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     @Autowired
     OrderService orderService;
-    @Autowired
-    InvoiceService invoiceService;
-
     @GetMapping("")
-    public ResponseEntity<Order> getOrderById(@RequestParam Long orderId) {
-        Order order = orderService.getOrderById(orderId);
-        if (order == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(order);
+    public Order getOrderById(@RequestParam Long orderId) {
+        return orderService.getOrderById(orderId);
+    }
+    @PostMapping("/cancel")
+    public void cancelOrder(@RequestBody Map<String, Long> reqBody) throws IOException {
+        orderService.cancelOrder(reqBody.get("orderId"));
     }
 
 }

@@ -1,20 +1,14 @@
 package com.springboot.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.springboot.common.Constant;
 import com.springboot.dto.CartProductDTO;
 import com.springboot.model.entity.Cart;
+import com.springboot.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.springboot.model.entity.CartProduct;
-import com.springboot.service.CartService;
-import com.springboot.service.ProductService;
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -58,8 +52,8 @@ public class CartController {
 		return "Delete cart item successfully";
 	}
 	@GetMapping("/tax")
-	public ResponseEntity<Double> getTax() {
-		return ResponseEntity.ok(Constant.TAX_RATE);
+	public Double getTax() {
+		return Constant.TAX_RATE;
 	}
 
 }

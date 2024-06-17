@@ -33,7 +33,7 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import DeliveryInfo from "./delivery-info";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { getDeliveryFees, submitDelivery } from "@/api/delivery";
+import { getDeliveryFees, submitDelivery } from "@/api/Delivery";
 import { DeliveryInfoDTO } from "@/api/DTO/DeliveryFormDTO";
 import { useRouter } from "next/navigation";
 

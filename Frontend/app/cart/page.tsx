@@ -11,6 +11,7 @@ export default function Cart() {
     const taxRate = useRef(0);
     const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
     useEffect(() => {
+        document.title = "Cart - E-commerce";
         getCartItems().then((response) => {
             if (response) setCartItems(response.data);
         });

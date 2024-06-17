@@ -32,9 +32,8 @@ public class ProductService {
     @Autowired
     private LPRespository lpRespository;
 
-    public boolean checkInventory(Long productId, Integer qty) throws Exception {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new Exception("Product not found"));
+    public boolean isInventoryGreaterThanQty(Long productId, Integer qty) throws Exception {
+        Product product = getProductById(productId);
         return product.getQtyInStock() >= qty;
     }
     public Product getProductById(Long id) throws Exception {

@@ -1,9 +1,12 @@
 package com.springboot.service;
 
 import com.springboot.common.Constant;
+import com.springboot.exception.order.InvalidOrderCancellationException;
 import com.springboot.exception.order.OrderNotFoundException;
 import com.springboot.model.entity.DeliveryInfo;
 import com.springboot.repository.DeliveryInfoRepository;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,15 +31,19 @@ public class OrderService {
 	@Autowired
 	private CartProductRepository cartProductRepository;
 	@Autowired
-	private DeliveryInfoRepository deliveryInfoRepository;
-	@Autowired
 	private OrderRepository orderRepository;
+	@Autowired
+	private PaymentService paymentService;
 	public Order createOrder(Order order) {
 		orderRepository.findByCartId(order.getCart().getId()).ifPresent(value -> orderRepository.delete(value));
 		return orderRepository.save(order);
 	}
 	public Order getOrderById(Long orderId) {
-		return orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with id " + orderId + " not found"));
+		Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with id " + orderId + " not found"));
+		if (order.getState().equals(Constant.ORDER_STATUS_CREATED)) {
+			throw new OrderNotFoundException("Order with id " + orderId + " is not paid yet");
+		}
+		return order;
 	}
 	public Order processPaidOrder(Long orderId) {
 		Order order = getOrderById(orderId);
@@ -48,6 +55,15 @@ public class OrderService {
 		return orderRepository.findAll().stream().map(order -> new OrderResponse(order.getId(),
 				order.getDeliveryInfo().getName(), order.getTotalAmount(), order.getState()))
 				.collect(Collectors.toList());
+	}
+	public void cancelOrder(Long id) throws IOException {
+		Order order = getOrderById(id);
+		if (!order.getState().equals(Constant.ORDER_STATUS_PENDING)) {
+			throw new InvalidOrderCancellationException("Order with id " + id + " cannot be cancelled");
+		}
+		paymentService.refundPayment(order.getId());
+		order.setState(Constant.ORDER_STATUS_CANCELLED);
+		orderRepository.save(order);
 	}
 	public void serOrderPending(Long id) throws Exception {
 		Order order = orderRepository.findById(id).orElse(null);

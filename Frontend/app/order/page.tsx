@@ -4,6 +4,7 @@ import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import { TransactionDTO } from "@/api/DTO/InvoiceDTO";
 import { OrderDTO } from "@/api/DTO/OrderDTO";
 import { getInvoiceByOrderId } from "@/api/Invoice";
+import { cancelOrder } from "@/api/Order";
 import CheckoutDeliveryInfo from "@/components/checkout/checkout-delivery-info";
 import {
     Item,
@@ -11,28 +12,35 @@ import {
     SummaryItem,
 } from "@/components/checkout/delivery-item";
 import TransactionInfo from "@/components/invoice/transaction-info";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { ORDER_STATE_PENDING } from "@/lib/constant";
 import { ShoppingBag } from "lucide-react";
-import { Metadata } from "next";
 import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-
 export default function OrderPage() {
+    useEffect(() => {
+        document.title = "Order - E-commerce";
+    }, []);
     const [orderId, setOrderId] = useState<string>("");
     const [order, setOrder] = useState<OrderDTO | undefined>(undefined);
     const taxRate = useRef(0);
     const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
-    const [transaction, setTransaction] = useState<TransactionDTO | undefined>(undefined);
-    const handleFetchData = async () => {
+    const [transaction, setTransaction] = useState<TransactionDTO | undefined>(
+        undefined
+    );
+    const handleCheckOrder = async () => {
         const orderResponse = await getInvoiceByOrderId(orderId);
         if (orderResponse.error) {
             toast.error("Order not found: " + orderId);
             return;
         }
-        const cartItemsResponse = await getCartItemsByCartId(orderResponse.data.order.cart.id);
+        const cartItemsResponse = await getCartItemsByCartId(
+            orderResponse.data.order.cart.id
+        );
         if (cartItemsResponse.error) {
             toast.error("Cart not found: " + orderResponse.data.order.cart.id);
             return;
@@ -40,10 +48,19 @@ export default function OrderPage() {
         setCartItems(cartItemsResponse.data);
         setTransaction(orderResponse.data.paymentTransaction);
         setOrder(orderResponse.data.order);
-    }
-    const handleCheckOrder = () => {
-        handleFetchData();
     };
+
+    const handleCancelOrder = async () => {
+        const { error } = await cancelOrder(orderId);
+        if (error) {
+            toast.error("An error occurred while cancelling the order");
+            return;
+        }
+        toast.success("Order cancelled successfully");
+        setOrder(undefined);
+        setCartItems([]);
+        setTransaction(undefined);
+    }
     useEffect(() => {
         getTaxRate().then((data) => {
             taxRate.current = data;
@@ -68,9 +85,12 @@ export default function OrderPage() {
         <>
             {order ? (
                 <div className=" max-w-[48rem] space-y-8 m-auto">
-                    <h1 className="text-xl font-bold text-center">
-                        Your Order
-                    </h1>
+                    <div className="flex space-x-4 justify-center items-center">
+                        <h1 className="text-xl font-bold">
+                            Your Order #{order.id}{" "}
+                        </h1>
+                        <Badge className="ml-4">{order.state}</Badge>
+                    </div>
                     <CheckoutDeliveryInfo deliveryInfo={order?.deliveryInfo} />{" "}
                     <Separator orientation="horizontal" />
                     <div className="space-y-4">
@@ -115,9 +135,13 @@ export default function OrderPage() {
                     <Separator orientation="horizontal" />
                     <SummaryItem label="Total" value={total} />
                     <Separator orientation="horizontal" />
-                    <TransactionInfo transaction={transaction as TransactionDTO} />
-                    {order?.state === "Pending" && (
-                        <Button variant="destructive" className="w-1/2 m-auto">Cancel Order</Button>
+                    <TransactionInfo
+                        transaction={transaction as TransactionDTO}
+                    />
+                    {order?.state === ORDER_STATE_PENDING && (
+                        <Button variant="destructive" className="w-1/2 m-auto" onClick={handleCancelOrder}>
+                            Cancel Order
+                        </Button>
                     )}
                 </div>
             ) : (

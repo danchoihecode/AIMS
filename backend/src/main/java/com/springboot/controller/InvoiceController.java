@@ -21,17 +21,5 @@ public class InvoiceController {
         }
         return ResponseEntity.ok(invoice);
     }
-    @PostMapping("/cancel")
-    public ResponseEntity<Void> cancelInvoice(@RequestParam Long orderId) {
-        Invoice invoice = invoiceService.getInvoiceByOrderId(orderId);
-        if (invoice == null) {
-            return ResponseEntity.notFound().build();
-        }
-        if (!invoice.getOrder().getState().equals("PENDING")) {
-            return ResponseEntity.badRequest().build();
-        }
-        invoiceService.cancelInvoice(invoice);
-        return ResponseEntity.ok().build();
-    }
 
 }

@@ -2,15 +2,14 @@ package com.springboot.subsystem.vnpaysubsystem;
 
 import java.util.Map;
 
-import com.springboot.Utils;
-import com.springboot.exception.AnonymousTransactionException;
-import com.springboot.exception.ProcessingException;
-import com.springboot.exception.RejectedTransactionException;
-import com.springboot.exception.SendToBankException;
-import com.springboot.exception.TransactionFailedException;
-import com.springboot.exception.TransactionNotDoneException;
-import com.springboot.exception.TransactionReverseException;
-import com.springboot.exception.UnrecognizedException;
+import com.springboot.exception.payment.vnpay.VNPayException;
+import com.springboot.exception.payment.vnpay.payrequest.AnonymousTransactionException;
+import com.springboot.exception.payment.vnpay.payrequest.ProcessingException;
+import com.springboot.exception.payment.vnpay.payrequest.RejectedTransactionException;
+import com.springboot.exception.payment.vnpay.payrequest.SendToBankException;
+import com.springboot.exception.payment.vnpay.payrequest.TransactionFailedException;
+import com.springboot.exception.payment.vnpay.payrequest.TransactionNotDoneException;
+import com.springboot.exception.payment.vnpay.payrequest.TransactionReverseException;
 import com.springboot.model.entity.PaymentTransaction;
 
 public class PayResponseVNPay {
@@ -31,7 +30,16 @@ public class PayResponseVNPay {
         int amount = Integer.parseInt(response.get("vnp_Amount")) / 100;
         String createdAt = response.get("vnp_PayDate");
         String vnpTxnRef = response.get("vnp_TxnRef");
-        PaymentTransaction trans = new PaymentTransaction(errorCode, transactionId, transactionContent, amount, Utils.convertPaymentTimeFormat(createdAt), vnpTxnRef);
+
+        PaymentTransaction trans = PaymentTransaction.builder()
+                .errorCode(errorCode)
+                .transactionId(transactionId)
+                .transactionContent(transactionContent)
+                .amount(amount)
+                .createdAt(createdAt)
+                .transactionNum(vnpTxnRef)
+                .paymentMethod("VNPay")
+                .build();
 
         switch (trans.getErrorCode()) {
             case "00":
@@ -51,7 +59,7 @@ public class PayResponseVNPay {
             case "07":
                 throw new AnonymousTransactionException();
             default:
-                throw new UnrecognizedException();
+                throw new VNPayException();
         }
         return trans;
     }

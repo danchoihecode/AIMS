@@ -42,4 +42,13 @@ public class PaymentService {
         orderService.processPaidOrder(orderId);
         invoiceService.createInvoice(order, paymentTransaction);
     }
+    public void refundPayment(Long orderId) throws IOException {
+        Order order = orderService.getOrderById(orderId);
+        if (!order.getState().equals(Constant.ORDER_STATUS_PENDING)) {
+            throw new OrderNotFoundException("Order with id " + orderId + " is not paid yet");
+        }
+        PaymentTransaction paymentTransaction = invoiceService.getPaymentTransactionByOrderId(orderId);
+        PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentTransaction.getPaymentMethod());
+        paymentStrategy.refund(paymentTransaction);
+    }
 }

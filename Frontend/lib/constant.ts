@@ -63,3 +63,4 @@ export const province = [
     { id: "26", name: "Vĩnh Phúc" },
     { id: "15", name: "Yên Bái" },
 ];
+export const ORDER_STATE_PENDING = "PENDING";

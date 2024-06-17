@@ -1,42 +1,17 @@
 package com.springboot.controller;
 
-import java.io.IOException;
-import java.util.Map;
-
-import com.springboot.service.OrderService;
 import com.springboot.service.PaymentService;
-import com.springboot.subsystem.PaymentStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.springboot.model.entity.Invoice;
-import com.springboot.model.entity.Order;
-import com.springboot.model.entity.PaymentTransaction;
-import com.springboot.service.InvoiceService;
-import com.springboot.subsystem.PaymentStrategy;
+import java.io.IOException;
+import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/payment")
 public class PaymentController {
 	@Autowired
-	PaymentStrategyFactory paymentStrategyFactory;
-	@Autowired
-	InvoiceService invoiceService;
-	@Autowired
-	OrderService orderService;
-	@Autowired
 	PaymentService paymentService;
-	
-	@GetMapping("/invoice")
-	public ResponseEntity<Order> getInvoiceDetail(@RequestParam Long orderId)  {
-		Order order = orderService.getOrderById(orderId);
-		if (order == null) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(order);
-	}
 
 	@PostMapping("/result/{orderId}")
 	public String makePayment(@RequestBody Map<String, String> res, @PathVariable Long orderId) throws Exception {
@@ -50,12 +25,9 @@ public class PaymentController {
 		return paymentService.generatePaymentLink(orderId, paymentMethod);
 
 	}
-//	@GetMapping("/refund")
-//	public ResponseEntity<Void> refund(@RequestParam Long orderId) throws IOException {
-//		PaymentStrategy payment = new PaymentSubsystem(new VNPaySubsystemController());
-//
-//		RefundTransaction refundTransaction = payment.refund(null);
-//		return ResponseEntity.ok().build();
-//	}
+	@GetMapping("/refund")
+	public void refund(@RequestParam Long orderId) throws IOException {
+		paymentService.refundPayment(orderId);
+	}
 
 }

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class OrderExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
-    public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException ex) {
+    public ResponseEntity<String> handleNotFoundException(OrderNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(OrderAlreadyPaidException.class)
-    public ResponseEntity<String> handleOrderAlreadyPaidException(OrderAlreadyPaidException ex) {
+    @ExceptionHandler({OrderAlreadyPaidException.class, InvalidOrderCancellationException.class, InvalidDeliveryInfoException.class})
+    public ResponseEntity<String> handleInvalidInformationException(OrderAlreadyPaidException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(OrderException.class)
