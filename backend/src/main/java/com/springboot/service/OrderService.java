@@ -62,6 +62,12 @@ public class OrderService {
 							"Quantity in cart exceeds stock for product: " + product.getTitle());
 				}
 			}
+			for (CartProduct cartProduct : cartProducts) {
+				Product product = productRepository.findById(cartProduct.getProduct().getId())
+						.orElseThrow(() -> new Exception("Product not found"));
+				product.setQtyInStock(product.getQtyInStock() - cartProduct.getQty());
+				productRepository.save(product);
+			}
 
 			order.setState("Approved");
 			orderRepository.save(order);
