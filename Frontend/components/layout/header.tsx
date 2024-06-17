@@ -1,6 +1,8 @@
 import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
+import { cn } from '@/lib/utils';
 import { UserNav } from './user-nav';
 import Link from 'next/link';
+import { Session } from "next-auth";
 
 export default function Header() {
   return (

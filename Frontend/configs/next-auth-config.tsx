@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import {NextAuthOptions} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 
@@ -8,22 +8,15 @@ export const getCurrentEpochTime = () => {
     return Math.floor(new Date().getTime() / 1000);
 };
 const SIGN_IN_HANDLERS:any = {
-    "login": async (user:any, account:any) => {
+    "login": async (user:any,account:any) => {
         if(user?.error){
             throw new Error( 'Email or Password is wrong\n');
         }
         return true;
     },
-    "register": async (user:any, account:any) => {
+    "register": async (user:any,account:any) => {
         if(user?.error){
             throw new Error( 'Register failed ' + 'Status: ' + user.error.status);
-        }else{
-            return true;
-        }
-    },
-    "change-password": async (user:any, account:any) => {
-        if(user?.error){
-            throw new Error( 'Change password failed ' + 'Status: ' + user.error.status);
         }else{
             return true;
         }
@@ -53,7 +46,7 @@ export const authOption:NextAuthOptions = {
                         const data = await res.json()
                         if(data) return data
                     }else{
-                        return {error: {status:res.status, message:res.statusText}}
+                        return {error: {status:res.status,message:res.statusText}}
                     }
                 }
             }
@@ -68,7 +61,7 @@ export const authOption:NextAuthOptions = {
                     password:{label:"Password",type:"password"}
                 },
                 async authorize(credentials) {
-                    const res = await fetch(process.env.BACK_END_URL + "/auth/signup", {
+                    const res = await fetch("localhost:8080" + "/auth/signup", {
                         method: 'POST',
                         body: JSON.stringify(credentials),
                         headers: {"Content-Type": "application/json"},
@@ -77,30 +70,6 @@ export const authOption:NextAuthOptions = {
 
                     if (res.ok) {
                         return {message: "register success"} as any
-                    } else {
-                        return {error:{status:res.status,message:res.statusText}};
-                    }
-                }
-            }
-        ),
-        CredentialsProvider(
-            {
-                id:"change-password",
-                name:"Change Password",
-                credentials:{
-                    token:{label:"Token",type:"text"},
-                    newPassword:{label:"New Password",type:"password"}
-                },
-                async authorize(credentials) {
-                    const res = await fetch(process.env.BACK_END_URL + "/auth/change-password", {
-                        method: 'POST',
-                        body: JSON.stringify(credentials),
-                        headers: {"Content-Type": "application/json"},
-                        cache: "no-store"
-                    })
-
-                    if (res.ok) {
-                        return {message: "change password success"} as any
                     } else {
                         return {error:{status:res.status,message:res.statusText}};
                     }

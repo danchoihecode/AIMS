@@ -5,7 +5,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.response.CartProductResponse;
@@ -15,25 +20,15 @@ import com.springboot.model.response.UpdateCartResponse;
 import com.springboot.service.CartService;
 import com.springboot.service.ProductService;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/cart")
+@RequestMapping
 public class ViewCartController {
 	@Autowired
 	private CartService cartService;
 	@Autowired
 	private ProductService productService;
 
-	@GetMapping()
-	public ResponseEntity<CartProductResponse> getAllProductsInCart(@RequestParam("cartId") Long cartId) {
-		System.out.println("cartId: " + cartId);
-		List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
-		if (cartProducts == null) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(CartProductResponse.fromCartProducts(cartProducts));
-	}
-
+	@GetMapping("/cart")
 	public ResponseEntity<CartProductResponse> getAllProductsInCart(@RequestBody Map<String, Object> request) {
 		Long cartId = Long.valueOf(request.get("cartId").toString());
 		List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);

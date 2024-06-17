@@ -10,5 +10,4 @@ public class AimsApplication {
 		SpringApplication.run(AimsApplication.class, args);
 	}
 
-
 }

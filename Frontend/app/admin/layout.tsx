@@ -6,6 +6,7 @@ import { Session } from "next-auth";
 import { authOption } from "@/configs/next-auth-config";
 import { redirect } from "next/navigation";
 
+
 export const metadata: Metadata = {
   title: 'Admin Panel',
   description: 'Admin panel'
@@ -20,13 +21,13 @@ export default async function AdminLayout({
   if (!session || !session.access_token || !session.admin) {
       redirect("/auth/login");
   }
-  return (
+  /*return (
     <div>
-      <Header />
+      <Header session={session}/>
       <div className="flex h-screen overflow-hidden">
         <AdminSidebar />
-        <main className="flex-1 overflow-auto pt-16">{children}</main>
+        <main className="flex-1 overflow-hidden pt-16">{children}</main>
       </div>
     </div>
-  );
+  );*/
 }

@@ -23,7 +23,7 @@ public class DeliveryInfo {
 	private String instructions;
 	private LocalDate deliveryTime;
 	private boolean isRushOrder;
-	private String province;
+	private Long province;
 
 	public DeliveryInfo() {}
 
@@ -36,7 +36,7 @@ public class DeliveryInfo {
 		this.isRushOrder = isRushOrder;
 	}
 
-	public DeliveryInfo(String name, String phone, String email, String province, String instructions, String address, LocalDate deliveryTime,
+	public DeliveryInfo(String name, String phone, String email, Long province, String instructions, String address, LocalDate deliveryTime,
 			boolean isRushOrder) {
 		super();
 		this.name = name;

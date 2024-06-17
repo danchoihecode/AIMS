@@ -1,24 +1,21 @@
 import type { Metadata } from 'next';
-import { SessionProvider } from '@/context/SessionContext';
 
 export const metadata: Metadata = {
   title: 'Auth Panel',
   description: 'Auth panel'
 };
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <div className="flex h-screen overflow-hidden">
       <main className="flex-1 flex items-center justify-center pt-16">
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        {children}
       </main>
     </div>
-  
   );
 }

@@ -5,8 +5,6 @@ import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import { authOption } from "@/configs/next-auth-config";
 import { redirect } from "next/navigation";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: 'Manager Dashboard',
@@ -25,12 +23,9 @@ export default async function ManagerLayout({
   return (
     <div>
       <Header />
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen">
         <ManagerSidebar />
-        <main className="flex-1 overflow-hidden pt-16">
-          {children}
-          <ToastContainer />
-        </main>
+        <main className="flex-1 pt-16">{children}</main>
       </div>
     </div>
   );

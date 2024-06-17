@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { CartItemDTO } from './CartItemDTO';
-import { UserDTO } from './UserDTO';
-import { OrderDTO } from './OrderDTO';
+
 interface Product {
   id: number;
   title: string;
@@ -80,81 +79,20 @@ export const getTaxRate = async (): Promise<TaxResponse> => {
 
 // GET /cart
 const getCart = async (): Promise<CartItem[]> => {
-    const response = await axios.get<CartItem[]>(`${apiBaseUrl}/cart`);
-    return response.data;
+  const response = await axios.get<CartItem[]>(`${apiBaseUrl}/cart`);
+  return response.data;
 };
 
 // POST /cart
 interface AddToCartRequest {
-    product_id: string;
-    qty: string;
+  product_id: string;
+  qty: string;
 }
 
 const addToCart = async (data: AddToCartRequest): Promise<CartResponse> => {
-    const response = await axios.post<CartResponse>(`${apiBaseUrl}/cart`, data);
-    return response.data;
+  const response = await axios.post<CartResponse>(`${apiBaseUrl}/cart`, data);
+  return response.data;
 };
 
-export const getUsers = async (): Promise<UserDTO[]> => {
-  const response = await axios.get(`${apiBaseUrl}/admin/users`);
-  const data = response.data;
-  return data.map((user: any) => {
-    return {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      isManager: user.isManager,
-      isBlocked: user.blocked,
-    }
-  });
-}
 
-export const updateUser = async (user: UserDTO): Promise<UserDTO[]> => {
-  let response = {} as any;
-  try {
-    response = await axios.post(`${apiBaseUrl}/admin/users/${user.id}/update`, user, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('User updated successfully:', response.data);
-  } catch (error) {
-    console.error('Error updating user:', error);
-  }
-  return response.data;
-}
-
-export const createUser = async (user: UserDTO): Promise<UserDTO[]> => {
-  const response = await axios.post(`${apiBaseUrl}/admin/users/create`, user);
-  return response.data;
-}
-
-export const getUser = async (id: string): Promise<UserDTO> => {
-  const response = await axios.get(`${apiBaseUrl}/admin/users/${id}/edit`);
-  const user = response.data;
-  return {
-    id: user.id,
-    fullName: user.fullName,
-    email: user.email,
-    password: 'password',
-    phone: user.phone,
-    address: user.address,
-    isAdmin: user.isAdmin,
-    isManager: user.isManager,
-    isBlocked: user.isBlocked,
-  }
-}
-export const getOrders = async (): Promise<OrderDTO[]> => {
-  const response = await axios.get(`${apiBaseUrl}/manager/orders`);
-  const data = response.data;
-  return data.map((item: any) => {
-    return {
-      id: item.id,
-      name: item.name,
-      amount: item.amount,
-      state: item.state,
-    }
-  });
-}
 

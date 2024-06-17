@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartProductResponse {
-    private List<CartProductDTO> items;
+    private List<CartProductDTO> allCartProducts;
 
     public static CartProductResponse fromCartProducts(List<CartProduct> cartProducts) {
         List<CartProductDTO> cartProductDTOs = cartProducts.stream()
@@ -31,8 +31,6 @@ public class CartProductResponse {
         private Integer quantity;
         private String imageUrl;
         private Boolean isRushDelivery;
-        private Integer year;
-        private String category;
 
         public CartProductDTO(CartProduct cartProduct) {
             this.id = cartProduct.getProduct().getId();
@@ -40,8 +38,6 @@ public class CartProductResponse {
             this.price = cartProduct.getProduct().getPrice();
             this.quantity = cartProduct.getQty();
             this.imageUrl = cartProduct.getProduct().getImage();
-            this.year = cartProduct.getProduct().getYear();
-            this.category = cartProduct.getProduct().getCategory();
             this.isRushDelivery = cartProduct.getProduct().getRushOrderEligible();
         }
     }
