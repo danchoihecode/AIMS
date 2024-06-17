@@ -1,4 +1,4 @@
-package com.springboot.model.response;
+package com.springboot.model.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.model.dto.LoginResponse;
+import com.springboot.model.dto.LoginUser;
 import com.springboot.model.entity.User;
-import com.springboot.repository.UserRepository;
+import com.springboot.service.UserService;
 import com.springboot.service.auth.AuthenticationService;
 import com.springboot.service.auth.JwtService;
-import com.springboot.service.auth.LoginResponse;
-import com.springboot.service.auth.LoginUser;
-import com.springboot.service.auth.RegisterUser;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,20 +27,13 @@ public class AuthenticationController {
 	private final AuthenticationService authenticationService;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
 		this.jwtService = jwtService;
 		this.authenticationService = authenticationService;
-	}
-
-	// use for add new user ( via postman or frontend request)
-	@PostMapping("/signup")
-	public ResponseEntity<User> registerUser(@RequestBody RegisterUser registerUser) {
-		User registeredUser = authenticationService.signup(registerUser);
-		return ResponseEntity.ok(registeredUser);
 	}
 
 	@PostMapping("/login")
@@ -64,14 +56,14 @@ public class AuthenticationController {
 		String newPassword = requestBody.get("newPassword");
 		String email = jwtService.extractUsername(token);
 
-		Optional<User> optionalUser = userRepository.findByEmail(email);
+		Optional<User> optionalUser = userService.findByEmail(email);
 		if (!optionalUser.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
 		} else {
 			User user = optionalUser.get();
 			String hashedPassword = passwordEncoder.encode(newPassword);
 			user.setPassword(hashedPassword);
-			userRepository.save(user);
+			userService.save(user);
 
 			return ResponseEntity.ok("Password changed successfully");
 		}

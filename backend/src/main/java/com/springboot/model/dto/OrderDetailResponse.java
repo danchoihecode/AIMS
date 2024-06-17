@@ -1,11 +1,11 @@
-package com.springboot.model.response;
+package com.springboot.model.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.springboot.model.dto.CartProductResponse.CartProductDTO;
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.DeliveryInfo;
-import com.springboot.model.response.CartProductResponse.CartProductDTO;
 
 import lombok.Data;
 

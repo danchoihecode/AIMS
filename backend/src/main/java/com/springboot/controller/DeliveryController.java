@@ -1,8 +1,8 @@
 package com.springboot.controller;
 
-import com.springboot.dto.DeliveryInfoDTO;
+import com.springboot.model.dto.DeliveryInfoDTO;
+import com.springboot.model.dto.ShippingFeeDTO;
 import com.springboot.model.entity.Order;
-import com.springboot.model.response.ShippingFeeDTO;
 import com.springboot.service.DeliveryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

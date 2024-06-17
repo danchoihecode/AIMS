@@ -2,11 +2,11 @@ package com.springboot.service;
 
 import ch.qos.logback.core.net.server.Client;
 import com.springboot.exception.product.ProductNotFoundException;
+import com.springboot.model.dto.ClientProductDTO;
 import com.springboot.model.entity.Book;
 import com.springboot.model.entity.CD;
 import com.springboot.model.entity.DVD;
 import com.springboot.model.entity.LP;
-import com.springboot.model.response.ClientProductDTO;
 import com.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

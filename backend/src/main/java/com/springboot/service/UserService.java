@@ -2,15 +2,17 @@ package com.springboot.service;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.Optional;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.springboot.model.dto.UserListResponse;
+import com.springboot.model.dto.UserResponse;
 import com.springboot.model.entity.User;
 import com.springboot.repository.UserRepository;
-import com.springboot.model.response.UserListResponse;
-import com.springboot.model.response.UserResponse;
 
 @Service
 public class UserService {
@@ -44,6 +46,10 @@ public class UserService {
 
   public void delete(User user) {
     userRepository.delete(user);
+  }
+  
+  public Optional<User> findByEmail(String email) {
+	  return userRepository.findByEmail(email);
   }
 
   public List<UserListResponse> getAllUsers() {
