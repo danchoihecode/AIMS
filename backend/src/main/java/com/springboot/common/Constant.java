@@ -11,4 +11,5 @@ public class Constant {
     public static final double TAX_RATE = 0.1;
     public static final String[] SUPPORTED_PAYMENT_METHODS = {"VNPay"};
     public static final String ORDER_STATUS_PENDING = "PENDING";
+    public static final String ORDER_STATUS_CREATED = "CREATED";
 }

@@ -36,7 +36,10 @@ public class InvoiceService {
 		paymentTransactionRepository.save(transaction);
 		invoiceRepository.save(invoice);
 	}
-
+	public void createInvoice(Order order, PaymentTransaction transaction) {
+		Invoice invoice = new Invoice(order, transaction);
+		invoiceRepository.save(invoice);
+	}
 	public void cancelInvoice(Invoice invoice) {
 		invoiceRepository.delete(invoice);
 	}

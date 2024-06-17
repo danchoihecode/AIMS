@@ -22,17 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class DeliveryService {
     @Autowired
-    CartRepository cartRepository;
+    CartService cartService;
     @Autowired
-    CartProductRepository cartProductRepository;
-    @Autowired
-    OrderRepository orderRepository;
+    OrderService orderService;
     @Autowired
     DeliveryInfoRepository deliveryInfoRepository;
 
     public ShippingFeeDTO getShippingFee(Long cartId, int province, boolean isRushDelivery) {
-        cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("The cart with id " + cartId + " does not exist"));
-        List<CartProduct> cartProducts = cartProductRepository.findByCartId(cartId);
+        cartService.getCartById(cartId);
+        List<CartProduct> cartProducts = cartService.getAllProductsInCart(cartId);
         List<CartProduct> rushDeliveryProducts = getRushDeliveryProducts(cartProducts);
         boolean isRushSupported = Arrays.stream(Constant.RUSH_SUPPORTED_PROVINCES).anyMatch(p -> p == province) && !rushDeliveryProducts.isEmpty();
 
@@ -47,13 +45,10 @@ public class DeliveryService {
         return new ShippingFeeDTO(normalShippingFee, rushShippingFee, true);
 
     }
-    public void saveDeliveryInfo(Long cartId, ShippingFeeDTO shippingFee, DeliveryInfo deliveryInfo) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("The cart with id " + cartId + " does not exist"));
-        Order order = new Order(cart, shippingFee.getNormalShippingFee(), shippingFee.getRushShippingFee(), deliveryInfo);
-        orderRepository.findByCartId(cartId).ifPresent(value -> orderRepository.delete(value));
+    public Order saveDeliveryInfo(Long cartId, ShippingFeeDTO shippingFee, DeliveryInfo deliveryInfo) {
+        Cart cart = cartService.getCartById(cartId);
         deliveryInfoRepository.save(deliveryInfo);
-        orderRepository.save(order);
-
+        return orderService.createOrder(new Order(cart, shippingFee.getNormalShippingFee(), shippingFee.getRushShippingFee(), deliveryInfo));
     }
     private double calculateShippingFee(List<CartProduct> cartProducts, int province, boolean isRush) {
         if (cartProducts.isEmpty()) return 0;

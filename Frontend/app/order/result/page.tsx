@@ -13,6 +13,8 @@ export default function OrderResult() {
         searchParams.forEach((value, key) => {
             params[key] = value;
         });
+        params["paymentMethod"] = "VNPay";
+        console.log(JSON.stringify(params));
         savePayment(params).then(() => {
             const result = searchParams.get("vnp_TransactionStatus");
             if (!result) {

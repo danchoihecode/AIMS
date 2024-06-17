@@ -33,7 +33,7 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import DeliveryInfo from "./delivery-info";
 import { CartItemDTO } from "@/api/DTO/CartItemDTO";
-import { fetchDelivery, submitDelivery } from "@/api/delivery";
+import { getDeliveryFees, submitDelivery } from "@/api/delivery";
 import { DeliveryInfoDTO } from "@/api/DTO/DeliveryFormDTO";
 import { useRouter } from "next/navigation";
 
@@ -87,18 +87,17 @@ export default function DeliveryForm({
             address: deliveryInfo.street + " " + deliveryInfo.district,
             isRushOrder: true,
         };
-        console.log(deliveryData);
         const {data, error} = await submitDelivery(deliveryData, normalShippingFee, rushShippingFee);
         if (error) {
             toast.error("An error occurred while submitting the order");
             return;
         }
         localStorage.setItem("orderId", data.id);
-        router.push("/order/checkout/review");
+        router.push("/checkout/review");
     };
     const setDelivery = async (province: string, isRush: boolean) => {
         const { normalShippingFee, rushShippingFee, rushDeliveryAvailable } =
-            await fetchDelivery(province, isRush);
+            await getDeliveryFees(province, isRush);
         if (isRush && rushDeliveryAvailable === false) {
             toast.error("Your order cannot be rush delivery.");
             return;

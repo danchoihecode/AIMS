@@ -18,11 +18,6 @@ import com.springboot.service.CartService;
 @RequestMapping("/delivery")
 public class DeliveryController {
     @Autowired
-    private CartService cartService;
-
-    @Autowired
-    private OrderService orderService;
-    @Autowired
     private DeliveryService deliveryService;
 
 
@@ -33,9 +28,8 @@ public class DeliveryController {
     }
 
     @PostMapping("")
-    public String submitDeliveryForm(@RequestBody DeliveryInfoDTO deliveryInfoDTO) {
-        deliveryService.saveDeliveryInfo(deliveryInfoDTO.getCartId(), deliveryInfoDTO.getShippingFee(), deliveryInfoDTO.getDeliveryInfo());
-        return "Delivery info saved successfully";
+    public Order submitDeliveryForm(@RequestBody DeliveryInfoDTO deliveryInfoDTO) {
+        return deliveryService.saveDeliveryInfo(deliveryInfoDTO.getCartId(), deliveryInfoDTO.getShippingFee(), deliveryInfoDTO.getDeliveryInfo());
     }
 
 

@@ -1,5 +1,7 @@
 package com.springboot.service;
 
+import com.springboot.common.Constant;
+import com.springboot.exception.order.OrderNotFoundException;
 import com.springboot.model.entity.DeliveryInfo;
 import com.springboot.repository.DeliveryInfoRepository;
 import java.util.List;
@@ -29,26 +31,17 @@ public class OrderService {
 	private DeliveryInfoRepository deliveryInfoRepository;
 	@Autowired
 	private OrderRepository orderRepository;
-	private DeliveryInfo createDeliveryInfo(DeliveryInfo deliveryInfo) {
-		return deliveryInfoRepository.save(deliveryInfo);
-	}
 	public Order createOrder(Order order) {
-		Optional<Order> existingOrder = orderRepository.findByCartId(order.getCart().getId());
-        existingOrder.ifPresent(value -> orderRepository.delete(value));
-		DeliveryInfo deliveryInfo = order.getDeliveryInfo();
-		if (deliveryInfo != null) {
-			deliveryInfo = createDeliveryInfo(deliveryInfo);
-			order.setDeliveryInfo(deliveryInfo);
-		}
+		orderRepository.findByCartId(order.getCart().getId()).ifPresent(value -> orderRepository.delete(value));
 		return orderRepository.save(order);
 	}
 	public Order getOrderById(Long orderId) {
-		return orderRepository.findById(orderId).orElse(null);
+		return orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with id " + orderId + " not found"));
 	}
-
-	public Order findById(Long id) throws Exception {
-		Order order = orderRepository.findById(id).orElseThrow(() -> new Exception("Order not found"));
-		return order;
+	public Order processPaidOrder(Long orderId) {
+		Order order = getOrderById(orderId);
+		order.setState(Constant.ORDER_STATUS_PENDING);
+		return orderRepository.save(order);
 	}
 
 	public List<OrderResponse> getAllOrders() {

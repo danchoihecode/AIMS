@@ -8,11 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-
-/**
- *
- * @author CTT VNPAY
- */
 public class ConfigVNPay {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
@@ -24,7 +19,7 @@ public class ConfigVNPay {
     public static String vnp_Command_pay = "pay";
     public static String vnp_Command_refund = "refund";
     public static String vnp_TransactionType = "02";
-    public static String website_name = "aims_15";
+    public static String website_name = "AIMS - Media Store";
 
     public static String md5(String message) {
         String digest = null;

@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
         "Content-Type": "application/json",
     },
 });
-export const fetchDelivery = async (
+export const getDeliveryFees = async (
     provinceId: string,
     isRushDelivery: boolean
 ): Promise<ShippingFeeDTO> => {
@@ -40,7 +40,10 @@ export const submitDelivery = async (
     const cartId = localStorage.getItem("cartId");
     return axiosWithErrorHandling(axiosInstance, {
         method: "POST",
-        url: `${API_URL}`,
-        data: { deliveryInfo, normalShippingFee, rushShippingFee, cartId },
+        data: {
+            deliveryInfo,
+            shippingFee: { normalShippingFee, rushShippingFee },
+            cartId,
+        },
     });
 };

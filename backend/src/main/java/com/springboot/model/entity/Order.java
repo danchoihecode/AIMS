@@ -39,6 +39,7 @@ public class Order {
 		this.normalShippingFees = normalShippingFees;
 		this.rushShippingFees = rushShippingFees;
 		this.deliveryInfo = deliveryInfo;
+		this.state = Constant.ORDER_STATUS_CREATED;
 	}
 
 	public Double getTotalAmount() {

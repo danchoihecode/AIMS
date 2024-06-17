@@ -23,30 +23,33 @@ public class CartService {
 
     @Autowired
     private CartProductRepository cartProductRepository;
-
     @Autowired
     private CartRepository cartRepository;
-
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     public Cart createEmptyCart() {
         Cart cart = new Cart();
         cartRepository.save(cart);
         return cart;
     }
-    public List<CartProductDTO> getAllProductsInCart(Long cartId) {
-        cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart with id " + cartId + " not found"));
-        List<CartProduct> cartProduct = cartProductRepository.findByCartId(cartId);
-        return cartProduct.stream().map(CartProductDTO::new).toList();
+
+    public Cart getCartById(Long id) {
+        return cartRepository.findById(id).orElseThrow(() -> new CartNotFoundException("Cart with id " + id + " not found"));
     }
-    private void checkValidCartProduct(Long cartId, Long productId, Integer qty) {
-        cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart with id " + cartId + " not found"));
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id " + productId + " not found"));
+    public List<CartProduct> getAllProductsInCart(Long cartId) {
+        getCartById(cartId);
+        return cartProductRepository.findByCartId(cartId);
+    }
+
+    private void checkValidCartProduct(Long cartId, Long productId, Integer qty) throws Exception {
+        getCartById(cartId);
+        Product product = productService.getProductById(productId);
         if (product.getQtyInStock() < qty) {
             throw new ProductQuantityNotEnoughException("Not enough product in stock");
         }
     }
+
     public void addItemToCart(Long cartId, Long productId, Integer qty) throws Exception {
         checkValidCartProduct(cartId, productId, qty);
         CartProductKey key = new CartProductKey(cartId, productId);
@@ -59,9 +62,9 @@ public class CartService {
     }
 
 
-    public void updateCart(Long cartId, Long productId, Integer qty) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id " + productId + " not found"));
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart with id " + cartId + " not found"));
+    public void updateCart(Long cartId, Long productId, Integer qty) throws Exception {
+        Product product = productService.getProductById(productId);
+        Cart cart = getCartById(cartId);
         if (product.getQtyInStock() < qty) {
             throw new ProductQuantityNotEnoughException("Not enough product in stock");
         }
@@ -74,6 +77,7 @@ public class CartService {
         cartProductRepository.save(cartProduct);
         recalculateCartTotal(cart);
     }
+
     private void recalculateCartTotal(Cart cart) {
         List<CartProduct> cartProducts = cartProductRepository.findByCartId(cart.getId());
         double subTotal = cartProducts.stream().mapToDouble(cp -> cp.getProduct().getPrice() * cp.getQty()).sum();
@@ -81,13 +85,9 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public Cart getCartByCartId(Long id) throws Exception {
-        return cartRepository.findById(id).orElseThrow(() -> new Exception("Cart not found"));
-    }
-
-    public void deleteCartItem(Long cartId, Long productId) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException("Cart with id " + cartId + " not found"));
-        productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product with id " + productId + " not found"));
+    public void deleteCartItem(Long cartId, Long productId) throws Exception {
+        Cart cart = getCartById(cartId);
+        productService.getProductById(productId);
 
         CartProductKey key = new CartProductKey(cartId, productId);
         cartProductRepository.findById(key).orElseThrow(() -> new CartItemNotFoundException("Product with id " + productId + " not found in cart"));

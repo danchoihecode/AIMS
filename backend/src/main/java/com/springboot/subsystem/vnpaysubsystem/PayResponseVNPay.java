@@ -14,7 +14,7 @@ import com.springboot.exception.UnrecognizedException;
 import com.springboot.model.entity.PaymentTransaction;
 
 public class PayResponseVNPay {
-    private Map<String, String> response;
+    private final Map<String, String> response;
 
     public PayResponseVNPay(Map<String, String> response) {
         this.response = response;

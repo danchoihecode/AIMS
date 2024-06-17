@@ -119,7 +119,7 @@ export const addItemToCart = async (
     productId: number,
     quantity: number
 ): Promise<Response> => {
-    return await axiosWithErrorHandling(axiosInstance,{
+    const {data, error} =  await axiosWithErrorHandling(axiosInstance,{
         method: "POST",
         url: `/${localStorage.getItem("cartId")}/add`,
         data: {
@@ -127,6 +127,14 @@ export const addItemToCart = async (
             quantity,
         },
     });
+    if (error && error.response.status === 404 && error.response.data.startsWith("Cart")) {
+        await getEmptyCart();
+        return addItemToCart(productId, quantity);
+    }
+    return {
+        data,
+        error,
+    };
 }
 // export const updateCart = async (productId: string, qty: number) => {
 //     try {

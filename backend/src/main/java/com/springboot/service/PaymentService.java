@@ -5,27 +5,41 @@ import com.springboot.exception.order.OrderAlreadyPaidException;
 import com.springboot.exception.order.OrderNotFoundException;
 import com.springboot.exception.payment.PaymentMethodNotSupportedException;
 import com.springboot.model.entity.Order;
+import com.springboot.model.entity.PaymentTransaction;
 import com.springboot.repository.OrderRepository;
+import com.springboot.subsystem.PaymentStrategy;
+import com.springboot.subsystem.PaymentStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
 @Service
 public class PaymentService {
     @Autowired
-    private OrderRepository orderRepository;
-    public String generatePaymentLink(Long orderId, String paymentMethod) {
-        if (Arrays.asList(Constant.SUPPORTED_PAYMENT_METHODS).contains(paymentMethod)) {
-            throw new PaymentMethodNotSupportedException("Payment method " + paymentMethod + " is not supported");
-        }
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with id " + orderId + " not found"));
-        if (order.getState().equals(Constant.ORDER_STATUS_PENDING)) {
+    PaymentStrategyFactory paymentStrategyFactory;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private InvoiceService invoiceService;
+    public String generatePaymentLink(Long orderId, String paymentMethod) throws IOException {
+        Order order = orderService.getOrderById(orderId);
+        PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentMethod);
+        if (!order.getState().equals(Constant.ORDER_STATUS_CREATED)) {
             throw new OrderAlreadyPaidException("Order with id " + orderId + " is already paid");
         }
-
-
-
-        return "https://payment-gateway.com/payment?orderId=" + orderId + "&paymentMethod=" + paymentMethod;
+        return paymentStrategy.generateURL(order.getTotalAmount(), "Payment for order " + orderId);
+    }
+    public void savePaymentResult(Long orderId, String paymentMethod, Map<String, String> paymentResult) throws IOException {
+        Order order = orderService.getOrderById(orderId);
+        if (!order.getState().equals(Constant.ORDER_STATUS_CREATED)) {
+            throw new OrderAlreadyPaidException("Order with id " + orderId + " is already paid");
+        }
+        PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentMethod);
+        PaymentTransaction paymentTransaction = paymentStrategy.getPaymentTransaction(paymentResult);
+        orderService.processPaidOrder(orderId);
+        invoiceService.createInvoice(order, paymentTransaction);
     }
 }

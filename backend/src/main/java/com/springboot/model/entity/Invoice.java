@@ -39,5 +39,11 @@ public class Invoice {
 		this.currency = "VND";
 		this.amount = order.getTotalAmount();
 	}
+	public Invoice(Order order, PaymentTransaction paymentTransaction) {
+		this.order = order;
+		this.currency = "VND";
+		this.amount = order.getTotalAmount();
+		this.paymentTransaction = paymentTransaction;
+	}
 
 }

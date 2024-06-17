@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.springboot.subsystem.vnpaysubsystem.VNPayPaymentStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,7 @@ import com.springboot.model.response.OrderDetailResponse;
 import com.springboot.model.response.OrderResponse;
 import com.springboot.service.InvoiceService;
 import com.springboot.service.OrderService;
-import com.springboot.subsystem.IPaymentSubsystem;
-import com.springboot.subsystem.PaymentSubsystem;
-import com.springboot.subsystem.vnpaysubsystem.VNPaySubsystemController;
+import com.springboot.subsystem.PaymentStrategy;
 
 @RestController
 @RequestMapping("/admin")
@@ -32,10 +31,6 @@ public class ViewOrderController {
 	private OrderService orderService;
 	@Autowired
 	private InvoiceService invoiceService;
-	private IPaymentSubsystem payment;
-	public ViewOrderController() {
-		this.payment = new PaymentSubsystem(new VNPaySubsystemController());
-	}
 
 	@GetMapping("/orders")
 	public ResponseEntity<List<OrderResponse>> getAllOrders() {
@@ -70,6 +65,7 @@ public class ViewOrderController {
 	public ResponseEntity<?> rejectOrder(@RequestParam Long id) {
 		try {
 			PaymentTransaction paymentTransaction = invoiceService.getPaymentTransactionByOrderId(id);
+			PaymentStrategy payment = new VNPayPaymentStrategy();
 			RefundTransaction refundTransaction = payment.refund(paymentTransaction);
 			orderService.rejectOrder(id);
 			return ResponseEntity.ok(refundTransaction);

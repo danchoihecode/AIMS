@@ -8,12 +8,12 @@ import com.springboot.exception.UnrecognizedException;
 import com.springboot.model.entity.PaymentTransaction;
 import com.springboot.model.entity.RefundTransaction;
 
-public interface IPaymentSubsystem {
+public interface PaymentStrategy {
 
 	PaymentTransaction getPaymentTransaction(Map<String, String> res)
 			throws PaymentException, UnrecognizedException, IOException;
 
-	String generateURL(double d, String content) throws IOException;
+	String generateURL(double amount, String content) throws IOException;
 	RefundTransaction refund(PaymentTransaction paymentTransaction) throws IOException;
 
 }

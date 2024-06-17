@@ -10,6 +10,7 @@ export default function Checkout() {
     const taxRate = useRef(0);
     const [cartItems, setCartItems] = useState<CartItemDTO[]>([]);
     useEffect(() => {
+        document.title = "Checkout - E-commerce";
         getCartItems().then((response) => {
             if (response.error || !response.data.length) router.push("/cart");
             setCartItems(response.data);

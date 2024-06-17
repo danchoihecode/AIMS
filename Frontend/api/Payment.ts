@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 
 export const getPaymentURL = async () => {
     const { data, error } = await axiosWithErrorHandling(axiosInstance, {
-        url: '/VNPayURL',
+        url: '/pay',
         params: {
             orderId: localStorage.getItem("orderId"),
             paymentMethod: "VNPay",
@@ -24,10 +24,9 @@ export const getPaymentURL = async () => {
 }
 export const savePayment = async (paymentInfo: any) => {
     const orderId = localStorage.getItem("orderId");
-    console.log(orderId);
     const { error } = await axiosWithErrorHandling(axiosInstance, {
         method: "POST",
-        url: `/result/${5}`,
+        url: `/result/${orderId}`,
         data: paymentInfo,
     });
     console.log(error);
