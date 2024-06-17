@@ -24,14 +24,8 @@ import {
   Settings,
   SunMedium,
   Trash,
-<<<<<<< HEAD
-  User,
-  User2Icon,
-  UserX2Icon,
-=======
   UsersRound,
   User2Icon,
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   PackageSearch,
   ShoppingCart,
   X,
@@ -50,10 +44,6 @@ export const Icons = {
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   trash: Trash,
-<<<<<<< HEAD
-  employee: UserX2Icon,
-=======
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   post: FileText,
   page: File,
   media: Image,
@@ -62,11 +52,7 @@ export const Icons = {
   ellipsis: MoreVertical,
   add: Plus,
   warning: AlertTriangle,
-<<<<<<< HEAD
-  user: User,
-=======
   user: UsersRound,
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,

@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-export default  function NotFound(){
-    return <div>
-        NOT FOUND PAGE
-    </div>
-=======
 import Link from 'next/link';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
  
@@ -21,5 +15,4 @@ export default function NotFound() {
       </Link>
     </main>
   );
->>>>>>> b07a15e8229340d3646ddb7be785e7b564c5ec48
 }
