@@ -14,12 +14,8 @@ public class InvoiceController {
     InvoiceService invoiceService;
 
     @GetMapping("")
-    public ResponseEntity<Invoice> getInvoiceByOrderId(@RequestParam Long orderId) {
-        Invoice invoice = invoiceService.getInvoiceByOrderId(orderId);
-        if (invoice == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(invoice);
+    public Invoice getInvoiceByOrderId(@RequestParam Long orderId) {
+        return invoiceService.getInvoiceByOrderId(orderId);
     }
 
 }

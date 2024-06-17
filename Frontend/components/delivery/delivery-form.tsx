@@ -87,11 +87,20 @@ export default function DeliveryForm({
             address: deliveryInfo.street + " " + deliveryInfo.district,
             isRushOrder: true,
         };
-        const {data, error} = await submitDelivery(deliveryData, normalShippingFee, rushShippingFee);
+        const shippingFee = {
+            normalShippingFee,
+            rushShippingFee,
+            rushDeliveryAvailable: isRush,
+        };
+        const { data, error } = await submitDelivery(
+            deliveryData,
+            shippingFee
+        );
         if (error) {
             toast.error("An error occurred while submitting the order");
             return;
         }
+        console.log("Order submitted successfully:", data);
         localStorage.setItem("orderId", data.id);
         router.push("/checkout/review");
     };

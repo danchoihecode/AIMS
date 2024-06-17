@@ -8,10 +8,16 @@ import toast, { Toaster } from "react-hot-toast";
 import { addItemToCart } from "@/api/Cart";
 import { Product } from "@/api/DTO/CartItemDTO";
 
-export default function AddToCart({ product }: { product: Product }) {
+export default function AddToCart({
+    product,
+    styling,
+}: {
+    product: Product;
+    styling?: string;
+}) {
     const [quantity, setQuantity] = useState<number>(1);
     const handleAddToCart = async () => {
-        const {error} = await addItemToCart(product.id, quantity);
+        const { error } = await addItemToCart(product.id, quantity);
         if (error) {
             console.log(error);
             toast.error("An error occurred while adding to cart");
@@ -36,33 +42,37 @@ export default function AddToCart({ product }: { product: Product }) {
         setQuantity(parsedQty);
     };
     return (
-        <div className="flex space-x-4">
+        <>
             <Toaster />
-            <div className="flex space-x-2">
-                <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setQuantity((qty) => Math.max(0, qty - 1))}
-                >
-                    <Minus size={16} />
-                </Button>
-                <Input
-                    className="w-12"
-                    value={quantity}
-                    onChange={(e) => handleChangeQty(e.target.value)}
-                />
-                <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setQuantity((qty) => Math.max(qty + 1))}
-                >
-                    <Plus size={16} />
+            <div className={styling ? styling : "flex space-x-4"}>
+                <div className="flex space-x-2">
+                    <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() =>
+                            setQuantity((qty) => Math.max(0, qty - 1))
+                        }
+                    >
+                        <Minus size={16} />
+                    </Button>
+                    <Input
+                        className="w-12"
+                        value={quantity}
+                        onChange={(e) => handleChangeQty(e.target.value)}
+                    />
+                    <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() => setQuantity((qty) => Math.max(qty + 1))}
+                    >
+                        <Plus size={16} />
+                    </Button>
+                </div>
+                <Button onClick={handleAddToCart}>
+                    <ShoppingBag size={16} className="mr-4" />
+                    Add to cart
                 </Button>
             </div>
-            <Button onClick={handleAddToCart}>
-                <ShoppingBag size={16} className="mr-4" />
-                Add to cart
-            </Button>
-        </div>
+        </>
     );
 }

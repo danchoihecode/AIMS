@@ -36,7 +36,7 @@ public class ProductService {
         Product product = getProductById(productId);
         return product.getQtyInStock() >= qty;
     }
-    public Product getProductById(Long id) throws Exception {
+    public Product getProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("The product with id " + id + " does not exist"));
     }

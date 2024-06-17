@@ -25,9 +25,10 @@ public class PaymentController {
 		return paymentService.generatePaymentLink(orderId, paymentMethod);
 
 	}
-	@GetMapping("/refund")
-	public void refund(@RequestParam Long orderId) throws IOException {
-		paymentService.refundPayment(orderId);
+
+	@PostMapping("/refund")
+	public void cancelOrder(@RequestBody Map<String, Long> reqBody) throws IOException {
+		paymentService.refundPayment(reqBody.get("orderId"));
 	}
 
 }

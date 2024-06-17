@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class CartExceptionHandler {
 
     @ExceptionHandler({CartNotFoundException.class, CartItemNotFoundException.class})
-    public ResponseEntity<String> handleCartNotFoundException(CartNotFoundException ex) {
+    public ResponseEntity<String> handleCartNotFoundException(CartException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

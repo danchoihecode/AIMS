@@ -19,9 +19,4 @@ public class OrderController {
     public Order getOrderById(@RequestParam Long orderId) {
         return orderService.getOrderById(orderId);
     }
-    @PostMapping("/cancel")
-    public void cancelOrder(@RequestBody Map<String, Long> reqBody) throws IOException {
-        orderService.cancelOrder(reqBody.get("orderId"));
-    }
-
 }

@@ -1,5 +1,7 @@
 package com.springboot.service;
 
+import com.springboot.common.Constant;
+import com.springboot.exception.order.OrderNotFoundException;
 import com.springboot.model.entity.Order;
 import com.springboot.repository.PaymentTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,10 @@ public class InvoiceService {
 
 	}
 	public Invoice getInvoiceByOrderId(Long orderId) {
-		return invoiceRepository.findByOrderId(orderId);
+		Invoice invoice = invoiceRepository.findByOrderId(orderId).orElseThrow(() -> new OrderNotFoundException("Invoice with order id " + orderId + " not found"));
+		Order order = invoice.getOrder();
+		if (order.getState().equals(Constant.ORDER_STATUS_CREATED)) throw new OrderNotFoundException("Order with id " + orderId + " not found");
+		return invoice;
 	}
 
 	public void createInvoice(Order order, PaymentTransaction transaction) {

@@ -4,7 +4,7 @@ import { CartItemDTO } from "@/api/DTO/CartItemDTO";
 import { TransactionDTO } from "@/api/DTO/InvoiceDTO";
 import { OrderDTO } from "@/api/DTO/OrderDTO";
 import { getInvoiceByOrderId } from "@/api/Invoice";
-import { cancelOrder } from "@/api/Order";
+import { refundPayment } from "@/api/Payment";
 import CheckoutDeliveryInfo from "@/components/checkout/checkout-delivery-info";
 import {
     Item,
@@ -35,7 +35,7 @@ export default function OrderPage() {
     const handleCheckOrder = async () => {
         const orderResponse = await getInvoiceByOrderId(orderId);
         if (orderResponse.error) {
-            toast.error("Order not found: " + orderId);
+            toast.error("The order was not found");
             return;
         }
         const cartItemsResponse = await getCartItemsByCartId(
@@ -51,7 +51,7 @@ export default function OrderPage() {
     };
 
     const handleCancelOrder = async () => {
-        const { error } = await cancelOrder(orderId);
+        const { error } = await refundPayment(orderId);
         if (error) {
             toast.error("An error occurred while cancelling the order");
             return;
@@ -60,7 +60,7 @@ export default function OrderPage() {
         setOrder(undefined);
         setCartItems([]);
         setTransaction(undefined);
-    }
+    };
     useEffect(() => {
         getTaxRate().then((data) => {
             taxRate.current = data;
@@ -83,6 +83,7 @@ export default function OrderPage() {
         (order?.rushShippingFees || 0);
     return (
         <>
+            <Toaster />
             {order ? (
                 <div className=" max-w-[48rem] space-y-8 m-auto">
                     <div className="flex space-x-4 justify-center items-center">
@@ -139,14 +140,17 @@ export default function OrderPage() {
                         transaction={transaction as TransactionDTO}
                     />
                     {order?.state === ORDER_STATE_PENDING && (
-                        <Button variant="destructive" className="w-1/2 m-auto" onClick={handleCancelOrder}>
+                        <Button
+                            variant="destructive"
+                            className="w-1/2 m-auto"
+                            onClick={handleCancelOrder}
+                        >
                             Cancel Order
                         </Button>
                     )}
                 </div>
             ) : (
                 <div className="space-y-4 text-center">
-                    <Toaster />
                     <ShoppingBag size={96} strokeWidth={1} className="m-auto" />
                     <div className="space-y-2">
                         <h1 className="text-xl font-bold">Track Your Order</h1>

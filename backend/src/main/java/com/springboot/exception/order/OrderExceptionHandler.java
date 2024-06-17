@@ -13,7 +13,7 @@ public class OrderExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler({OrderAlreadyPaidException.class, InvalidOrderCancellationException.class, InvalidDeliveryInfoException.class})
-    public ResponseEntity<String> handleInvalidInformationException(OrderAlreadyPaidException ex) {
+    public ResponseEntity<String> handleInvalidInformationException(OrderException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(OrderException.class)

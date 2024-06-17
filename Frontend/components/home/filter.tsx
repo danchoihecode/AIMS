@@ -17,18 +17,18 @@ export default function CategoryFilter({setFilter, filter}: {setFilter: any; fil
     const params = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
-    const categoryFilter = filter.category ?? ['book', 'cd', 'dvd', 'ld'];
+    const categoryFilter = filter.category ?? ['book', 'cd', 'dvd', 'lp'];
     const category: Record<string, boolean> = {
         book: categoryFilter.includes("book"),
         cd: categoryFilter.includes("cd"),
         dvd: categoryFilter.includes("dvd"),
-        ld: categoryFilter.includes("ld"),
+        lp: categoryFilter.includes("lp"),
     };
     const [allCategory, setAllCategory] = useState<boolean>(false);
     const [booksCategory, setBooksCategory] = useState<boolean>(category.book);
     const [cdCategory, setCdCategory] = useState<boolean>(category.cd);
     const [dvdCategory, setDvdCategory] = useState<boolean>(category.dvd);
-    const [ldCategory, setLdCategory] = useState<boolean>(category.ld);
+    const [lpCategory, setLdCategory] = useState<boolean>(category.lp);
     const handleSelectAll = (checked: boolean) => {
         setAllCategory(checked);
         setBooksCategory(checked);
@@ -47,7 +47,7 @@ export default function CategoryFilter({setFilter, filter}: {setFilter: any; fil
     };
     useEffect(() => {
       const seachParams = new URLSearchParams(params);
-      if (booksCategory && cdCategory && dvdCategory && ldCategory) {
+      if (booksCategory && cdCategory && dvdCategory && lpCategory) {
             setAllCategory(true);
             seachParams.delete("filter");            
         } else {
@@ -56,13 +56,13 @@ export default function CategoryFilter({setFilter, filter}: {setFilter: any; fil
             if (booksCategory) categoryFilter.push("book");
             if (cdCategory) categoryFilter.push("cd");
             if (dvdCategory) categoryFilter.push("dvd");
-            if (ldCategory) categoryFilter.push("ld");
+            if (lpCategory) categoryFilter.push("lp");
             seachParams.set("filter", categoryFilter.join(" "));
             setFilter((prev: any) => ({...prev, category: categoryFilter}));
         }
         replace(`${pathname}?${seachParams.toString()}`);
         
-    }, [booksCategory, cdCategory, dvdCategory, ldCategory]);
+    }, [booksCategory, cdCategory, dvdCategory, lpCategory]);
     return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -97,10 +97,10 @@ export default function CategoryFilter({setFilter, filter}: {setFilter: any; fil
                         DVDs
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem
-                        checked={ldCategory}
+                        checked={lpCategory}
                         onCheckedChange={setLdCategory}
                     >
-                        Laser Discs
+                        LP Records
                     </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>

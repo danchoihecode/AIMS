@@ -1,5 +1,4 @@
 import axios from "axios";
-import { CartItemDTO } from "./DTO/CartItemDTO";
 import { DeliveryInfoDTO, ShippingFeeDTO } from "./DTO/DeliveryFormDTO";
 import { axiosWithErrorHandling } from "./axiosConfig";
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/delivery`;
@@ -34,15 +33,14 @@ export const getDeliveryFees = async (
 };
 export const submitDelivery = async (
     deliveryInfo: DeliveryInfoDTO,
-    normalShippingFee: number,
-    rushShippingFee: number
+    shippingFee: ShippingFeeDTO
 ) => {
     const cartId = localStorage.getItem("cartId");
     return axiosWithErrorHandling(axiosInstance, {
         method: "POST",
         data: {
             deliveryInfo,
-            shippingFee: { normalShippingFee, rushShippingFee },
+            shippingFee,
             cartId,
         },
     });

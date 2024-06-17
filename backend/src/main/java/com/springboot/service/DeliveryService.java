@@ -48,7 +48,7 @@ public class DeliveryService {
     }
     public Order saveDeliveryInfo(Long cartId, ShippingFeeDTO shippingFee, DeliveryInfo deliveryInfo) {
         Cart cart = cartService.getCartById(cartId);
-        if (!deliveryInfo.isValid()) throw new InvalidDeliveryInfoException("Invalid delivery information");
+        if (!deliveryInfo.isValid(shippingFee.isRushDeliveryAvailable())) throw new InvalidDeliveryInfoException("Invalid delivery information");
         deliveryInfoRepository.save(deliveryInfo);
         return orderService.createOrder(new Order(cart, shippingFee.getNormalShippingFee(), shippingFee.getRushShippingFee(), deliveryInfo));
     }

@@ -5,6 +5,7 @@ import com.springboot.model.entity.RefundTransaction;
 import com.springboot.subsystem.PaymentStrategy;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
@@ -18,7 +19,9 @@ public class VNPayPaymentStrategy implements PaymentStrategy {
         PayResponseVNPay payResponseVNPay = new PayResponseVNPay(res);
         return payResponseVNPay.getPaymentTransaction();
     }
-    public RefundTransaction refund(PaymentTransaction paymentTransaction) {
+    public RefundTransaction refund(PaymentTransaction paymentTransaction) throws IOException {
+        RefundRequestVNPay refundRequestVNPay = new RefundRequestVNPay(paymentTransaction);
+        refundRequestVNPay.refund();
         return null;
     }
 

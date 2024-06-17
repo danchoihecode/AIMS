@@ -30,9 +30,10 @@ public class DeliveryInfo {
     private boolean isRushOrder;
     private Long province;
 
-    public boolean isValid() {
-        return validateName(this.name) && validatePhoneNumber(this.phone) && validateAddress(this.address) && validateEmail(this.email)
-                && validateInstructions(this.instructions) && validateDeliveryTime(this.deliveryTime);
+    public boolean isValid(boolean isRushOrder) {
+        boolean normalDeliveryCondition = validateName(this.name) && validatePhoneNumber(this.phone) && validateAddress(this.address) && validateEmail(this.email);
+        if (!isRushOrder) return normalDeliveryCondition;
+        return normalDeliveryCondition && validateInstructions(this.instructions) && validateDeliveryTime(this.deliveryTime);
     }
 
     public boolean validatePhoneNumber(String phoneNumber) {
@@ -53,7 +54,7 @@ public class DeliveryInfo {
             return false;
         if (name.trim().isEmpty())
             return false;
-        return name.matches("^[a-zA-Z ]*$");
+        return name.matches("^[\\p{L} .'-]+$");
     }
 
     public boolean validateAddress(String address) {
@@ -61,7 +62,7 @@ public class DeliveryInfo {
             return false;
         if (address.trim().isEmpty())
             return false;
-        return address.matches("^[a-zA-Z0-9 ,.-]*$");
+        return address.matches("^[\\p{L}0-9 ,.-]*$");
     }
 
     public boolean validateEmail(String email) {

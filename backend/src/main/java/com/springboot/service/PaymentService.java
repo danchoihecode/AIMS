@@ -1,19 +1,16 @@
 package com.springboot.service;
 
 import com.springboot.common.Constant;
+import com.springboot.exception.order.InvalidOrderCancellationException;
 import com.springboot.exception.order.OrderAlreadyPaidException;
-import com.springboot.exception.order.OrderNotFoundException;
-import com.springboot.exception.payment.PaymentMethodNotSupportedException;
 import com.springboot.model.entity.Order;
 import com.springboot.model.entity.PaymentTransaction;
-import com.springboot.repository.OrderRepository;
 import com.springboot.subsystem.PaymentStrategy;
 import com.springboot.subsystem.PaymentStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
 @Service
@@ -45,8 +42,9 @@ public class PaymentService {
     public void refundPayment(Long orderId) throws IOException {
         Order order = orderService.getOrderById(orderId);
         if (!order.getState().equals(Constant.ORDER_STATUS_PENDING)) {
-            throw new OrderNotFoundException("Order with id " + orderId + " is not paid yet");
+            throw new InvalidOrderCancellationException("Order with id " + orderId + " cannot be canceled");
         }
+        orderService.cancelOrder(orderId);
         PaymentTransaction paymentTransaction = invoiceService.getPaymentTransactionByOrderId(orderId);
         PaymentStrategy paymentStrategy = paymentStrategyFactory.getPaymentStrategy(paymentTransaction.getPaymentMethod());
         paymentStrategy.refund(paymentTransaction);

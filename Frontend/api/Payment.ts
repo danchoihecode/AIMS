@@ -29,7 +29,17 @@ export const savePayment = async (paymentInfo: any) => {
         url: `/result/${orderId}`,
         data: paymentInfo,
     });
-    console.log(error);
+    return {
+        data: null,
+        error,
+    };
+}
+export const refundPayment = async (orderId: string) => {
+    const { error } = await axiosWithErrorHandling(axiosInstance, {
+        method: "POST",
+        url: `/refund`,
+        data: {orderId}
+    });
     return {
         data: null,
         error,

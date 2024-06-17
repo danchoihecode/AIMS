@@ -32,17 +32,12 @@ public class OrderService {
 	private CartProductRepository cartProductRepository;
 	@Autowired
 	private OrderRepository orderRepository;
-	@Autowired
-	private PaymentService paymentService;
 	public Order createOrder(Order order) {
 		orderRepository.findByCartId(order.getCart().getId()).ifPresent(value -> orderRepository.delete(value));
 		return orderRepository.save(order);
 	}
 	public Order getOrderById(Long orderId) {
 		Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order with id " + orderId + " not found"));
-		if (order.getState().equals(Constant.ORDER_STATUS_CREATED)) {
-			throw new OrderNotFoundException("Order with id " + orderId + " is not paid yet");
-		}
 		return order;
 	}
 	public Order processPaidOrder(Long orderId) {
@@ -56,24 +51,12 @@ public class OrderService {
 				order.getDeliveryInfo().getName(), order.getTotalAmount(), order.getState()))
 				.collect(Collectors.toList());
 	}
-	public void cancelOrder(Long id) throws IOException {
+	public void cancelOrder(Long id) {
 		Order order = getOrderById(id);
 		if (!order.getState().equals(Constant.ORDER_STATUS_PENDING)) {
 			throw new InvalidOrderCancellationException("Order with id " + id + " cannot be cancelled");
 		}
-		paymentService.refundPayment(order.getId());
 		order.setState(Constant.ORDER_STATUS_CANCELLED);
-		orderRepository.save(order);
-	}
-	public void serOrderPending(Long id) throws Exception {
-		Order order = orderRepository.findById(id).orElse(null);
-		if (order == null) {
-			throw new Exception("Order not found with id: " + id);
-		}
-		if (order.getState() != null) {
-			throw new Exception("Order is already in state: " + order.getState());
-		}
-		order.setState("Pending");
 		orderRepository.save(order);
 	}
 	public OrderDetailResponse getOrderDetail(Long id) throws Exception {
