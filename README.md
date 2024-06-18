@@ -54,9 +54,9 @@ All use cases related to Place order
 Complete the entire AIMS project
 ## Work done
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
-- Do Hong Hai 20215199: 
+- Do Hong Hai 20215199: View cart, Update cart, Place order (includes Place rush order and Pay order), View order information, Cancel order
 - Duong Hoang Hai 20215198: View list of orders, Approve order, Reject order, Login (Backend), Change password (Backend)
-- Nguyen Huu Hai 20215200: 
+- Nguyen Huu Hai 20215200: View List of product in homepage, Search Product, View product detail information, Add product to cart
 - Dang Phuc Hieu 20194759: CRUD Product, Update product price, Login (Frontend)
 # Tech stack
 - Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
