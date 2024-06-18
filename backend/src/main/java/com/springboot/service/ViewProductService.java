@@ -1,7 +1,11 @@
 package com.springboot.service;
 
+import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.User;
+import com.springboot.repository.CartProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.springboot.model.entity.Product;
 import com.springboot.repository.ProductRepository;
@@ -13,6 +17,10 @@ import java.util.Optional;
 public class ViewProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CartProductRepository cartProductRepository;
+
+    private CartProductService cardProductService;
 
     public boolean checkInventory(Long productId, Integer qty) throws Exception {
         Product product = productRepository.findById(productId)
@@ -52,11 +60,16 @@ public class ViewProductService {
     public void save(Product product) {
         productRepository.save(product);
     }
-    public void deleteProduct(Long id) {
+    public ResponseEntity<String> deleteProduct(Long id) {
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
-
+        List<CartProduct> cardProduct = cartProductRepository.findByProductId(id);
+        if (!cardProduct.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Product cannot be deleted because it is in the cart.");
+        }
         productRepository.delete(product);
-    }
+
+        return ResponseEntity.ok("Product deleted successfully.");    }
 }
 
