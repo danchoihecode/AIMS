@@ -2,6 +2,7 @@ package com.springboot.service;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.Optional;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,10 @@ public class UserService {
 
   public void delete(User user) {
     userRepository.delete(user);
+  }
+  
+  public Optional<User> findByEmail(String email) {
+	  return userRepository.findByEmail(email);
   }
 
   public List<UserListResponse> getAllUsers() {
