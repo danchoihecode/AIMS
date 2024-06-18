@@ -2,13 +2,12 @@ package com.springboot.service;
 
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.User;
-import com.springboot.repository.CartProductRepository;
+import com.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.springboot.model.entity.Product;
-import com.springboot.repository.ProductRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,14 @@ public class ViewProductService {
     private ProductRepository productRepository;
     @Autowired
     private CartProductRepository cartProductRepository;
+    @Autowired
+    private BookRespository bookRespository;
+    @Autowired
+    private CDRespository cdRespository;
+    @Autowired
+    private DVDRespository dvdRespository;
+    @Autowired
+    private LPRespository lpRespository;
 
     private CartProductService cardProductService;
 
@@ -64,12 +71,25 @@ public class ViewProductService {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
-        List<CartProduct> cardProduct = cartProductRepository.findByProductId(id);
-        if (!cardProduct.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Product cannot be deleted because it is in the cart.");
+        switch (product.getCategory().toLowerCase()) {
+            case "book":
+                bookRespository.deleteById(id);
+                break;
+            case "lp":
+                lpRespository.deleteById(id);
+                break;
+            case "dvd":
+                dvdRespository.deleteById(id);
+                break;
+            case "cd":
+                cdRespository.deleteById(id);
+                break;
+            default:
+                break;
         }
         productRepository.delete(product);
 
-        return ResponseEntity.ok("Product deleted successfully.");    }
+        return ResponseEntity.ok("Product deleted successfully.");
+    }
 }
 
