@@ -1,4 +1,4 @@
-package com.springboot.model.response;
+package com.springboot.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

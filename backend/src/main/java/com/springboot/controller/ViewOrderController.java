@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.model.response.OrderDetailResponse;
-import com.springboot.model.response.OrderResponse;
+import com.springboot.model.dto.OrderDetailResponse;
+import com.springboot.model.dto.OrderResponse;
 import com.springboot.service.OrderService;
 
 @RestController

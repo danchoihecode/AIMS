@@ -1,4 +1,4 @@
-package com.springboot.service.auth;
+package com.springboot.model.dto;
 
 public class LoginResponse {
     private String token;

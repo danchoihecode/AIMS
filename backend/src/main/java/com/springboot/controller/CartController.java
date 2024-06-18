@@ -1,7 +1,7 @@
 package com.springboot.controller;
 
 import com.springboot.common.Constant;
-import com.springboot.dto.CartProductDTO;
+import com.springboot.model.dto.CartProductDTO;
 import com.springboot.model.entity.Cart;
 import com.springboot.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;

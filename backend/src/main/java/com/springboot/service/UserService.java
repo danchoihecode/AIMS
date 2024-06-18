@@ -7,10 +7,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.springboot.model.dto.UserListResponse;
+import com.springboot.model.dto.UserResponse;
 import com.springboot.model.entity.User;
 import com.springboot.repository.UserRepository;
-import com.springboot.model.response.UserListResponse;
-import com.springboot.model.response.UserResponse;
 
 @Service
 public class UserService {

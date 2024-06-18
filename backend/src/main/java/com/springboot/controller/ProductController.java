@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.model.dto.ClientProductDTO;
 import com.springboot.model.entity.Product;
-import com.springboot.model.response.ClientProductDTO;
 import com.springboot.service.ProductService;
 
 @CrossOrigin(origins = "http://localhost:3000")

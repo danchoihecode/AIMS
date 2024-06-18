@@ -1,4 +1,4 @@
-package com.springboot.dto;
+package com.springboot.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.springboot.model.entity.CartProduct;
