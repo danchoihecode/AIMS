@@ -29,32 +29,6 @@ public class PaymentTransaction {
 	private int amount;
 	private String paymentMethod;
 
-//	public PaymentTransaction(String transactionId, String transactionContent, int amount,
-//			String createdAt, String transactionNum) {
-//		super();
-//		this.transactionId = transactionId;
-//		this.transactionNum = transactionNum;
-//		this.transactionContent = transactionContent;
-//		this.amount = amount;
-//		this.createdAt = createdAt;
-//	}
-//
-//	public PaymentTransaction(String errorCode, String transactionId, String transactionContent,
-//			int amount, String createdAt, String transactionNum) {
-//		super();
-//		this.errorCode = errorCode;
-//		this.transactionId = transactionId;
-//		this.transactionNum = transactionNum;
-//		this.transactionContent = transactionContent;
-//		this.amount = amount;
-//		this.createdAt = createdAt;
-//		if ("00".equals(getErrorCode())) {
-//			message = "Successful transaction";
-//		} else {
-//			message = "Transaction failed";
-//		}
-//	}
-
 	public static PaymentTransaction getPaymentTransactionByOrderId(Long orderId) throws SQLException {
 		return null;
 	}

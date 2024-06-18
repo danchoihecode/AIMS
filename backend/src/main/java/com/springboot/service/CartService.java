@@ -2,21 +2,18 @@ package com.springboot.service;
 
 import java.util.List;
 
-import com.springboot.exception.cart.CartItemNotFoundException;
-import com.springboot.exception.cart.CartNotFoundException;
-import com.springboot.exception.product.ProductNotFoundException;
-import com.springboot.exception.product.ProductQuantityNotEnoughException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.springboot.model.dto.CartProductDTO;
+import com.springboot.exception.cart.CartItemNotFoundException;
+import com.springboot.exception.cart.CartNotFoundException;
+import com.springboot.exception.product.ProductQuantityNotEnoughException;
 import com.springboot.model.entity.Cart;
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.CartProductKey;
 import com.springboot.model.entity.Product;
 import com.springboot.repository.CartProductRepository;
 import com.springboot.repository.CartRepository;
-import com.springboot.repository.ProductRepository;
 
 @Service
 public class CartService {

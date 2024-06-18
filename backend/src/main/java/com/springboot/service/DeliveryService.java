@@ -1,24 +1,20 @@
 package com.springboot.service;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.springboot.common.Constant;
-import com.springboot.exception.cart.CartNotFoundException;
 import com.springboot.exception.order.InvalidDeliveryInfoException;
 import com.springboot.model.dto.ShippingFeeDTO;
 import com.springboot.model.entity.Cart;
 import com.springboot.model.entity.CartProduct;
 import com.springboot.model.entity.DeliveryInfo;
 import com.springboot.model.entity.Order;
-import com.springboot.repository.CartProductRepository;
-import com.springboot.repository.CartRepository;
 import com.springboot.repository.DeliveryInfoRepository;
-import com.springboot.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class DeliveryService {
