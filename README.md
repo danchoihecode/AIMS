@@ -61,9 +61,9 @@ Complete the entire AIMS project
 ## Making SDD
 - Bui Hoang Ha 20205149: Screen Transition Diagrams (4.1.2), Data Modeling (4.2), Non-Database Management System Files (4.3)
 - Do Hong Hai 20215199: Design Considerations (5)
-- Duong Hoang Hai 20215198: Screen Configuration Standardization (4.1.1), General Class Diagram (4.4.1), Class Diagrams (4.4.2.1 - 4.4.2.4)
+- Duong Hoang Hai 20215198: Screen Configuration Standardization (4.1.1), General Class Diagram (4.4.1), Class Diagrams (4.4.2)
 - Nguyen Huu Hai 20215200: Introduction (1), Overall Description (2), Architectural Patterns (3.1), Security Software Architecture (3.5)
-- Dang Phuc Hieu 20194759: Class Diagrams (4.4.2.5 - 4.4.2.8)
+- Dang Phuc Hieu 20194759: Did not participate (only did individual part)
 # Tech stack
 - Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
 - Backend :  Spring Boot and JWT authentication, Java, MySQL
