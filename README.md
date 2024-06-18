@@ -52,12 +52,18 @@ All use cases related to Place order
 
 ## 3/6-18/6/2024
 Complete the entire AIMS project
-## Work done
+## Use cases
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
 - Do Hong Hai 20215199: View cart, Update cart, Place order (includes Place rush order and Pay order), View order information, Cancel order
 - Duong Hoang Hai 20215198: View list of orders, Approve order, Reject order, Login (Backend), Change password (Backend)
 - Nguyen Huu Hai 20215200: View List of product in homepage, Search Product, View product detail information, Add product to cart
-- Dang Phuc Hieu 20194759: CRUD Product, Update product price, Login (Frontend)
+- Dang Phuc Hieu 20194759: CRUD Product, Update product price (Not finish), Login (Frontend)
+## Making SDD
+- Bui Hoang Ha 20205149: Screen Transition Diagrams (4.1.2), Data Modeling (4.2), Non-Database Management System Files (4.3)
+- Do Hong Hai 20215199: Design Considerations (5)
+- Duong Hoang Hai 20215198: Screen Configuration Standardization (4.1.1), General Class Diagram (4.4.1), Class Diagrams (4.4.2.1 - 4.4.2.4)
+- Nguyen Huu Hai 20215200: Introduction (1), Overall Description (2), Architectural Patterns (3.1), Security Software Architecture (3.5)
+- Dang Phuc Hieu 20194759: Class Diagrams (4.4.2.5 - 4.4.2.8)
 # Tech stack
 - Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
 - Backend :  Spring Boot and JWT authentication, Java, MySQL
