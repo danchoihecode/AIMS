@@ -24,17 +24,7 @@ public class CartController {
 	public List<CartProductDTO> getAllProductsInCart(@RequestParam("cartId") Long cartId) {
 		return cartService.getAllProductsInCart(cartId).stream().map(CartProductDTO::new).toList();
 	}
-//	@PostMapping("/{cartId}")
-//	public ResponseEntity<String> updatedCart(@RequestBody List<CartProductDTO> cartItems, @PathVariable("cartId") Long cartId) {
-//		try {
-//			for (CartProductDTO cartItem : cartItems) {
-//				cartService.updateCart(cartId, cartItem.getProductId(), cartItem.getQuantity());
-//			}
-//			return ResponseEntity.ok("Update cart successfully");
-//		} catch (Exception e) {
-//			return new ResponseEntity<>("Update cart failed", HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
+
 	@PostMapping("/{cartId}/add")
 	public String addCartItem(@RequestBody CartProductDTO item, @PathVariable("cartId") Long cartId) throws Exception {
 		cartService.addItemToCart(cartId, item.getProductId(), item.getQuantity());

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.model.dto.LoginResponse;
 import com.springboot.model.dto.LoginUser;
 import com.springboot.model.entity.User;
-import com.springboot.repository.UserRepository;
+import com.springboot.service.UserService;
 import com.springboot.service.auth.AuthenticationService;
 import com.springboot.service.auth.JwtService;
 
@@ -27,7 +27,7 @@ public class AuthenticationController {
 	private final AuthenticationService authenticationService;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -56,14 +56,14 @@ public class AuthenticationController {
 		String newPassword = requestBody.get("newPassword");
 		String email = jwtService.extractUsername(token);
 
-		Optional<User> optionalUser = userRepository.findByEmail(email);
+		Optional<User> optionalUser = userService.findByEmail(email);
 		if (!optionalUser.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
 		} else {
 			User user = optionalUser.get();
 			String hashedPassword = passwordEncoder.encode(newPassword);
 			user.setPassword(hashedPassword);
-			userRepository.save(user);
+			userService.save(user);
 
 			return ResponseEntity.ok("Password changed successfully");
 		}
