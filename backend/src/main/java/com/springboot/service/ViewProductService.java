@@ -71,6 +71,13 @@ public class ViewProductService {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id " + id));
+
+        List<CartProduct> cartProducts = cartProductRepository.findByProductId(id);
+
+        if (!cartProducts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Product cannot be deleted because it is in the cart.");
+
+        }
         switch (product.getCategory().toLowerCase()) {
             case "book":
                 bookRespository.deleteById(id);

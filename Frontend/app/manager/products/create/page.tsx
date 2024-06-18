@@ -35,6 +35,9 @@ export default function Component() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const router = useRouter();
+
+  const [rushOrderEligible, setRushOrderEligible] = useState(false);
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -71,7 +74,7 @@ export default function Component() {
       image: formData.get('image') as string,
       year: parseInt(formData.get('year') as string),
       category: formData.get('category') as string,
-      rushOrderEligible: formData.get('rushOrderEligible') === 'true'
+      rushOrderEligible: rushOrderEligible
     };
   
     try {
@@ -146,9 +149,17 @@ export default function Component() {
               </select>
             </div>
             <div className="md:col-span-2">
-              <Label>Rush Order Eligible:</Label>
-              <Checkbox name="rushOrderEligible" />
-            </div>
+        <Label>Rush Order Eligible:</Label>
+        <input
+          type="checkbox"
+          name="rushOrderEligible"
+          checked={rushOrderEligible}
+          onChange={(e) => {
+            setRushOrderEligible(e.target.checked);
+          }}
+          
+        />
+        </div>
             <div className="md:col-span-2">
               <Button type="submit">Create Product</Button>
             </div>
