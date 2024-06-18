@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th6 06, 2024 lúc 06:26 PM
+-- Thời gian đã tạo: Th6 18, 2024 lúc 04:23 AM
 -- Phiên bản máy phục vụ: 10.4.25-MariaDB
 -- Phiên bản PHP: 8.1.10
 
@@ -38,6 +38,17 @@ CREATE TABLE `book` (
   `publisher` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `book`
+--
+
+INSERT INTO `book` (`id`, `author`, `cover_type`, `genre`, `language`, `number_of_pages`, `publication_date`, `publisher`) VALUES
+(1, 'F. Scott Fitzgerald', 'Hardcover', 'Fiction', 'English', 180, '1925-04-10 00:00:00.000000', 'Scribner'),
+(6, 'J.K. Rowling', 'Hardcover', 'Fantasy', 'English', 309, '1997-06-26 00:00:00.000000', 'Bloomsbury'),
+(10, 'J.R.R. Tolkien', 'Hardcover', 'Fantasy', 'English', 310, '1937-09-21 00:00:00.000000', 'George Allen & Unwin'),
+(14, 'George Orwell', 'Paperback', 'Dystopian', 'English', 328, '1949-06-08 00:00:00.000000', 'Secker & Warburg'),
+(18, 'Jane Austen', 'Hardcover', 'Romance', 'English', 279, '1813-01-28 00:00:00.000000', 'T. Egerton');
+
 -- --------------------------------------------------------
 
 --
@@ -54,7 +65,11 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`subtotal`, `id`) VALUES
-(270, 1);
+(270, 1),
+(90, 2),
+(2100000, 301),
+(NULL, 302),
+(NULL, 303);
 
 -- --------------------------------------------------------
 
@@ -73,8 +88,17 @@ CREATE TABLE `cart_product` (
 --
 
 INSERT INTO `cart_product` (`qty`, `cart_id`, `product_id`) VALUES
-(3, 1, 1),
-(7, 1, 2);
+(3, 1, 4),
+(3, 2, 3),
+(1, 301, 2),
+(1, 301, 3),
+(1, 301, 4),
+(1, 301, 5),
+(1, 301, 6),
+(1, 301, 10),
+(1, 301, 11),
+(1, 301, 15),
+(1, 301, 16);
 
 -- --------------------------------------------------------
 
@@ -91,6 +115,17 @@ CREATE TABLE `cd` (
   `tracklist` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `cd`
+--
+
+INSERT INTO `cd` (`id`, `artist`, `genre`, `record_label`, `release_date`, `tracklist`) VALUES
+(3, 'The Beatles', 'Rock', 'Apple Records', '1969-09-26 00:00:00.000000', 'Come Together, Something, Maxwell\'s Silver Hammer, etc.'),
+(8, 'Michael Jackson', 'Pop', 'Epic Records', '1982-11-30 00:00:00.000000', 'Wanna Be Startin\' Somethin\', Thriller, Beat It...'),
+(12, 'Pink Floyd', 'Rock', 'Harvest Records', '1973-03-01 00:00:00.000000', 'Speak to Me, Breathe, On the Run...'),
+(16, 'Led Zeppelin', 'Rock', 'Atlantic Records', '1971-11-08 00:00:00.000000', 'Black Dog, Rock and Roll, Stairway to Heaven...'),
+(20, 'The Beatles', 'Rock', 'Parlophone', '1967-05-26 00:00:00.000000', 'Sgt. Pepper\'s Lonely Hearts Club Band, With a Little Help from My Friends...');
+
 -- --------------------------------------------------------
 
 --
@@ -106,8 +141,17 @@ CREATE TABLE `delivery_info` (
   `is_rush_order` bit(1) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `province` bigint(20) DEFAULT NULL
+  `province` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `delivery_info`
+--
+
+INSERT INTO `delivery_info` (`id`, `address`, `delivery_time`, `email`, `instructions`, `is_rush_order`, `name`, `phone`, `province`) VALUES
+(5, 'HN', '2024-06-07', 'abc@gmail.com', 'Hello', b'1', 'Hai', '0123456789', '01'),
+(6, 'Hai Ba Trung', '2024-06-05', 'abc@gmail.com', 'Nhanh len nhe', b'1', 'Tran Nam', '0123456789', '01'),
+(7, '03 ABC Hai ba trung', '2024-06-24', 'admin@gmail.com', 'giao nhanh nhe', b'1', 'Duong ', '0314121412', '01');
 
 -- --------------------------------------------------------
 
@@ -127,6 +171,18 @@ CREATE TABLE `dvd` (
   `subtitles` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `dvd`
+--
+
+INSERT INTO `dvd` (`id`, `director`, `disc_type`, `genre`, `language`, `release_date`, `runtime`, `studio`, `subtitles`) VALUES
+(2, 'Francis Ford Coppola', 'Blu-ray', 'Crime', 'English', '1972-03-24 00:00:00.000000', 175, 'Paramount Pictures', 'English, French, Spanish'),
+(4, 'Quentin Tarantino', 'Blu-ray', 'Crime', 'English', '1994-10-14 00:00:00.000000', 154, 'Miramax', 'English, Spanish, French'),
+(7, 'Christopher Nolan', 'Blu-ray', 'Sci-Fi', 'English', '2010-07-16 00:00:00.000000', 148, 'Warner Bros.', 'English, Spanish, French'),
+(11, 'Robert Zemeckis', 'DVD', 'Drama', 'English', '1994-07-06 00:00:00.000000', 142, 'Paramount Pictures', 'English, Spanish'),
+(15, 'George Lucas', 'Blu-ray', 'Sci-Fi', 'English', '1977-05-25 00:00:00.000000', 121, '20th Century Fox', 'English, Spanish, French'),
+(19, 'Peter Jackson', 'Blu-ray', 'Fantasy', 'English', '2001-12-19 00:00:00.000000', 178, 'New Line Cinema', 'English, Elvish, Spanish');
+
 -- --------------------------------------------------------
 
 --
@@ -140,6 +196,15 @@ CREATE TABLE `invoice` (
   `order_id` bigint(20) DEFAULT NULL,
   `payment_transaction_id` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `invoice`
+--
+
+INSERT INTO `invoice` (`id`, `amount`, `currency`, `order_id`, `payment_transaction_id`) VALUES
+(3, 100000, 'VND', 4, 3),
+(4, 100000, 'VND', 5, 4),
+(6, 2342000, 'VND', 6, 6);
 
 -- --------------------------------------------------------
 
@@ -156,6 +221,16 @@ CREATE TABLE `lp` (
   `tracklist` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `lp`
+--
+
+INSERT INTO `lp` (`id`, `artist`, `genre`, `record_label`, `release_date`, `tracklist`) VALUES
+(5, 'Various Artists', 'Soundtrack', 'MCA Records', '1985-07-03 00:00:00.000000', 'The Power of Love, Back in Time, Heaven Is One Step Away, etc.'),
+(9, 'John Williams', 'Soundtrack', 'MCA Records', '1993-06-11 00:00:00.000000', 'Theme from Jurassic Park, Incident at Isla Nublar...'),
+(13, 'Vangelis', 'Soundtrack', 'Atlantic Records', '1982-06-25 00:00:00.000000', 'Main Titles, Blush Response, Wait for Me...'),
+(17, 'Various Artists', 'Soundtrack', 'Warner Bros. Records', '1999-03-31 00:00:00.000000', 'Main Title, Trinity Infinity, Neo on the Run...');
+
 -- --------------------------------------------------------
 
 --
@@ -171,6 +246,15 @@ CREATE TABLE `orders` (
   `state` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `orders`
+--
+
+INSERT INTO `orders` (`id`, `cart_id`, `delivery_info_id`, `normal_shipping_fees`, `rush_shipping_fees`, `state`) VALUES
+(4, 1, 5, 10000, 10000, 'REJECTED'),
+(5, 2, 6, 10000, 10000, 'APPROVED'),
+(6, 301, 7, 0, 32000, 'CANCELLED');
+
 -- --------------------------------------------------------
 
 --
@@ -185,8 +269,18 @@ CREATE TABLE `payment_transaction` (
   `message` varchar(255) DEFAULT NULL,
   `transaction_content` varchar(255) DEFAULT NULL,
   `transaction_id` varchar(255) DEFAULT NULL,
-  `transaction_num` varchar(255) DEFAULT NULL
+  `transaction_num` varchar(255) DEFAULT NULL,
+  `payment_method` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `payment_transaction`
+--
+
+INSERT INTO `payment_transaction` (`id`, `amount`, `created_at`, `error_code`, `message`, `transaction_content`, `transaction_id`, `transaction_num`, `payment_method`) VALUES
+(3, 100000, '2024/06/09 15:30:00', '00', '\"Success\"', '\"OK\"', '123', '12', NULL),
+(4, 100000, '2024/17/09 10:00:00', '00', '\"Success\"', '\"OK\"', '124', '125', NULL),
+(6, 2342000, '20240618001450', '00', NULL, 'Payment for order 6', '14464207', '45945326', 'VNPay');
 
 -- --------------------------------------------------------
 
@@ -212,8 +306,26 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`price`, `qty_in_stock`, `rush_order_eligible`, `weight`, `year`, `id`, `category`, `image_url`, `title`, `value`) VALUES
-(20, 10, b'1', 3.5, 2020, 1, 'Electronics', '/poster/anh1.png', 'Title 1', '100'),
-(30, 10, b'0', 3.5, 2021, 2, 'Books', '/poster/anh2.png', 'Title 2', '100');
+(210000, 11, b'0', 1, 1925, 1, 'Book', '/poster/image1.jpg', 'The Great Gatsby', ''),
+(200000, 21, b'0', 2, 1972, 2, 'DVD', '/poster/image2.jpg', 'The Godfather', ''),
+(190000, 27, b'0', 1, 1969, 3, 'CD', '/poster/image3.jpg', 'Abbey Road', ''),
+(220000, 1, b'0', 1, 1994, 4, 'DVD', '/poster/image4.jpg', 'Pulp Fiction', ''),
+(200000, 41, b'0', 1, 1985, 5, 'LP', '/poster/image5.jpg', 'Back to the Future', ''),
+(210000, 22, b'1', 2.3, 1997, 6, 'Book', '/poster/image6.jpg', 'Harry Potter and the Sorcerer\'s Stone', '170000'),
+(220000, 35, b'0', 2, 2010, 7, 'DVD', '/poster/image7.jpg', 'Inception', '180000'),
+(160000, 28, b'0', 1.7, 1982, 8, 'CD', '/poster/image8.jpg', 'Thriller', '120000'),
+(230000, 12, b'0', 1.3, 1993, 9, 'LP', '/poster/image9.jpg', 'Jurassic Park', '190000'),
+(240000, 45, b'0', 2.1, 1937, 10, 'Book', '/poster/image10.jpg', 'The Hobbit', '200000'),
+(250000, 32, b'0', 2.5, 1994, 11, 'DVD', '/poster/image11.jpg', 'Forrest Gump', '210000'),
+(260000, 27, b'0', 1.9, 1973, 12, 'CD', '/poster/image12.jpg', 'Dark Side of the Moon', '220000'),
+(270000, 14, b'0', 2.8, 1982, 13, 'LP', '/poster/image13.jpg', 'Blade Runner', '230000'),
+(280000, 19, b'0', 1.1, 1949, 14, 'Book', '/poster/image14.jpg', '1984', '240000'),
+(290000, 50, b'0', 2.6, 1977, 15, 'DVD', '/poster/image15.jpg', 'Star Wars: A New Hope', '250000'),
+(300000, 23, b'0', 2.2, 1971, 16, 'CD', '/poster/image16.jpg', 'Led Zeppelin IV', '260000'),
+(240000, 11, b'0', 2.4, 1999, 17, 'LP', '/poster/image17.jpg', 'The Matrix', '200000'),
+(150000, 38, b'0', 1, 1813, 18, 'Book', '/poster/image18.jpg', 'Pride and Prejudice', '100000'),
+(290000, 29, b'0', 1.6, 2001, 19, 'DVD', '/poster/image19.jpg', 'The Lord of the Rings: The Fellowship of the Ring', '250000'),
+(280000, 20, b'0', 2.7, 1967, 20, 'CD', '/poster/image20.jpg', 'Sgt. Pepper\'s Lonely Hearts Club Band', '230000');
 
 -- --------------------------------------------------------
 
@@ -239,9 +351,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `email`, `full_name`, `is_admin`, `password`, `is_manager`, `address`, `blocked`, `phone`) VALUES
 (0x39fb720dcd614f87841e3ca1f67c26ed, 'admin@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$YBYR5zBMR/ZOdzS2uOY3FOHtC/Gy.VHqopkfc63grRrnUvbDl2s4a', b'0', NULL, b'0', NULL),
-(0x40f26975cb874a59bead90ff25837b8a, 'an@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$NJ96ubd3VVklbz1pxE.3eOsHa55cpdpMASfGO/05nc0gtZis5byMa', b'1', NULL, b'0', NULL),
-(0x4f5126bf31634648837da10649204646, 'abc@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$2qsyIDxyZqKvAFY6tvoo5e3krHEDR6K0YS6uJDPBloOun4aXxxV/6', b'0', NULL, b'0', NULL),
-(0xc7109ae171834cc7a146e5e69a0ceec8, 'g@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$BDf46zXNfyZRp2U5C26TSO0WVVzPVUlB1Pg8ciEpjwSeLhMMMcvfS', b'0', NULL, b'0', NULL);
+(0x40f26975cb874a59bead90ff25837b8a, 'an@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$OXEmwKxaNYVYz0cTuEE3qelItFrcAdWr0slMjHgKQzSAbJcgFjb7C', b'1', 'Vĩnh Yên', b'0', '866172604'),
+(0x4f5126bf31634648837da10649204646, 'abc@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$2qsyIDxyZqKvAFY6tvoo5e3krHEDR6K0YS6uJDPBloOun4aXxxV/6', b'1', 'Vĩnh Yên', b'0', '314121412'),
+(0xc7109ae171834cc7a146e5e69a0ceec8, 'g@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$BDf46zXNfyZRp2U5C26TSO0WVVzPVUlB1Pg8ciEpjwSeLhMMMcvfS', b'1', NULL, b'0', NULL);
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -332,61 +444,61 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `book`
 --
 ALTER TABLE `book`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=304;
 
 --
 -- AUTO_INCREMENT cho bảng `cd`
 --
 ALTER TABLE `cd`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT cho bảng `delivery_info`
 --
 ALTER TABLE `delivery_info`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `dvd`
 --
 ALTER TABLE `dvd`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT cho bảng `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `lp`
 --
 ALTER TABLE `lp`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `payment_transaction`
 --
 ALTER TABLE `payment_transaction`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT cho bảng `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
