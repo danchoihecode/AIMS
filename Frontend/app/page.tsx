@@ -2,6 +2,8 @@
 
 import { Product } from "@/api/DTO/CartItemDTO";
 import { getProducts } from "@/api/Product";
+import MyBreadcrumb from "@/components/common/breadcrumb";
+import Heading from "@/components/common/heading";
 import CategoryFilter from "@/components/home/filter";
 import SeachBar from "@/components/home/seach-bar";
 import AddToCart from "@/components/product-detail/add-to-cart";
@@ -62,30 +64,34 @@ export default function Home() {
             return a.id - b.id;
         });
     return (
-        <main className="space-y-8">
-            <div className=" flex space-x-4">
-                <CategoryFilter setFilter={setFilter} filter={filter} />
-                <SeachBar setFilter={setFilter} filter={filter} />
-                <Button
-                    onClick={() => setSorting("asc")}
-                    variant={sorting === "asc" ? "default" : "outline"}
-                >
-                    Sort Asc
-                </Button>
-                <Button
-                    onClick={() => setSorting("desc")}
-                    variant={sorting === "desc" ? "default" : "outline"}
-                >
-                    Sort Desc
-                </Button>
-            </div>
-            <Separator orientation="horizontal" />
-            <div className="flex flex-wrap gap-4 justify-between">
-                {filteredItems.map((item, index) => (
-                    <ProductPreview item={item} key={index} />
-                ))}
-            </div>
-        </main>
+        <>
+            <Heading />
+            <MyBreadcrumb />
+            <main className="space-y-8 p-16">
+                <div className=" flex space-x-4">
+                    <CategoryFilter setFilter={setFilter} filter={filter} />
+                    <SeachBar setFilter={setFilter} filter={filter} />
+                    <Button
+                        onClick={() => setSorting("asc")}
+                        variant={sorting === "asc" ? "default" : "outline"}
+                    >
+                        Sort Asc
+                    </Button>
+                    <Button
+                        onClick={() => setSorting("desc")}
+                        variant={sorting === "desc" ? "default" : "outline"}
+                    >
+                        Sort Desc
+                    </Button>
+                </div>
+                <Separator orientation="horizontal" />
+                <div className="flex flex-wrap gap-4 justify-between">
+                    {filteredItems.map((item, index) => (
+                        <ProductPreview item={item} key={index} />
+                    ))}
+                </div>
+            </main>
+        </>
     );
 }
 const ProductPreview = ({ item }: { item: Product }) => {
@@ -94,36 +100,34 @@ const ProductPreview = ({ item }: { item: Product }) => {
         currency: "VND",
     });
     return (
-        <>
-            <Card className="p-4 space-y-4 text-center w-60">
-                <div className="w-48 h-48 bg-slate-100 shrink-0 flex justify-center items-center relative rounded-md m-auto">
-                    <Image
-                        src={item.image}
-                        alt="poster"
-                        layout="fill"
-                        objectFit="contain"
-                    />
-                </div>
-                <Separator orientation="horizontal" />
-                <div className="space-y-2">
-                    <p className="font-semibold text-wrap">{item.title}</p>
-                    <p className="text-sm text-slate-500">
-                        {item.category.toLocaleUpperCase()} - {item.year}
-                    </p>
-                </div>
-                <p className="shrink-0 font-medium">
-                    {formatter.format(item.price)}
-                </p>
-                <AddToCart
-                    product={item}
-                    styling="flex flex-col space-y-2 items-center"
+        <Card className="p-4 space-y-4 text-center w-60">
+            <div className="w-48 h-48 bg-slate-100 shrink-0 flex justify-center items-center relative rounded-md m-auto">
+                <Image
+                    src={item.image}
+                    alt="poster"
+                    layout="fill"
+                    objectFit="contain"
                 />
-                <Link href={`/${item.id}`} className="block">
-                    <Button variant="outline" className="">
-                        View details
-                    </Button>
-                </Link>
-            </Card>
-        </>
+            </div>
+            <Separator orientation="horizontal" />
+            <div className="space-y-2">
+                <p className="font-semibold text-wrap">{item.title}</p>
+                <p className="text-sm text-slate-500">
+                    {item.category.toLocaleUpperCase()} - {item.year}
+                </p>
+            </div>
+            <p className="shrink-0 font-medium">
+                {formatter.format(item.price)}
+            </p>
+            <AddToCart
+                product={item}
+                styling="flex flex-col space-y-2 items-center"
+            />
+            <Link href={`/${item.id}`} className="block">
+                <Button variant="outline" className="">
+                    View details
+                </Button>
+            </Link>
+        </Card>
     );
 };

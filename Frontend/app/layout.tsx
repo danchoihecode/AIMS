@@ -18,11 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={inter.className}>
-                <Heading />
-                <MyBreadcrumb />
-                <div className="p-16">{children}</div>
-            </body>
+            <body className={inter.className}>{children}</body>
         </html>
     );
 }
