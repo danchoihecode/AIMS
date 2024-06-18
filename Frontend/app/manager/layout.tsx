@@ -19,9 +19,9 @@ export default async function ManagerLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOption) as Session;
-  if (!session || !session.access_token || !session.manager) {
+  /*if (!session || !session.access_token || !session.manager) {
       redirect("/auth/login");
-  }
+  }*/
   return (
     <div>
       <Header />

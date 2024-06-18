@@ -5,8 +5,8 @@ import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Product {
   id: number;
@@ -50,7 +50,6 @@ export default function Component() {
     try {
       const response = await axios.delete(`http://localhost:8080/manager/products/${productId}`);
       console.log('Product deleted:', response.data);
-
       const updatedProducts = products.filter(product => product.id !== productId);
       setProducts(updatedProducts);
     } catch (error) {
@@ -59,6 +58,8 @@ export default function Component() {
     }
   };
   return (
+    <ScrollArea className="h-full">
+
     <div className="flex flex-col min-h-screen">
       <header className="flex items-center justify-between px-4 py-2 border-b">
         <Link href="#" className="flex items-center gap-2" prefetch={false}>
@@ -75,7 +76,9 @@ export default function Component() {
         </Link>
         </form>
       </header>
-      <main className="flex flex-col lg:flex-row gap-4 lg:gap-6 p-4 md:p-6"> {/* Thêm overflow-y-auto vào đây */}
+      
+
+      <main className="flex flex-col lg:flex-row gap-4 lg:gap-6 p-4 md:p-6 overflow-y-auto"> {/* Thêm overflow-y-auto vào đây */}
       {error ? (
         <p>{error}</p>
       ) : (
@@ -92,7 +95,7 @@ export default function Component() {
               <h3 className="text-lg font-semibold">{product.title}</h3>
               <p className="text-gray-500">{product.price} $</p>
             
-            <Link href={`/products/${product.id}/edit`} passHref>
+            <Link href={`products/${product.id}/edit`} passHref>
 
               <Button className="mt-2 mr-2" >Change</Button>
             </Link>
@@ -112,6 +115,9 @@ export default function Component() {
     </div>
   )}
       </main>
+
     </div>
+    </ScrollArea>
+
   )
 }
