@@ -85,7 +85,7 @@ export default function DeliveryForm({
         const deliveryData: DeliveryInfoDTO = {
             ...deliveryInfo,
             address: deliveryInfo.street + " " + deliveryInfo.district,
-            isRushOrder: true,
+            isRushOrder: isRush,
         };
         const shippingFee = {
             normalShippingFee,
