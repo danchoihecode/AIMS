@@ -4,7 +4,6 @@ package com.springboot.exception;
  * The PlaceOrderException wraps all unchecked exceptions You can use this
  * exception to inform 
  * 
- * @author nguyenlm
  */
 public class PlaceOrderException extends AimsException {
 
