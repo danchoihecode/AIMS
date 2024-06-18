@@ -68,28 +68,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     // Return the product details
     return (
-      /*<div className="flex flex-col min-h-screen">
-         <header className="flex items-center justify-between px-4 py-2 border-b">
-          <span className="text-lg font-semibold">{product.title}</span>
-       
-        </header>        
-      <div className={styles.header}>
-          <h1></h1>
-        </div>
-        <img className={styles.image} src={product.image} alt={product.title} />
-        <div className={styles.details}>
-          <p >Value: {product.value}</p>
-          <p >Price: ${product.price}</p>
-          <p >Quantity in stock: {product.qtyInStock}</p>
-          <p >Weight: {product.weight} kg</p>
-          <p >Year: {product.year}</p>
-          <p  >Category: {product.category}</p>
-          <p>
-            Rush order eligible: {product.rushOrderEligible ? 'Yes' : 'No'}
-          </p>
-        </div>
-      </div>*/
-  
+      
      <Card>
      <CardHeader>
        <CardTitle>{product.title}</CardTitle>

@@ -50,9 +50,16 @@ export default function Component() {
     try {
       const response = await axios.delete(`http://localhost:8080/manager/products/${productId}`);
       console.log('Product deleted:', response.data);
+      alert(response.data);
+
+      if (response.data != "<409 CONFLICT Conflict,Product cannot be deleted because it is in the cart.,[]>" ) 
+        {
+
       const updatedProducts = products.filter(product => product.id !== productId);
       setProducts(updatedProducts);
+        }
     } catch (error) {
+      
       setError('Error deleting product');
       console.error('Error deleting product', error);
     }

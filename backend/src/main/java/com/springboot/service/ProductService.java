@@ -3,24 +3,17 @@ package com.springboot.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.springboot.model.entity.*;
+import com.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springboot.exception.product.ProductNotFoundException;
 import com.springboot.model.dto.ClientProductDTO;
-import com.springboot.model.entity.Book;
-import com.springboot.model.entity.CD;
-import com.springboot.model.entity.DVD;
-import com.springboot.model.entity.LP;
-import com.springboot.model.entity.Product;
-import com.springboot.repository.BookRespository;
-import com.springboot.repository.CDRespository;
-import com.springboot.repository.DVDRespository;
-import com.springboot.repository.LPRespository;
-import com.springboot.repository.ProductRepository;
 
 @Service
 public class ProductService {
+    private CartProductRepository cartProductRepository;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -51,6 +44,9 @@ public class ProductService {
         CD cd = null;
         DVD dvd = null;
         LP lp = null;
+
+        List<CartProduct> cartProducts = cartProductRepository.findByProductId(id);
+
 
         switch (product.getCategory()){
             case "Book":
