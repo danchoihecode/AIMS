@@ -13,6 +13,7 @@ import com.springboot.model.dto.ClientProductDTO;
 
 @Service
 public class ProductService {
+	@Autowired
     private CartProductRepository cartProductRepository;
     @Autowired
     private ProductRepository productRepository;
