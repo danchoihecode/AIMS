@@ -1,23 +1,23 @@
 package com.springboot.service;
 
-import ch.qos.logback.core.net.server.Client;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.springboot.exception.product.ProductNotFoundException;
 import com.springboot.model.dto.ClientProductDTO;
 import com.springboot.model.entity.Book;
 import com.springboot.model.entity.CD;
 import com.springboot.model.entity.DVD;
 import com.springboot.model.entity.LP;
-import com.springboot.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.springboot.model.entity.Product;
-
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.springboot.repository.BookRespository;
+import com.springboot.repository.CDRespository;
+import com.springboot.repository.DVDRespository;
+import com.springboot.repository.LPRespository;
+import com.springboot.repository.ProductRepository;
 
 @Service
 public class ProductService {
@@ -69,6 +69,7 @@ public class ProductService {
         }
         return new ClientProductDTO(product, book, dvd, cd, lp);
     }
+
 
 
 }

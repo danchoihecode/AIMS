@@ -1,26 +1,17 @@
 package com.springboot.subsystem.vnpaysubsystem;
 
-import static com.springboot.subsystem.vnpaysubsystem.ConfigVNPay.vnp_Version;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimeZone;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.springboot.common.Utils;
-import com.springboot.model.entity.Order;
 import com.springboot.model.entity.PaymentTransaction;
 
 public class RefundRequestVNPay {

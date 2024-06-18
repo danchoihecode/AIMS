@@ -1,6 +1,5 @@
 package com.springboot.model.dto;
 
-import com.springboot.model.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

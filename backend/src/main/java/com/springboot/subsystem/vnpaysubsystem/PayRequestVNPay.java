@@ -2,7 +2,6 @@ package com.springboot.subsystem.vnpaysubsystem;
 
 import static com.springboot.subsystem.vnpaysubsystem.ConfigVNPay.vnp_Version;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;

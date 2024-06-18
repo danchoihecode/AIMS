@@ -1,11 +1,14 @@
 package com.springboot.model.dto;
 
-import com.springboot.model.entity.*;
+import com.springboot.model.entity.Book;
+import com.springboot.model.entity.CD;
+import com.springboot.model.entity.DVD;
+import com.springboot.model.entity.LP;
+import com.springboot.model.entity.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
