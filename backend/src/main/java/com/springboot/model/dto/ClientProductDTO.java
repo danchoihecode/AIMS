@@ -1,4 +1,4 @@
-package com.springboot.model.response;
+package com.springboot.model.dto;
 
 import com.springboot.model.entity.*;
 import lombok.AllArgsConstructor;

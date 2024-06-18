@@ -1,7 +1,7 @@
-package com.springboot.dto;
+package com.springboot.model.dto;
 
 import com.springboot.model.entity.DeliveryInfo;
-import com.springboot.model.response.ShippingFeeDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

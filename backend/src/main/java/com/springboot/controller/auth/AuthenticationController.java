@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.model.dto.LoginResponse;
+import com.springboot.model.dto.LoginUser;
 import com.springboot.model.entity.User;
 import com.springboot.repository.UserRepository;
 import com.springboot.service.auth.AuthenticationService;
 import com.springboot.service.auth.JwtService;
-import com.springboot.service.auth.LoginResponse;
-import com.springboot.service.auth.LoginUser;
-import com.springboot.service.auth.RegisterUser;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,13 +34,6 @@ public class AuthenticationController {
 	public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
 		this.jwtService = jwtService;
 		this.authenticationService = authenticationService;
-	}
-
-	// use for add new user ( via postman or frontend request)
-	@PostMapping("/signup")
-	public ResponseEntity<User> registerUser(@RequestBody RegisterUser registerUser) {
-		User registeredUser = authenticationService.signup(registerUser);
-		return ResponseEntity.ok(registeredUser);
 	}
 
 	@PostMapping("/login")
