@@ -9,5 +9,6 @@ import com.springboot.model.entity.CartProductKey;
 
 public interface CartProductRepository extends JpaRepository<CartProduct, CartProductKey> {
 	 List<CartProduct> findByCartId(Long cartId);
+	 List<CartProduct> findByProductId(Long productId);
 }
 

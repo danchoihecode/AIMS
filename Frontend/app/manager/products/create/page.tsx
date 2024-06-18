@@ -14,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {useRouter} from "next/navigation";
 
 
 interface Product {
@@ -32,6 +33,10 @@ interface Product {
 export default function Component() {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const router = useRouter();
+
+  const [rushOrderEligible, setRushOrderEligible] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -69,19 +74,24 @@ export default function Component() {
       image: formData.get('image') as string,
       year: parseInt(formData.get('year') as string),
       category: formData.get('category') as string,
-      rushOrderEligible: formData.get('rushOrderEligible') === 'true'
+      rushOrderEligible: rushOrderEligible
     };
   
     try {
       const response = await axios.post('http://localhost:8080/manager/products/create', newProduct);
       console.log('Product created:', response.data);
-  
+      setSuccessMessage('Product created successfully!');
+
       // Sau khi tạo thành công, cập nhật danh sách sản phẩm
       fetchProducts();
     } catch (error) {
       setError('Error creating product');
       console.error('Error creating product', error);
     }
+  };
+  const closeSuccessMessage = () => {
+    setSuccessMessage(null);
+    router.push("/manager/products");
   };
 
   return (
@@ -139,14 +149,30 @@ export default function Component() {
               </select>
             </div>
             <div className="md:col-span-2">
-              <Label>Rush Order Eligible:</Label>
-              <Checkbox name="rushOrderEligible" />
-            </div>
+        <Label>Rush Order Eligible:</Label>
+        <input
+          type="checkbox"
+          name="rushOrderEligible"
+          checked={rushOrderEligible}
+          onChange={(e) => {
+            setRushOrderEligible(e.target.checked);
+          }}
+          
+        />
+        </div>
             <div className="md:col-span-2">
               <Button type="submit">Create Product</Button>
             </div>
             {error && <p className="text-red-500 md:col-span-2">{error}</p>}
           </form>
+          {successMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <p className="text-lg font-semibold mb-2">{successMessage}</p>
+            <button onClick={closeSuccessMessage} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">Close</button>
+          </div>
+        </div>
+      )}
         </div>
       </main>
     </div>
