@@ -65,6 +65,10 @@ Complete the entire AIMS project
 - Nguyen Huu Hai 20215200: Introduction (1), Overall Description (2), Architectural Patterns (3.1), Security Software Architecture (3.5) + Use cases ralated part
 - Dang Phuc Hieu 20194759: Did not participate at all
 ## Making slide
+- Bui Hoang Ha 20205149 
+- Do Hong Hai 20215199
+- Duong Hoang Hai 20215198
+- Nguyen Huu Hai 20215200
 # Tech stack
 - Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
 - Backend :  Spring Boot and JWT authentication, Java, MySQL
