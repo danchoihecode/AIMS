@@ -52,7 +52,7 @@ All use cases related to Place order
 
 ## 3/6-18/6/2024
 Complete the entire AIMS project
-## Use cases (Programming)
+## Use cases (Programming & Use case specification & Test plan)
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
 - Do Hong Hai 20215199: View cart, Update cart, Place order (includes Place rush order and Pay order), View order information, Cancel order
 - Duong Hoang Hai 20215198: View list of orders, Approve order, Reject order, Login (Backend), Change password (Backend)
