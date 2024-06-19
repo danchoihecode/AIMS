@@ -52,18 +52,18 @@ All use cases related to Place order
 
 ## 3/6-18/6/2024
 Complete the entire AIMS project
-## Use cases 
+## Use cases (Programming)
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
 - Do Hong Hai 20215199: View cart, Update cart, Place order (includes Place rush order and Pay order), View order information, Cancel order
 - Duong Hoang Hai 20215198: View list of orders, Approve order, Reject order, Login (Backend), Change password (Backend)
 - Nguyen Huu Hai 20215200: View List of product in homepage, Search Product, View product detail information, Add product to cart
-- Dang Phuc Hieu 20194759: CRUD Product, Update product price (Not finish), Login (Frontend)
+- Dang Phuc Hieu 20194759: CRUD Product, Update product price (Did not finish), Login (Frontend)
 ## Making SDD
-- Bui Hoang Ha 20205149: Screen Transition Diagrams (4.1.2), Data Modeling (4.2), Non-Database Management System Files (4.3)
-- Do Hong Hai 20215199: Design Considerations (5)
-- Duong Hoang Hai 20215198: Screen Configuration Standardization (4.1.1), General Class Diagram (4.4.1), Class Diagrams (4.4.2)
-- Nguyen Huu Hai 20215200: Introduction (1), Overall Description (2), Architectural Patterns (3.1), Security Software Architecture (3.5)
-- Dang Phuc Hieu 20194759: Only did individual part
+- Bui Hoang Ha 20205149: Screen Transition Diagrams (4.1.2), Data Modeling (4.2), Non-Database Management System Files (4.3) + Use cases ralated part
+- Do Hong Hai 20215199: Design Considerations (5) + Use cases ralated part
+- Duong Hoang Hai 20215198: Screen Configuration Standardization (4.1.1), General Class Diagram (4.4.1), Class Diagrams (4.4.2) + Use cases ralated part
+- Nguyen Huu Hai 20215200: Introduction (1), Overall Description (2), Architectural Patterns (3.1), Security Software Architecture (3.5) + Use cases ralated part
+- Dang Phuc Hieu 20194759: Did not participate at all
 ## Making slide
 # Tech stack
 - Frontend : HTML, CSS, Javascript, React.js, TypeScript, Next.js Framework.
