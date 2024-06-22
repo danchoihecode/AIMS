@@ -110,5 +110,7 @@ Ensure you have Node.js installed. You can download it from [nodejs.org](https:/
     npm run dev
     ```
 
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the customer page.
-    Admin and product manager login page : [http://localhost:3000/auth/login](http://localhost:3000/auth/login)
+    #### Open [http://localhost:3000](http://localhost:3000) with your browser to see the customer page.
+    #### Admin and product manager login page : [http://localhost:3000/auth/login](http://localhost:3000/auth/login)
+    #### Sample account (for both admin and manager) : Email : g@gmail.com, Password : 123
+
