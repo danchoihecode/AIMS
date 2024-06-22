@@ -90,11 +90,10 @@ Ensure you have Node.js installed. You can download it from [nodejs.org](https:/
 
 ### Installation
 
-1. **Clone the repository:**
+1. **Ensure you are in the frontend project's directory:**
 
     ```bash
-    git clone https://github.com/your-username/your-nextjs-project.git
-    cd your-nextjs-project
+    cd Frontend
     ```
 
 2. **Install the dependencies:**
