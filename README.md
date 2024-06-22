@@ -50,7 +50,7 @@ All use cases related to Place order
 - Nguyen Huu Hai 20215200: OCP: The Open Closed Principle
 - Dang Phuc Hieu 20194759: ISP: The Interface Segregation Principle
 
-## 3/6-18/6/2024
+## 3/6-22/6/2024
 Complete the entire AIMS project
 ## Use cases (Programming & Use case specification & Test plan)
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
