@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th6 18, 2024 lúc 04:23 AM
+-- Thời gian đã tạo: Th6 22, 2024 lúc 03:25 PM
 -- Phiên bản máy phục vụ: 10.4.25-MariaDB
 -- Phiên bản PHP: 8.1.10
 
@@ -43,7 +43,6 @@ CREATE TABLE `book` (
 --
 
 INSERT INTO `book` (`id`, `author`, `cover_type`, `genre`, `language`, `number_of_pages`, `publication_date`, `publisher`) VALUES
-(1, 'F. Scott Fitzgerald', 'Hardcover', 'Fiction', 'English', 180, '1925-04-10 00:00:00.000000', 'Scribner'),
 (6, 'J.K. Rowling', 'Hardcover', 'Fantasy', 'English', 309, '1997-06-26 00:00:00.000000', 'Bloomsbury'),
 (10, 'J.R.R. Tolkien', 'Hardcover', 'Fantasy', 'English', 310, '1937-09-21 00:00:00.000000', 'George Allen & Unwin'),
 (14, 'George Orwell', 'Paperback', 'Dystopian', 'English', 328, '1949-06-08 00:00:00.000000', 'Secker & Warburg'),
@@ -65,11 +64,26 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`subtotal`, `id`) VALUES
-(270, 1),
-(90, 2),
 (2100000, 301),
 (NULL, 302),
-(NULL, 303);
+(710000, 303),
+(NULL, 304),
+(200000, 305),
+(NULL, 306),
+(410000, 307),
+(NULL, 308),
+(200000, 309),
+(NULL, 310),
+(780000, 311),
+(NULL, 312),
+(760000, 313),
+(NULL, 314),
+(2120000, 315),
+(1200000, 322),
+(NULL, 323),
+(740000, 324),
+(NULL, 325),
+(NULL, 326);
 
 -- --------------------------------------------------------
 
@@ -88,8 +102,6 @@ CREATE TABLE `cart_product` (
 --
 
 INSERT INTO `cart_product` (`qty`, `cart_id`, `product_id`) VALUES
-(3, 1, 4),
-(3, 2, 3),
 (1, 301, 2),
 (1, 301, 3),
 (1, 301, 4),
@@ -98,7 +110,30 @@ INSERT INTO `cart_product` (`qty`, `cart_id`, `product_id`) VALUES
 (1, 301, 10),
 (1, 301, 11),
 (1, 301, 15),
-(1, 301, 16);
+(1, 301, 16),
+(2, 303, 2),
+(2, 303, 18),
+(1, 303, 24),
+(1, 305, 2),
+(1, 307, 3),
+(1, 307, 4),
+(1, 309, 2),
+(2, 311, 2),
+(2, 311, 3),
+(1, 313, 2),
+(1, 313, 3),
+(1, 313, 6),
+(1, 313, 8),
+(2, 315, 6),
+(2, 315, 12),
+(2, 315, 15),
+(2, 315, 16),
+(2, 322, 2),
+(2, 322, 3),
+(2, 322, 6),
+(1, 324, 2),
+(2, 324, 3),
+(1, 324, 8);
 
 -- --------------------------------------------------------
 
@@ -151,7 +186,16 @@ CREATE TABLE `delivery_info` (
 INSERT INTO `delivery_info` (`id`, `address`, `delivery_time`, `email`, `instructions`, `is_rush_order`, `name`, `phone`, `province`) VALUES
 (5, 'HN', '2024-06-07', 'abc@gmail.com', 'Hello', b'1', 'Hai', '0123456789', '01'),
 (6, 'Hai Ba Trung', '2024-06-05', 'abc@gmail.com', 'Nhanh len nhe', b'1', 'Tran Nam', '0123456789', '01'),
-(7, '03 ABC Hai ba trung', '2024-06-24', 'admin@gmail.com', 'giao nhanh nhe', b'1', 'Duong ', '0314121412', '01');
+(7, '03 ABC Hai ba trung', '2024-06-24', 'admin@gmail.com', 'giao nhanh nhe', b'1', 'Duong ', '0314121412', '01'),
+(8, '03 ABC Hai ba trung', '2024-06-19', 'an@gmail.com', 'hello nhanh len nhe', b'1', 'Lê Minh', '0314121412', '01'),
+(9, '03 ABC Hai ba trung', NULL, 'hoanghai2003vp@gmail.com', '', b'1', 'Lê Minh Việt Anh', '0866172604', '01'),
+(10, '03 ABC Hai ba trung', NULL, 'longhvp03@gmail.com', '', b'1', 'Trần Thị Lan', '0314121412', '89'),
+(11, '03 ABC Hai ba trung', NULL, 'an@gmail.com', '', b'1', 'Tran A', '0866172604', '77'),
+(12, '03 ABC Hai ba trung', NULL, 'hoanghai2003vp@gmail.com', '', b'0', 'Lê Minh Việt Anh', '0866172604', '01'),
+(13, '03 ABC Hai ba trung', '2024-06-19', 'hoanghai2003vp@gmail.com', 'nhanh len nhe', b'1', 'Lê Minh Việt Anh', '0866172604', '01'),
+(14, '03 ABC Hai ba trung', '2024-06-19', 'hoanghai2003vp@gmail.com', 'nhanh len nhe', b'1', 'Lê Minh Việt Anh', '0866172604', '01'),
+(17, '03 ABC Hai ba trung', '2024-06-27', 'hoanghai2003vp@gmail.com', 'nhanh len nhe', b'1', 'Trần Thị Lan', '0314121412', '01'),
+(18, '03 ABC Hai ba trung', NULL, 'hoanghai2003vp@gmail.com', '', b'0', 'Trần Thị Lan', '0314121412', '24');
 
 -- --------------------------------------------------------
 
@@ -176,7 +220,6 @@ CREATE TABLE `dvd` (
 --
 
 INSERT INTO `dvd` (`id`, `director`, `disc_type`, `genre`, `language`, `release_date`, `runtime`, `studio`, `subtitles`) VALUES
-(2, 'Francis Ford Coppola', 'Blu-ray', 'Crime', 'English', '1972-03-24 00:00:00.000000', 175, 'Paramount Pictures', 'English, French, Spanish'),
 (4, 'Quentin Tarantino', 'Blu-ray', 'Crime', 'English', '1994-10-14 00:00:00.000000', 154, 'Miramax', 'English, Spanish, French'),
 (7, 'Christopher Nolan', 'Blu-ray', 'Sci-Fi', 'English', '2010-07-16 00:00:00.000000', 148, 'Warner Bros.', 'English, Spanish, French'),
 (11, 'Robert Zemeckis', 'DVD', 'Drama', 'English', '1994-07-06 00:00:00.000000', 142, 'Paramount Pictures', 'English, Spanish'),
@@ -202,9 +245,16 @@ CREATE TABLE `invoice` (
 --
 
 INSERT INTO `invoice` (`id`, `amount`, `currency`, `order_id`, `payment_transaction_id`) VALUES
-(3, 100000, 'VND', 4, 3),
-(4, 100000, 'VND', 5, 4),
-(6, 2342000, 'VND', 6, 6);
+(6, 2342000, 'VND', 6, 6),
+(7, 850000.0000000001, 'VND', 7, 7),
+(9, 220000.00000000003, 'VND', 8, 9),
+(11, 458500.00000000006, 'VND', 9, 11),
+(13, 232500.00000000003, 'VND', 10, 13),
+(15, 860000.0000000001, 'VND', 11, 15),
+(17, 868000.0000000001, 'VND', 12, 17),
+(19, 2393500, 'VND', 13, 20),
+(25, 1374000, 'VND', 16, 25),
+(27, 826500.0000000001, 'VND', 17, 27);
 
 -- --------------------------------------------------------
 
@@ -251,9 +301,16 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `cart_id`, `delivery_info_id`, `normal_shipping_fees`, `rush_shipping_fees`, `state`) VALUES
-(4, 1, 5, 10000, 10000, 'REJECTED'),
-(5, 2, 6, 10000, 10000, 'APPROVED'),
-(6, 301, 7, 0, 32000, 'CANCELLED');
+(6, 301, 7, 0, 32000, 'CANCELLED'),
+(7, 303, 8, 2000, 67000, 'CANCELLED'),
+(8, 305, 9, 0, 0, 'APPROVED'),
+(9, 307, 10, 7500, 0, 'REJECTED'),
+(10, 309, 11, 12500, 0, 'REJECTED'),
+(11, 311, 12, 2000, 0, 'CANCELLED'),
+(12, 313, 13, 0, 32000, 'APPROVED'),
+(13, 315, 14, 9500, 52000, 'REJECTED'),
+(16, 322, 17, 2000, 52000, 'PENDING'),
+(17, 324, 18, 12500, 0, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -278,9 +335,16 @@ CREATE TABLE `payment_transaction` (
 --
 
 INSERT INTO `payment_transaction` (`id`, `amount`, `created_at`, `error_code`, `message`, `transaction_content`, `transaction_id`, `transaction_num`, `payment_method`) VALUES
-(3, 100000, '2024/06/09 15:30:00', '00', '\"Success\"', '\"OK\"', '123', '12', NULL),
-(4, 100000, '2024/17/09 10:00:00', '00', '\"Success\"', '\"OK\"', '124', '125', NULL),
-(6, 2342000, '20240618001450', '00', NULL, 'Payment for order 6', '14464207', '45945326', 'VNPay');
+(6, 2342000, '20240618001450', '00', NULL, 'Payment for order 6', '14464207', '45945326', 'VNPay'),
+(7, 850000, '20240618213555', '00', NULL, 'Payment for order 7', '14466019', '01364908', 'VNPay'),
+(9, 220000, '20240618215743', '00', NULL, 'Payment for order 8', '14466073', '43634567', 'VNPay'),
+(11, 458500, '20240618215851', '00', NULL, 'Payment for order 9', '14466076', '93788390', 'VNPay'),
+(13, 232500, '20240618221310', '00', NULL, 'Payment for order 10', '14466105', '26516165', 'VNPay'),
+(15, 860000, '20240618223050', '00', NULL, 'Payment for order 11', '14466137', '26958109', 'VNPay'),
+(17, 868000, '20240618223912', '00', NULL, 'Payment for order 12', '14466155', '26129912', 'VNPay'),
+(20, 2393500, '20240618225800', '00', NULL, 'Payment for order 13', '14466190', '49499869', 'VNPay'),
+(25, 1374000, '20240622202200', '00', NULL, 'Payment for order 16', '14473099', '28676479', 'VNPay'),
+(27, 826500, '20240622202316', '00', NULL, 'Payment for order 17', '14473103', '34790225', 'VNPay');
 
 -- --------------------------------------------------------
 
@@ -306,14 +370,13 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`price`, `qty_in_stock`, `rush_order_eligible`, `weight`, `year`, `id`, `category`, `image_url`, `title`, `value`) VALUES
-(210000, 11, b'0', 1, 1925, 1, 'Book', '/poster/image1.jpg', 'The Great Gatsby', ''),
-(200000, 21, b'0', 2, 1972, 2, 'DVD', '/poster/image2.jpg', 'The Godfather', ''),
-(190000, 27, b'0', 1, 1969, 3, 'CD', '/poster/image3.jpg', 'Abbey Road', ''),
+(200000, 18, b'0', 2, 1972, 2, 'DVD', '/poster/image2.jpg', 'The Godfather 2', ''),
+(190000, 26, b'0', 1, 1969, 3, 'CD', '/poster/image3.jpg', 'Abbey Road', ''),
 (220000, 1, b'0', 1, 1994, 4, 'DVD', '/poster/image4.jpg', 'Pulp Fiction', ''),
 (200000, 41, b'0', 1, 1985, 5, 'LP', '/poster/image5.jpg', 'Back to the Future', ''),
-(210000, 22, b'1', 2.3, 1997, 6, 'Book', '/poster/image6.jpg', 'Harry Potter and the Sorcerer\'s Stone', '170000'),
+(210000, 21, b'1', 2.3, 1997, 6, 'Book', '/poster/image6.jpg', 'Harry Potter and the Sorcerer\'s Stone', '170000'),
 (220000, 35, b'0', 2, 2010, 7, 'DVD', '/poster/image7.jpg', 'Inception', '180000'),
-(160000, 28, b'0', 1.7, 1982, 8, 'CD', '/poster/image8.jpg', 'Thriller', '120000'),
+(160000, 27, b'0', 1.7, 1982, 8, 'CD', '/poster/image8.jpg', 'Thriller', '120000'),
 (230000, 12, b'0', 1.3, 1993, 9, 'LP', '/poster/image9.jpg', 'Jurassic Park', '190000'),
 (240000, 45, b'0', 2.1, 1937, 10, 'Book', '/poster/image10.jpg', 'The Hobbit', '200000'),
 (250000, 32, b'0', 2.5, 1994, 11, 'DVD', '/poster/image11.jpg', 'Forrest Gump', '210000'),
@@ -325,7 +388,9 @@ INSERT INTO `product` (`price`, `qty_in_stock`, `rush_order_eligible`, `weight`,
 (240000, 11, b'0', 2.4, 1999, 17, 'LP', '/poster/image17.jpg', 'The Matrix', '200000'),
 (150000, 38, b'0', 1, 1813, 18, 'Book', '/poster/image18.jpg', 'Pride and Prejudice', '100000'),
 (290000, 29, b'0', 1.6, 2001, 19, 'DVD', '/poster/image19.jpg', 'The Lord of the Rings: The Fellowship of the Ring', '250000'),
-(280000, 20, b'0', 2.7, 1967, 20, 'CD', '/poster/image20.jpg', 'Sgt. Pepper\'s Lonely Hearts Club Band', '230000');
+(280000, 20, b'0', 2.7, 1967, 20, 'CD', '/poster/image20.jpg', 'Sgt. Pepper\'s Lonely Hearts Club Band', '230000'),
+(10000, 99, b'1', 10, 2002, 24, 'Book', '/poster/image1.jpg', 'book4', '10000'),
+(10000, 100, b'1', 1.98, 2000, 25, 'Book', '/poster/image1.jpg', 'Demo', '10000');
 
 -- --------------------------------------------------------
 
@@ -350,10 +415,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email`, `full_name`, `is_admin`, `password`, `is_manager`, `address`, `blocked`, `phone`) VALUES
-(0x39fb720dcd614f87841e3ca1f67c26ed, 'admin@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$YBYR5zBMR/ZOdzS2uOY3FOHtC/Gy.VHqopkfc63grRrnUvbDl2s4a', b'0', NULL, b'0', NULL),
-(0x40f26975cb874a59bead90ff25837b8a, 'an@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$OXEmwKxaNYVYz0cTuEE3qelItFrcAdWr0slMjHgKQzSAbJcgFjb7C', b'1', 'Vĩnh Yên', b'0', '866172604'),
+(0x39fb720dcd614f87841e3ca1f67c26ed, 'admin@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$YBYR5zBMR/ZOdzS2uOY3FOHtC/Gy.VHqopkfc63grRrnUvbDl2s4a', b'1', 'Vĩnh Yên', b'0', '314121412'),
+(0x40f26975cb874a59bead90ff25837b8a, 'an@gmail.com', 'Dương Hoàng Hải', b'0', '$2a$10$NGWSRsuO.VBAuR24/h9HtOK.EX0kF7iAOMnzcHOmOdZOCcCx6reLy', b'1', 'Vĩnh Yên', b'0', '866172604'),
 (0x4f5126bf31634648837da10649204646, 'abc@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$2qsyIDxyZqKvAFY6tvoo5e3krHEDR6K0YS6uJDPBloOun4aXxxV/6', b'1', 'Vĩnh Yên', b'0', '314121412'),
-(0xc7109ae171834cc7a146e5e69a0ceec8, 'g@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$BDf46zXNfyZRp2U5C26TSO0WVVzPVUlB1Pg8ciEpjwSeLhMMMcvfS', b'1', NULL, b'0', NULL);
+(0x73e7f71f5b924bce9ce3f661c0b641ed, 'longhvp03@gmail.com', 'Trần Thị Lan', b'1', '$2a$10$DKp.sxYc9ycIqwEFbIIYn.6LhJkU5YVNRdsJltn/zbDLbce/MAuSC', b'1', 'Ha Noi', b'0', '866172604'),
+(0xc7109ae171834cc7a146e5e69a0ceec8, 'g@gmail.com', 'Dương Hoàng Hải', b'1', '$2a$10$WBVXoV88gg5PshVeHbVvceMKG6o5n/Com0YMBFhRn.sVSFquI1PlW', b'1', NULL, b'0', NULL),
+(0xe479931d64484a358fa87485cd60603d, 'ag@gmail.com', 'Duong ', b'1', '$2a$10$4oDfYEBPPyh2gzL7aX52YOtFPwTfRW9z5QsIB1AlRfz.63pdR1WKC', b'1', 'Vĩnh Yên', b'0', '123456789');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -450,7 +517,7 @@ ALTER TABLE `book`
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=304;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
 
 --
 -- AUTO_INCREMENT cho bảng `cd`
@@ -462,7 +529,7 @@ ALTER TABLE `cd`
 -- AUTO_INCREMENT cho bảng `delivery_info`
 --
 ALTER TABLE `delivery_info`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT cho bảng `dvd`
@@ -474,7 +541,7 @@ ALTER TABLE `dvd`
 -- AUTO_INCREMENT cho bảng `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT cho bảng `lp`
@@ -486,19 +553,19 @@ ALTER TABLE `lp`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `payment_transaction`
 --
 ALTER TABLE `payment_transaction`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT cho bảng `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
