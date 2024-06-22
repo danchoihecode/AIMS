@@ -1,16 +1,21 @@
 package com.springboot.service;
 
-import com.springboot.model.entity.CartProduct;
-import com.springboot.model.entity.User;
-import com.springboot.repository.*;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.springboot.model.entity.Product;
 
-import java.util.List;
-import java.util.Optional;
+import com.springboot.model.entity.CartProduct;
+import com.springboot.model.entity.Product;
+import com.springboot.repository.BookRespository;
+import com.springboot.repository.CDRespository;
+import com.springboot.repository.CartProductRepository;
+import com.springboot.repository.DVDRespository;
+import com.springboot.repository.LPRespository;
+import com.springboot.repository.ProductRepository;
 
 @Service
 public class ViewProductService {
@@ -26,8 +31,6 @@ public class ViewProductService {
     private DVDRespository dvdRespository;
     @Autowired
     private LPRespository lpRespository;
-
-    private CartProductService cardProductService;
 
     public boolean checkInventory(Long productId, Integer qty) throws Exception {
         Product product = productRepository.findById(productId)
