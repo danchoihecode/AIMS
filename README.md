@@ -56,7 +56,7 @@ Complete the entire AIMS project
 - Bui Hoang Ha 20205149: CRUD user, Manage user role, Block/unblock user, Change password (Frontend)
 - Do Hong Hai 20215199: View cart, Update cart, Place order (includes Place rush order and Pay order), View order information, Cancel order
 - Duong Hoang Hai 20215198: View list of orders, Approve order, Reject order, Login (Backend), Change password (Backend)
-- Nguyen Huu Hai 20215200: View List of product in homepage, Search Product, View product detail information, Add product to cart
+- Nguyen Huu Hai 20215200: View List of products in homepage, Search Product, View product detail information, Add product to cart
 - Dang Phuc Hieu 20194759: CRUD Product, Update product price (Did not finish), Login (Frontend)
 ## Making SDD
 - Bui Hoang Ha 20205149: Screen Transition Diagrams (4.1.2), Data Modeling (4.2), Non-Database Management System Files (4.3) + Use cases ralated part
