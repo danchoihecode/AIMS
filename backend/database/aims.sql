@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th6 22, 2024 lúc 03:25 PM
+-- Thời gian đã tạo: Th6 22, 2024 lúc 03:47 PM
 -- Phiên bản máy phục vụ: 10.4.25-MariaDB
 -- Phiên bản PHP: 8.1.10
 
@@ -83,7 +83,9 @@ INSERT INTO `cart` (`subtotal`, `id`) VALUES
 (NULL, 323),
 (740000, 324),
 (NULL, 325),
-(NULL, 326);
+(790000, 326),
+(NULL, 327),
+(NULL, 328);
 
 -- --------------------------------------------------------
 
@@ -133,7 +135,9 @@ INSERT INTO `cart_product` (`qty`, `cart_id`, `product_id`) VALUES
 (2, 322, 6),
 (1, 324, 2),
 (2, 324, 3),
-(1, 324, 8);
+(1, 324, 8),
+(3, 326, 2),
+(1, 326, 3);
 
 -- --------------------------------------------------------
 
@@ -195,7 +199,8 @@ INSERT INTO `delivery_info` (`id`, `address`, `delivery_time`, `email`, `instruc
 (13, '03 ABC Hai ba trung', '2024-06-19', 'hoanghai2003vp@gmail.com', 'nhanh len nhe', b'1', 'Lê Minh Việt Anh', '0866172604', '01'),
 (14, '03 ABC Hai ba trung', '2024-06-19', 'hoanghai2003vp@gmail.com', 'nhanh len nhe', b'1', 'Lê Minh Việt Anh', '0866172604', '01'),
 (17, '03 ABC Hai ba trung', '2024-06-27', 'hoanghai2003vp@gmail.com', 'nhanh len nhe', b'1', 'Trần Thị Lan', '0314121412', '01'),
-(18, '03 ABC Hai ba trung', NULL, 'hoanghai2003vp@gmail.com', '', b'0', 'Trần Thị Lan', '0314121412', '24');
+(18, '03 ABC Hai ba trung', NULL, 'hoanghai2003vp@gmail.com', '', b'0', 'Trần Thị Lan', '0314121412', '24'),
+(19, '03 ABC Hai ba trung', NULL, 'longhvp03@gmail.com', '', b'0', 'Trần Thị Lan', '0314121412', '27');
 
 -- --------------------------------------------------------
 
@@ -254,7 +259,8 @@ INSERT INTO `invoice` (`id`, `amount`, `currency`, `order_id`, `payment_transact
 (17, 868000.0000000001, 'VND', 12, 17),
 (19, 2393500, 'VND', 13, 20),
 (25, 1374000, 'VND', 16, 25),
-(27, 826500.0000000001, 'VND', 17, 27);
+(27, 826500.0000000001, 'VND', 17, 27),
+(29, 901500.0000000001, 'VND', 18, 29);
 
 -- --------------------------------------------------------
 
@@ -310,7 +316,8 @@ INSERT INTO `orders` (`id`, `cart_id`, `delivery_info_id`, `normal_shipping_fees
 (12, 313, 13, 0, 32000, 'APPROVED'),
 (13, 315, 14, 9500, 52000, 'REJECTED'),
 (16, 322, 17, 2000, 52000, 'PENDING'),
-(17, 324, 18, 12500, 0, 'PENDING');
+(17, 324, 18, 12500, 0, 'PENDING'),
+(18, 326, 19, 32500, 0, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -344,7 +351,8 @@ INSERT INTO `payment_transaction` (`id`, `amount`, `created_at`, `error_code`, `
 (17, 868000, '20240618223912', '00', NULL, 'Payment for order 12', '14466155', '26129912', 'VNPay'),
 (20, 2393500, '20240618225800', '00', NULL, 'Payment for order 13', '14466190', '49499869', 'VNPay'),
 (25, 1374000, '20240622202200', '00', NULL, 'Payment for order 16', '14473099', '28676479', 'VNPay'),
-(27, 826500, '20240622202316', '00', NULL, 'Payment for order 17', '14473103', '34790225', 'VNPay');
+(27, 826500, '20240622202316', '00', NULL, 'Payment for order 17', '14473103', '34790225', 'VNPay'),
+(29, 901500, '20240622204502', '00', NULL, 'Payment for order 18', '14473123', '85387267', 'VNPay');
 
 -- --------------------------------------------------------
 
@@ -370,7 +378,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`price`, `qty_in_stock`, `rush_order_eligible`, `weight`, `year`, `id`, `category`, `image_url`, `title`, `value`) VALUES
-(200000, 18, b'0', 2, 1972, 2, 'DVD', '/poster/image2.jpg', 'The Godfather 2', ''),
+(200000, 5, b'0', 2, 1972, 2, 'DVD', '/poster/image2.jpg', 'The Godfather 2', ''),
 (190000, 26, b'0', 1, 1969, 3, 'CD', '/poster/image3.jpg', 'Abbey Road', ''),
 (220000, 1, b'0', 1, 1994, 4, 'DVD', '/poster/image4.jpg', 'Pulp Fiction', ''),
 (200000, 41, b'0', 1, 1985, 5, 'LP', '/poster/image5.jpg', 'Back to the Future', ''),
@@ -517,7 +525,7 @@ ALTER TABLE `book`
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=329;
 
 --
 -- AUTO_INCREMENT cho bảng `cd`
@@ -529,7 +537,7 @@ ALTER TABLE `cd`
 -- AUTO_INCREMENT cho bảng `delivery_info`
 --
 ALTER TABLE `delivery_info`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT cho bảng `dvd`
@@ -541,7 +549,7 @@ ALTER TABLE `dvd`
 -- AUTO_INCREMENT cho bảng `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT cho bảng `lp`
@@ -553,13 +561,13 @@ ALTER TABLE `lp`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT cho bảng `payment_transaction`
 --
 ALTER TABLE `payment_transaction`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT cho bảng `product`
