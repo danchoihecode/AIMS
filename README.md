@@ -81,6 +81,7 @@ Complete the entire AIMS project
 - Go to PHPMyAdmin: http://localhost:88/phpmyadmin/
 - Create a new database named 'aims'
 - Copy the command in the aims.sql file and run to create the database
+- Ensure Maven dependencies (in pom.xml) are installed
 - Run the AimsApplication class to start the backend application
 4. For the frontend project :
 
